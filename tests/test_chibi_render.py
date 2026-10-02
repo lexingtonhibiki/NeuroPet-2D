@@ -90,9 +90,13 @@ def load_head(name: str, tmp_name: str, ref: str = REF_COMMIT):
     参照版 torso_art.py 含相对导入(`from ..core import instr as _I`,b2ca945 U0
     插桩引入),按独立顶层模块加载会 ImportError("attempted relative import with
     no known parent package")。即本判据自 b2ca945 起一直是 ERROR 态(不是通过态)。"""
-    src = subprocess.run(
-        ["git", "-C", str(ROOT), "show", f"{ref}:neuropet/render/{name}.py"],
-        capture_output=True, text=True, check=True).stdout
+    frozen = ROOT / "tests" / "refs" / ref[:7] / f"{name}.py"
+    if frozen.exists():
+        src = frozen.read_text(encoding="utf-8-sig")
+    else:
+        src = subprocess.run(
+            ["git", "-C", str(ROOT), "show", f"{ref}:neuropet/render/{name}.py"],
+            capture_output=True, text=True, check=True).stdout
     tmp = ROOT / "scratch" / tmp_name
     tmp.write_text(src, encoding="utf-8")
     mod_name = f"neuropet.render.{tmp_name[:-3]}"

@@ -164,7 +164,9 @@ def _drive(app, h, ticks: int, min_frames: int, patch_decide: bool):
         skip_streak_max = max(skip_streak_max, h.skip_streak)
         if app._upload_count > last_up:
             last_up = app._upload_count
-            img, ix, iy = app.stage._pet_raw[h.pet_id]
+            # Inspect the untrimmed pose frame. Display transport now removes
+            # transparent margins, which vary across poses but do not alter pixels.
+            img, ix, iy = h.last_img, int(h.state.pos[0]), int(h.state.pos[1])
             st = h.state
             body = h.body
             samples.append({

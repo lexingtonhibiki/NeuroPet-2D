@@ -2,6 +2,7 @@
 from __future__ import annotations
 
 import json
+import os
 import sys
 from dataclasses import asdict, dataclass, field
 from pathlib import Path
@@ -12,7 +13,7 @@ if getattr(sys, "frozen", False):
     PROJECT_ROOT = Path(sys.executable).resolve().parent
 else:
     PROJECT_ROOT = Path(__file__).resolve().parents[2]
-DATA_DIR = PROJECT_ROOT / "data"
+DATA_DIR = Path(os.environ.get("NEUROPET_DATA_DIR", str(PROJECT_ROOT / "data"))).resolve()
 CONFIG_PATH = DATA_DIR / "config.json"
 PETS_PATH = DATA_DIR / "pets.json"   # 启动名册(r16 Task E;与 session.json 同目录)
 PROFILES_DIR = DATA_DIR / "profiles"
@@ -30,7 +31,7 @@ class AppConfig:
     # (load_config 不校验范围,set_intelligence/mastery_of 两侧都做 1..5 钳制)。
     intelligence: int = 3
     panel_visible: bool = True
-    max_pets: int = 3
+    max_pets: int = 10
     log_events: bool = False
     feeding_timeout_s: int = 15      # 投喂模式限时(秒);<=0 表示不自动退出
     bubbles_enabled: bool = True     # 提示气泡(C2;面板勾选,默认开)
@@ -45,7 +46,14 @@ DEFAULTS: dict[str, dict] = {
 def load_config() -> AppConfig:
     try:
         raw = json.loads(CONFIG_PATH.read_text("utf-8"))
-        return AppConfig(**{**asdict(AppConfig()), **raw.get("app", {})})
+        values = {**asdict(AppConfig()), **raw.get("app", {})}
+        # Old releases persisted a three-pet cap. Loading upgrades capacity without
+        # changing the user's file; the next intentional settings save persists it.
+        try:
+            values["max_pets"] = max(10, int(values["max_pets"]))
+        except (TypeError, ValueError, OverflowError):
+            values["max_pets"] = 10
+        return AppConfig(**values)
     except Exception:
         return AppConfig()
 

@@ -503,14 +503,21 @@ class App:
         ``NEUROPET_MASTERY=off``(停止自适应,脑保持当前等级)。
         """
         if len(self.pets) >= self.cfg.max_pets:
-            raise RuntimeError(f"已达到最大宠物数 {self.cfg.max_pets}(可在面板/配置调整)")
+            raise RuntimeError(f"桌面已有 {self.cfg.max_pets} 只宠物。先隐藏或移除一只，再添加。")
         sp = self.species(species_id)
         if pet_id is None:
             pet_id = f"{species_id}-{uuid.uuid4().hex[:6]}"
         elif pet_id in self.pets or pet_id in self._hidden:
             pet_id = f"{pet_id}-{uuid.uuid4().hex[:4]}"   # 防 id 冲突(防御性)
         if pos is None:
-            pos = (self.world.screen[0] * 0.5, self.world.screen[1] * 0.55)
+            # Place a newcomer in the least occupied slot instead of stacking every
+            # insect in the centre. This also avoids a large merged upload at startup.
+            width, height = self.world.screen
+            slots = [(width * (0.15 + col * 0.17), height * (0.32 + row * 0.30))
+                     for row in range(2) for col in range(5)]
+            existing = [h.state.pos for h in self.pets.values()]
+            pos = max(slots, key=lambda p: min(
+                ((p[0]-q[0])**2 + (p[1]-q[1])**2 for q in existing), default=0.0))
         state = PetState(pet_id=pet_id, species_id=species_id,
                          name=sp.get_manifest().name, pos=self.world.clamp_to_screen(pos))
         # AG5:体型档位 —— profile 持久值优先;NEUROPET_SCALE 环境变量为
@@ -913,11 +920,9 @@ class App:
         self._roster_live = True
         if self._prewarm_on:   # r22:3d/3d2 渲染不采样 2D 躯干桶,预热线程纯空转
             self._prewarm_torso()
-        from neuropet.ui.panel import ControlPanel
+        from neuropet.ui.compact_panel import ControlPanel
         self._panel = ControlPanel(self)
         self._panel.set_on_drop_request(self._on_panel_drop)   # r10:选择器→桌面
-        if not self.cfg.panel_visible:
-            self._panel.hide()
         # 系统托盘:懒加载 + 失败降级(无托盘也能正常运行,绝不因此崩溃)。
         # 面板关闭=隐藏,托盘是隐藏后的唯一唤出入口。
         try:
@@ -926,10 +931,13 @@ class App:
             if tray.start():
                 self._tray = tray
             else:
-                print("[app] 无托盘运行(面板隐藏后需重启程序才能唤出)")
+                print("[app] 无托盘运行，收起面板后可从任务栏恢复")
         except Exception as exc:
             print(f"[app] 托盘初始化失败,无托盘运行: {exc}")
+        if not self.cfg.panel_visible:
+            self._panel.hide()
         self._next_t = time.perf_counter()
+        self._last_tick = self._next_t
         self._run_t0 = self._next_t     # PF 快赢②:gc.freeze 计时起点(run 实际开始)
         self.root.after(1, self._tick)
         self.root.mainloop()
@@ -941,7 +949,8 @@ class App:
         # 绝对节拍:落后太多(>250ms,如系统休眠)才重置
         if now - self._next_t > 0.25:
             self._next_t = now
-        dt = min(0.05, max(0.001, now - (self._next_t - FRAME_DT)))
+        dt = min(0.05, max(0.001, now - getattr(self, "_last_tick", now-FRAME_DT)))
+        self._last_tick = now
         self._next_t += FRAME_DT
         _I.observe("dt_ms", dt * 1000.0)      # r25 U0:R2 帧间隔口径
         _I.mark("interval_ms")                # 真实 tick 间隔(墙钟)
@@ -952,6 +961,8 @@ class App:
             from neuropet.diag import log_exc    # r22:pythonw 无控制台,print 不可见
             log_exc("_tick")
         _I.end("step_frame_ms", t_sf)
+        if not self._running:
+            return
         delay = max(1, int((self._next_t - time.perf_counter()) * 1000))
         self.root.after(delay, self._tick)
 
@@ -1015,12 +1026,12 @@ class App:
                         ctypes.windll.kernel32.GetCurrentThread(), -1)
                 except Exception:
                     pass
-                handles = [h for h in list(self.pets.values())
-                           if "cockroach" in h.state.species_id]
-                if not handles:
-                    return
                 last_hd: dict[str, float] = {}
                 while self._running:
+                    handles = [h for h in list(self.pets.values())
+                               if "cockroach" in h.state.species_id]
+                    active_ids = {h.pet_id for h in handles}
+                    last_hd = {pid: hd for pid, hd in last_hd.items() if pid in active_ids}
                     did = False
                     for h in handles:
                         st = h.state
@@ -1076,7 +1087,7 @@ class App:
                         # 是 P95 尖刺的另一来源)。键与渲染同源用原始度数;
                         # traits 用含缩放版(精灵尺寸随 body_len×k)。
                         sh_hd = math.degrees(st.heading) + sign * 10.0
-                        if not _R.shadow_bucket_ready(st.species_id, traits_sc,
+                        if len(handles) <= 2 and not _R.shadow_bucket_ready(st.species_id, traits_sc,
                                                       sh_hd):
                             _R.prewarm_shadow(st.species_id, traits_sc, sh_hd)
                             did = True
@@ -1084,7 +1095,7 @@ class App:
                     # 改善(仍 ~16ms)——瓶颈是单桶 PIL 旋转 ~7ms 持 GIL 期间
                     # 主线程 Python 段无法推进,非 sleep 间隔。保留 0.001
                     # (预热带宽最大);预热本身已把 p50 从 10.8 砍到 4.4ms。
-                    time.sleep(0.001 if did else 0.02)
+                    time.sleep((0.001 if len(handles) <= 2 else 0.012) if did else 0.02)
             except Exception as exc:
                 print(f"[app] 躯干跟随预热退出: {exc!r}")
         for i in range(2):
@@ -1281,9 +1292,12 @@ class App:
         # 轮转游标每帧前进 QUOTA 个槽位,保证任一宠物至多饿 quota-1 个轮转位;
         # ≤2 只时配额永不截流(默认双宠场景行为与旧版完全一致)。
         pets = list(self.pets.values())
-        order = quota_rotation(len(pets), self._render_cursor, RENDER_QUOTA)
-        self._render_cursor += RENDER_QUOTA
-        quota_left = RENDER_QUOTA
+        self.stage.begin_frame()
+        self.stage.move_pets({h.pet_id: h.state.pos for h in pets})
+        quota = RENDER_QUOTA if len(pets) <= 3 else 4
+        order = quota_rotation(len(pets), self._render_cursor, quota)
+        self._render_cursor += quota
+        quota_left = quota
         for i in order:
             h = pets[i]
             st = h.state
@@ -1320,7 +1334,7 @@ class App:
                 interval = max(interval, 0.033)
             if now - h.last_render < interval:
                 continue                      # 未到期:不占配额
-            if len(pets) > RENDER_QUOTA and quota_left <= 0:
+            if len(pets) > 2 and (quota_left <= 0 or (quota_left < quota and (time.perf_counter()-t0) > .012)):
                 continue                      # 配额用尽:本帧跳过(不推进 last_render)
             pose = h.body.pose()
             ov = self._kernel.drag_overlay(h)   # r10 力学 v2 通道(ADR-0031)
@@ -1383,12 +1397,14 @@ class App:
             self._upload_count += 1
             h.last_img = img
             h.last_coords = (ix, iy)
-        _ms = (time.perf_counter() - t0) * 1000.0
-        self._frame_ms.append(_ms)
-        _I.observe("render_ms", _ms)          # r25 U0:帧耗 p50/p90/p99 口径
         if self._static_dirty:
             self.stage.render_static(self.world.foods, self.world.zones)
             self._static_dirty = False
+        self.stage.end_frame()
+        self.stage.fit_viewport()
+        _ms = (time.perf_counter() - t0) * 1000.0
+        self._frame_ms.append(_ms)
+        _I.observe("render_ms", _ms)
 
     # ---------------- C2 气泡引导(触发时机表:调研文档 §5.3) ----------------
     def render_stats(self) -> dict:
@@ -1410,11 +1426,15 @@ class App:
 
     # ---------------- 交互:抓取/拖拽(共享舞台命中) ----------------
     def _on_press(self, event) -> None:
-        pid = self.stage.hit_pet(event.x, event.y, self.pets)
+        # Real Tk events provide screen coordinates; offline fixtures historically
+        # supply already-global x/y only.
+        event.x_root = getattr(event, "x_root", event.x)
+        event.y_root = getattr(event, "y_root", event.y)
+        pid = self.stage.hit_pet(event.x_root, event.y_root, self.pets)
         if not pid:
             return
         h = self.pets[pid]
-        h.drag_offset = (h.state.pos[0] - event.x, h.state.pos[1] - event.y)
+        h.drag_offset = (h.state.pos[0] - event.x_root, h.state.pos[1] - event.y_root)
         self._kernel.feature("drag").clear_intent(pid)   # 新抓取:清陈旧意向
         if not h.state.frozen:
             h.state.held = True
@@ -1422,7 +1442,9 @@ class App:
             self.bus.publish("user/grab", {"pet_id": pid})
 
     def _on_drag(self, event) -> None:
-        pid = self.stage.hit_pet(event.x, event.y, self.pets)
+        event.x_root = getattr(event, "x_root", event.x)
+        event.y_root = getattr(event, "y_root", event.y)
+        pid = self.stage.hit_pet(event.x_root, event.y_root, self.pets)
         pid = pid or self._drag_pid
         if not pid:
             return
@@ -1432,7 +1454,7 @@ class App:
         # 每帧合成(held/frozen 分支 apply_pos;与其他写者显式定序)。
         self._kernel.feature("drag").on_drag(
             pid, self.world.clamp_to_screen(
-                (event.x + h.drag_offset[0], event.y + h.drag_offset[1])))
+                (event.x_root + h.drag_offset[0], event.y_root + h.drag_offset[1])))
 
     def _on_release(self, event) -> None:
         pid = getattr(self, "_drag_pid", None)
@@ -1663,6 +1685,15 @@ class App:
             x1 = x0 + int(win.winfo_width()) + PANEL_RECT_PAD * 2
             y1 = y0 + int(win.winfo_height()) + PANEL_RECT_PAD * 2
             self._panel_rect = (x0, y0, x1, y1)
+            extras = []
+            for extra in getattr(panel, "visible_windows", lambda: [])():
+                if extra is win:
+                    continue
+                ex, ey = int(extra.winfo_rootx()), int(extra.winfo_rooty())
+                extras.append((ex - PANEL_RECT_PAD, ey - PANEL_RECT_PAD,
+                               ex + int(extra.winfo_width()) + PANEL_RECT_PAD,
+                               ey + int(extra.winfo_height()) + PANEL_RECT_PAD))
+            self._panel_extra_rects = tuple(extras)
             self._panel_visible = True
         except Exception:
             # 窗口销毁中等 tkinter 异常:一律按不可见处理
@@ -1680,7 +1711,10 @@ class App:
         if rect is None:
             return False
         x0, y0, x1, y1 = rect
-        return x0 <= x <= x1 and y0 <= y <= y1
+        if x0 <= x <= x1 and y0 <= y <= y1:
+            return True
+        return any(ex0 <= x <= ex1 and ey0 <= y <= ey1
+                   for ex0, ey0, ex1, ey1 in getattr(self, "_panel_extra_rects", ()))
 
     def drop_food(self, x: int, y: int, kind: str | None = None) -> None:
         import random as _random
@@ -1727,11 +1761,11 @@ class App:
         self.bus.publish("story/cold_positive", {"story_id": story_id})
 
     def memory_of(self, pet_id: str) -> list[str]:
-        h = self.pets.get(pet_id)
+        h = self.pets.get(pet_id) or self._hidden.get(pet_id)
         return h.brain.memory_digest() if h else []
 
     def clear_memory(self, pet_id: str) -> None:
-        h = self.pets.get(pet_id)
+        h = self.pets.get(pet_id) or self._hidden.get(pet_id)
         if not h:
             return
         h.brain.clear_memory()

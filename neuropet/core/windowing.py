@@ -9,6 +9,7 @@
 from __future__ import annotations
 
 import atexit
+import time
 import tkinter as tk
 
 MAGIC = "#010101"  # 色键透明色:该颜色像素透明且点击穿透
@@ -52,6 +53,7 @@ def working_set_mb() -> float:
 
     class PMC_EX(ctypes.Structure):
         _fields_ = [("cb", wt.DWORD), ("PageFaultCount", wt.DWORD),
+                    ("PeakWorkingSetSize", ctypes.c_size_t),
                     ("WorkingSetSize", ctypes.c_size_t),
                     ("QuotaPeakPagedPoolUsage", ctypes.c_size_t),
                     ("QuotaPagedPoolUsage", ctypes.c_size_t),
@@ -131,13 +133,17 @@ class OverlayStage:
         self.w, self.h = screen_w, screen_h
         self.win = tk.Toplevel(root)
         self.win.overrideredirect(True)
-        self.win.geometry(f"{screen_w}x{screen_h}+0+0")
+        self.win.geometry("1x1+0+0")
         self.win.attributes("-topmost", True)
         self.win.attributes("-transparentcolor", MAGIC)
         self.win.configure(bg=MAGIC)
-        self.canvas = tk.Canvas(self.win, width=screen_w, height=screen_h, bg=MAGIC,
+        self.canvas = tk.Canvas(self.win, width=1, height=1, bg=MAGIC,
+                                scrollregion=(0, 0, screen_w, screen_h),
+                                xscrollincrement=1, yscrollincrement=1,
                                 highlightthickness=0, bd=0)
-        self.canvas.pack()
+        self.canvas.pack(fill="both", expand=True)
+        self._viewport = (0, 0, 1, 1)
+        self._viewport_time = 0.0
         self._pet_items: dict[str, int] = {}
         # 值=(常驻 tk.PhotoImage, 尺寸):尺寸不变时原地换数据,见 update_pet
         self._pet_photos: dict[str, tuple[tk.PhotoImage, tuple[int, int]]] = {}
@@ -147,6 +153,9 @@ class OverlayStage:
         # 改为按成员顺序 α 合成为一张图、单 canvas 项渲染,成员单项挪出屏;
         # 分离后立即从缓存恢复单项(无闪烁)。_pet_raw=(RGBA, ix, iy)。
         self._pet_raw: dict[str, tuple] = {}
+        self._pet_offsets: dict[str, tuple[int, int]] = {}
+        self._batch = False
+        self._image_dirty = set()
         self._merged_groups: dict[str, tuple[str, ...]] = {}
         self._merged_items: dict[str, int] = {}
         self._merged_photos: dict[str, tuple[tk.PhotoImage, tuple[int, int]]] = {}
@@ -177,7 +186,22 @@ class OverlayStage:
         if pil_image.mode != "RGBA":
             pil_image = pil_image.convert("RGBA")
         ix, iy = int(x), int(y)
+        # Transparent margins take space in Tk and cause false overlap groups.
+        # Crop them while preserving the exact screen coordinate of every pixel.
+        box = pil_image.getbbox(alpha_only=True)
+        if box is not None:
+            old_w, old_h = pil_image.size
+            pil_image = pil_image.crop(box)
+            offset = (box[0] + pil_image.width//2 - old_w//2,
+                      box[1] + pil_image.height//2 - old_h//2)
+        else:
+            offset = (0, 0)
+        self._pet_offsets[pet_id] = offset
+        ix, iy = ix + offset[0], iy + offset[1]
         self._pet_raw[pet_id] = (pil_image, ix, iy)
+        if self._batch:
+            self._image_dirty.add(pet_id)
+            return
         groups = self._compute_overlap_groups()
         # ---- 组 reconciliation:成员单项全部挪出屏(合成项接管显示) ----
         for g in groups:
@@ -202,6 +226,84 @@ class OverlayStage:
         self._merged_groups = new_groups
 
     # ---- 重叠组检测(≤max_pets 只,两两 bbox 相交 union-find,零分配热路径) ----
+    def begin_frame(self):
+        self._batch = True
+
+    def end_frame(self):
+        self._batch = False
+        self.move_pets({}, _flush=True)
+        self._image_dirty.clear()
+
+    def move_pets(self, positions: dict, *, _flush=False) -> None:
+        """Move cached images every simulation tick, independently of pose rate."""
+        changed = False
+        for pid, (x, y) in positions.items():
+            dx, dy = self._pet_offsets.get(pid, (0, 0))
+            x, y = int(x)+dx, int(y)+dy
+            raw = self._pet_raw.get(pid)
+            if raw is not None and raw[1:] != (int(x), int(y)):
+                self._pet_raw[pid] = (raw[0], int(x), int(y))
+                changed = True
+        if self._batch or (not changed and not _flush):
+            return
+        groups = self._compute_overlap_groups()
+        new_groups = {"|".join(g): g for g in groups}
+        old_members = {pid for g in self._merged_groups.values() for pid in g}
+        new_members = {pid for g in groups for pid in g}
+        for key, members in new_groups.items():
+            for pid in members:
+                self.canvas.coords(self._pet_items[pid], -9999, -9999)
+            self._render_merged(key, members)
+        for key in list(self._merged_groups):
+            if key not in new_groups:
+                self._dispose_merged(key)
+        for pid, raw in self._pet_raw.items():
+            if pid in new_members:
+                continue
+            if pid in old_members or pid in self._image_dirty:
+                self._upload_single(pid, raw[1], raw[2], raw[0])
+            else:
+                self.canvas.coords(self._pet_items[pid], raw[1], raw[2])
+        self._merged_groups = new_groups
+
+    def fit_viewport(self, force=False) -> None:
+        """Keep screen-space drawing, allocate a window only around visible items.
+
+        A 96-pixel margin avoids constantly resizing during ordinary motion. All
+        canvas items, including food and speech bubbles, participate in bounds.
+        """
+        boxes = []
+        for item in self.canvas.find_all():
+            box = self.canvas.bbox(item)
+            if box and box[2] > 0 and box[3] > 0 and box[0] < self.w and box[1] < self.h:
+                boxes.append(box)
+        if boxes:
+            bounds = (max(0, min(b[0] for b in boxes)), max(0, min(b[1] for b in boxes)),
+                      min(self.w, max(b[2] for b in boxes)), min(self.h, max(b[3] for b in boxes)))
+        else:
+            bounds = (0, 0, 1, 1)
+        left, top, right, bottom = self._viewport
+        now = time.perf_counter()
+        fits = bounds[0] >= left + 16 and bounds[1] >= top + 16 and bounds[2] <= right - 16 and bounds[3] <= bottom - 16
+        # At screen edges the extra margin cannot exist; exact containment is enough.
+        fits = fits or (bounds[0] >= left and bounds[1] >= top and bounds[2] <= right and bounds[3] <= bottom and
+                        (left == 0 or top == 0 or right == self.w or bottom == self.h))
+        if not force and fits and now - self._viewport_time < 2:
+            return
+        margin = 96 if boxes else 0
+        new = (max(0, bounds[0]-margin), max(0, bounds[1]-margin),
+               min(self.w, bounds[2]+margin), min(self.h, bounds[3]+margin))
+        self._viewport_time = now
+        if new == self._viewport:
+            return
+        self._viewport = new
+        left, top, right, bottom = new
+        self.win.geometry(f"{max(1, right-left)}x{max(1, bottom-top)}+{left}+{top}")
+        # Update the allocation before scrolling so Tk clamps against the new size.
+        self.win.update_idletasks()
+        self.canvas.xview_moveto(left / self.w)
+        self.canvas.yview_moveto(top / self.h)
+
     def _compute_overlap_groups(self) -> list[tuple[str, ...]]:
         ids = list(self._pet_raw)
         n = len(ids)
@@ -325,6 +427,8 @@ class OverlayStage:
             self.canvas.delete(self._pet_items[pet_id])
             del self._pet_items[pet_id]
         self._pet_photos.pop(pet_id, None)
+        self._pet_offsets.pop(pet_id, None)
+        self._image_dirty.discard(pet_id)
         was_grouped = any(pet_id in g for g in self._merged_groups.values())
         self._pet_raw.pop(pet_id, None)
         if was_grouped:

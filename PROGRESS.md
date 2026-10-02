@@ -4,9 +4,28 @@
 ## 已验证进度
 - [x] 原始代码/演示按字节复制到独立发行目录；原仓库没有修改。Git 初始化为 codex/2d-release。
 - [x] GitHub CLI 已登录 lexingtonhibiki；NeuroPet-2D 仓库名尚未占用。
+- [x] 原运动 smoke：`python tests/smoke.py` → ALL OK，证据 logs/baseline-smoke.txt。
+- [x] 缓存滞留 RED：`python tests/test_release_cache.py` 首图弱引用仍存活，退出 1，logs/cache-red.txt。
+- [x] 原 2/10 宠真实 mainloop 各 20 秒对照：logs/baseline-2.json、baseline-10.json。双宠末工作集 142.6 MiB，图像缓存去重 80.72 MiB，其中 snap 54.318；10 宠 loop 40.32 Hz，sprite 8.07 次/宠/秒。
+- [x] 容量 RED：旧配置迁移和真实创建 10 宠两项均失败于旧上限 3，logs/capacity-red.txt。
+- [x] 容量 GREEN：`python tests/test_release_capacity.py` → 2 passed；10 宠、分散位置、同 id 重启和记忆保真通过。
+- [x] 缓存 GREEN：首图弱引用释放；`test_body.py` 11/11、`test_turn_continuity.py` 4/4；相同 probe 双宠 20 秒末工作集 77.18 MiB、图像缓存 15.71 MiB、峰值 78.28（原峰值 279.49）。仍未达到工作集 60 目标。
+- [x] 原投喂鼠标钩子 `test_hook_passthrough.py` → ALL OK。
 
 ## 进行中
-- [ ] 基线与缓存引用滞留复现。
+- [x] 新面板真实控件测试 4 passed；使用与生产一致的单 Tk 解释器消除重复解释器初始化错误。
+- [x] 面板裁切修复：380×620，固定操作区与可缩放滚动列表；真实截图所有按钮边界通过，记忆/设置截图已检查。
+- [x] 显示运输：RGBA 透明边裁切保留原像素坐标；单宠位置移动复用 PhotoImage；重叠姿态每帧合成一次；窗口按内容范围分配。真实 Tk merge/split/viewport/batch 检查通过。
+- [x] 预热线程持续读取当前宠物名册，新增/隐藏/移除宠不再依赖启动快照。多蟑螂场景限制后台阴影预热。
+- [x] 全套第一轮 38/46，第二轮 44/46：补齐固定历史外观基线与训练工具，修正裁切后像素检查坐标，历史面板 fixture 显式维持其 3 宠情景。最后两项单跑均通过，待最终全跑。
+- [x] 构建便携 EXE 成功；打包性能与默认启动烟测待执行。
+- [x] 曾比较 >2 宠 2× 抗锯齿，改善很小，已撤回，保留已接受画质。
+- [x] 47/47 全套通过（logs/full-suite-final-2.txt）；高负载时基 RED 为重复推进 0.0467/0.05s，GREEN 正确推进每帧 0.03s，原运动夹具保持明确的固定 60Hz。
+- [x] 125/150% 缩放下六项真实面板检查通过；窗口与字体按可用屏幕高度适配。
+- [x] 内存采样结构发现遗漏 PeakWorkingSetSize，旧护栏把峰值当当前值。32MiB VirtualAlloc/Free 复现 RED，结构修复 GREEN；工具 probe 的独立采样从一开始就是正确的。
+- [x] 10 秒 / 15fps 的 10 宠自有像素连续动画，已查看中间帧；录制缓存不属于运行内存测量。
+- [ ] 默认便携版改为 onedir 单进程，避免 onefile 额外父进程；正在构建并做最终性能与正常启动检查。
+- [ ] 双宠工作集约 75 MiB，Private Bytes 约 48 MiB；继续分解显示表面/烘焙缓存，未宣传 60 MiB 已达标。
 
 ## 剩余工作
 - [ ] 10 宠默认容量及旧配置迁移、持久化检查。

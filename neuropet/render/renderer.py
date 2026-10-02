@@ -402,8 +402,6 @@ def _draw_shadow_hybrid(canvas: Image.Image, species_id: str, roach: bool,
         if cm is None or cm[0] is not region:
             cm = (region, region.point([0] + [255] * 255),
                   region.point([0, 0] + [255] * 254) if roach else None)
-            if len(_SHADOW_MASK_CACHE) > 160:
-                _SHADOW_MASK_CACHE.clear()
             _SHADOW_MASK_CACHE[ck] = cm
         canvas.paste(_SHADOW_C_LO, (x0 + cx0, y0 + cy0), cm[1])
         if roach and cm[2] is not None:
@@ -1212,7 +1210,9 @@ def _invalidate_caches() -> None:
 # 退回全合成。缓存仅保留少量条目(每宠稳态 1 条),不破坏 windowing 的 item
 # 复用语义(返回的仍是不可变合成结果,由调用方每帧新建 PhotoImage 上传)。
 # ============================================================================
-_OPT7_CACHE: "OrderedDict[tuple, Image.Image]" = OrderedDict()
+from .image_cache import ImageLRU
+
+_OPT7_CACHE = ImageLRU(1536 * 1024)
 # R3-A2/M2 内存收紧(记前后值 8→4):稳态每宠 1 条 + 过渡 2 条足够。
 # r24 体验修订 4→12:实测连续行走 240 帧,冷缓存 p50=8.00/p90=17.8ms、
 # 热缓存(命中)p50=3.77/p90=7.3ms——4 条在转向期被反复挤爆(实测条目数
@@ -1328,19 +1328,17 @@ def _snap_torso_alpha(torso: Image.Image) -> Image.Image:
         out = torso.copy()
         out.putalpha(a.point([0 if v < 48 else (255 if v >= 160 else v)
                               for v in range(256)]))
-    if len(_SNAP_CACHE) > 600:
-        _SNAP_CACHE.clear()
     _SNAP_CACHE[key] = (torso, out)
     return out
 
 
 # r24:α 吸附结果缓存(见 _snap_torso_alpha;键=输入对象 id,值为 (输入引用, 结果))
-_SNAP_CACHE: dict[int, tuple[Image.Image, Image.Image]] = {}
+_SNAP_CACHE = ImageLRU(1536 * 1024)
 
 # r24:阴影 mask 缓存(见 _draw_shadow_hybrid;键=id(region),值为
 # (region 引用, lo_mask, hi_mask|None))。region 未裁时即 _shadow_patches 的
 # tier 对象,裁切时是临时对象——用 id + 引用校验防回收后 id 复用。
-_SHADOW_MASK_CACHE: dict[int, tuple] = {}
+_SHADOW_MASK_CACHE = ImageLRU(3 * 1024 * 1024)
 
 
 
@@ -1375,7 +1373,7 @@ def _render_pose_full(pose: dict, traits: dict) -> Image.Image:
     species_id = str(traits.get("species_id") or
                      ("species.cockroach" if roach else "species.fruitfly"))
     bl = float(traits.get("body_len", 115 if roach else 30))
-    ss = 2 if _hy_level >= 3 else 3                  # 降级阶梯 L3:SS 3→2
+    ss = 2 if _hy_level >= 3 else 3
     W = size * ss
     s = float(ss)
     img = Image.new("RGBA", (W, W), (0, 0, 0, 0))

@@ -100,9 +100,11 @@ def main() -> None:
         # 联合图原点 (200,250);A 色块中心 (250,300) → 局部 (50,50) 红
         # B 色块中心 (300,330) → 局部 (100,80) 蓝(A 在此处透明)
         # 两块都透明处 → 键色
-        got_red = photo_px(pm, 50, 50)
-        got_blue = photo_px(pm, 100, 80)
-        got_key = photo_px(pm, 10, 10)
+        # Compare fixed world pixels; transparent margins may be cropped.
+        left, top = int(mx-pm.width()//2), int(my-pm.height()//2)
+        got_red = photo_px(pm, 250-left, 300-top)
+        got_blue = photo_px(pm, 300-left, 330-top)
+        got_key = photo_px(pm, 320-left, 290-top)
         record("③ both_visible_no_square",
                got_red == RED and got_blue == BLUE and got_key == KEY,
                f"下层红 {got_red}、上层蓝 {got_blue}、空白 {got_key}"

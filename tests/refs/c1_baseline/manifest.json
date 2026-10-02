@@ -1,0 +1,403 @@
+{
+ "what": "r25 C1 参考渲染历史基线(C1 落地前的渲染路径输出)",
+ "generated_at_git": "b2ca945bdd731953b5489174cf90a6e02e47d494",
+ "note": "重新生成即破坏判据 #5 ② 的意义;仅在主控裁决后才可重冻结",
+ "metric_defs": {
+  "region": "sprite scenes: the 1x sprite canvas (crop box of _rot_geo); frame scenes: whole frame",
+  "alpha_mean_abs": "mean(|A_new-A_base|)/255 over the region",
+  "alpha_gt16_ratio": "#{|dA|>16} / #{max(A_new,A_base)>0} over the region",
+  "edge_width_px": "#{0<a<255} / #{a>=128 and has 4-neighbour a<128}"
+ },
+ "thresholds": {
+  "alpha_mean_abs": 0.0058823529411764705,
+  "alpha_gt16_ratio": 0.035,
+  "edge_width_ratio": 1.02
+ },
+ "scenes": {
+  "spr_roach_off_h000": {
+   "size": [
+    240,
+    240
+   ],
+   "sha256": "64b167bbd6834576"
+  },
+  "spr_roach_off_h030": {
+   "size": [
+    240,
+    240
+   ],
+   "sha256": "7517808b7e1dc366"
+  },
+  "spr_roach_off_h060": {
+   "size": [
+    240,
+    240
+   ],
+   "sha256": "198afaba7270c0eb"
+  },
+  "spr_roach_off_h090": {
+   "size": [
+    240,
+    240
+   ],
+   "sha256": "727f8a5f0c51abe9"
+  },
+  "spr_roach_off_h120": {
+   "size": [
+    240,
+    240
+   ],
+   "sha256": "75704bbe6dfb4144"
+  },
+  "spr_roach_off_h150": {
+   "size": [
+    240,
+    240
+   ],
+   "sha256": "20e59078072fe49b"
+  },
+  "spr_roach_off_h180": {
+   "size": [
+    240,
+    240
+   ],
+   "sha256": "cd13b62817ffdb96"
+  },
+  "spr_roach_off_h210": {
+   "size": [
+    240,
+    240
+   ],
+   "sha256": "c6cf5e711da6b320"
+  },
+  "spr_roach_off_h240": {
+   "size": [
+    240,
+    240
+   ],
+   "sha256": "35de4283100c3ab5"
+  },
+  "spr_roach_off_h270": {
+   "size": [
+    240,
+    240
+   ],
+   "sha256": "c800f0dce4c0420f"
+  },
+  "spr_roach_off_h300": {
+   "size": [
+    240,
+    240
+   ],
+   "sha256": "55d313c13fd50f24"
+  },
+  "spr_roach_off_h330": {
+   "size": [
+    240,
+    240
+   ],
+   "sha256": "af7a95907960b5cb"
+  },
+  "spr_roach_on_h000": {
+   "size": [
+    240,
+    240
+   ],
+   "sha256": "91543634e0f1d1bb"
+  },
+  "spr_roach_on_h030": {
+   "size": [
+    240,
+    240
+   ],
+   "sha256": "d5de6e710a831aec"
+  },
+  "spr_roach_on_h060": {
+   "size": [
+    240,
+    240
+   ],
+   "sha256": "c60d6f068988e345"
+  },
+  "spr_roach_on_h090": {
+   "size": [
+    240,
+    240
+   ],
+   "sha256": "005e0c38696484fe"
+  },
+  "spr_roach_on_h120": {
+   "size": [
+    240,
+    240
+   ],
+   "sha256": "f2a52f7a0385bea4"
+  },
+  "spr_roach_on_h150": {
+   "size": [
+    240,
+    240
+   ],
+   "sha256": "6ae55eb2c2aed035"
+  },
+  "spr_roach_on_h180": {
+   "size": [
+    240,
+    240
+   ],
+   "sha256": "e36fc327d2f772c9"
+  },
+  "spr_roach_on_h210": {
+   "size": [
+    240,
+    240
+   ],
+   "sha256": "e86057810a15342c"
+  },
+  "spr_roach_on_h240": {
+   "size": [
+    240,
+    240
+   ],
+   "sha256": "6cd6742ce57be3c0"
+  },
+  "spr_roach_on_h270": {
+   "size": [
+    240,
+    240
+   ],
+   "sha256": "d0bfd82fe31c908a"
+  },
+  "spr_roach_on_h300": {
+   "size": [
+    240,
+    240
+   ],
+   "sha256": "6c7b91911d4dce40"
+  },
+  "spr_roach_on_h330": {
+   "size": [
+    240,
+    240
+   ],
+   "sha256": "0da9706335ae3c56"
+  },
+  "spr_fly_off_h000": {
+   "size": [
+    240,
+    240
+   ],
+   "sha256": "e6f512c7d91e9855"
+  },
+  "spr_fly_off_h030": {
+   "size": [
+    240,
+    240
+   ],
+   "sha256": "17cb2a5827e5062d"
+  },
+  "spr_fly_off_h060": {
+   "size": [
+    240,
+    240
+   ],
+   "sha256": "1f319a1fddea9135"
+  },
+  "spr_fly_off_h090": {
+   "size": [
+    240,
+    240
+   ],
+   "sha256": "f6464c6bd2a64e7d"
+  },
+  "spr_fly_off_h120": {
+   "size": [
+    240,
+    240
+   ],
+   "sha256": "7d0bb086ab53d7db"
+  },
+  "spr_fly_off_h150": {
+   "size": [
+    240,
+    240
+   ],
+   "sha256": "3e002668e4c66df3"
+  },
+  "spr_fly_off_h180": {
+   "size": [
+    240,
+    240
+   ],
+   "sha256": "0435943e2cfb55d8"
+  },
+  "spr_fly_off_h210": {
+   "size": [
+    240,
+    240
+   ],
+   "sha256": "f660a552bab20157"
+  },
+  "spr_fly_off_h240": {
+   "size": [
+    240,
+    240
+   ],
+   "sha256": "a2e96a4526878117"
+  },
+  "spr_fly_off_h270": {
+   "size": [
+    240,
+    240
+   ],
+   "sha256": "b02ca9015bc3a9b5"
+  },
+  "spr_fly_off_h300": {
+   "size": [
+    240,
+    240
+   ],
+   "sha256": "6b497c5a0fd07b27"
+  },
+  "spr_fly_off_h330": {
+   "size": [
+    240,
+    240
+   ],
+   "sha256": "cd02473e3b8f26da"
+  },
+  "spr_fly_on_h000": {
+   "size": [
+    240,
+    240
+   ],
+   "sha256": "d1483aff781e9368"
+  },
+  "spr_fly_on_h030": {
+   "size": [
+    240,
+    240
+   ],
+   "sha256": "9750dc0f05cfab8b"
+  },
+  "spr_fly_on_h060": {
+   "size": [
+    240,
+    240
+   ],
+   "sha256": "3113df97296079d6"
+  },
+  "spr_fly_on_h090": {
+   "size": [
+    240,
+    240
+   ],
+   "sha256": "af6515e3e05cb7a3"
+  },
+  "spr_fly_on_h120": {
+   "size": [
+    240,
+    240
+   ],
+   "sha256": "1872fff86dde0fd7"
+  },
+  "spr_fly_on_h150": {
+   "size": [
+    240,
+    240
+   ],
+   "sha256": "aabda11aaab717c6"
+  },
+  "spr_fly_on_h180": {
+   "size": [
+    240,
+    240
+   ],
+   "sha256": "5b9f81b7866ece70"
+  },
+  "spr_fly_on_h210": {
+   "size": [
+    240,
+    240
+   ],
+   "sha256": "c6db9428699f9b1d"
+  },
+  "spr_fly_on_h240": {
+   "size": [
+    240,
+    240
+   ],
+   "sha256": "374f7f4d8499cdce"
+  },
+  "spr_fly_on_h270": {
+   "size": [
+    240,
+    240
+   ],
+   "sha256": "937969d24a33e6c9"
+  },
+  "spr_fly_on_h300": {
+   "size": [
+    240,
+    240
+   ],
+   "sha256": "b5a3ffdfd82f0067"
+  },
+  "spr_fly_on_h330": {
+   "size": [
+    240,
+    240
+   ],
+   "sha256": "d6b7be1f44d11c4e"
+  },
+  "frame_fly_fly_rest": {
+   "size": [
+    156,
+    156
+   ],
+   "sha256": "9dfe0ed3d2c5b044"
+  },
+  "frame_fly_fly_walk30": {
+   "size": [
+    156,
+    156
+   ],
+   "sha256": "cc81809304e15809"
+  },
+  "frame_fly_fly_walk90": {
+   "size": [
+    156,
+    156
+   ],
+   "sha256": "2d502c48c79d86b5"
+  },
+  "frame_fly_fly_walk151": {
+   "size": [
+    156,
+    156
+   ],
+   "sha256": "3bb29bf0b1413fd6"
+  },
+  "frame_fly_fly_air": {
+   "size": [
+    156,
+    156
+   ],
+   "sha256": "fa1b81858051d572"
+  },
+  "frame_roach_off": {
+   "size": [
+    240,
+    240
+   ],
+   "sha256": "9ddec0cf15583215"
+  },
+  "frame_roach_on": {
+   "size": [
+    240,
+    240
+   ],
+   "sha256": "f4c60e37d8458cad"
+  }
+ }
+}

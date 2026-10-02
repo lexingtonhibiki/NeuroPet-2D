@@ -265,7 +265,7 @@ class FakeApp:
 
     def __init__(self, root: tk.Tk) -> None:
         self.root = root
-        self.cfg = AppConfig()
+        self.cfg = AppConfig(max_pets=3)  # Historical research-panel layout fixture.
         self.pets = {"roach-1": FakePet("roach-1"),
                      "fly-2": FakePet("fly-2", "species.fly"),
                      "roach-3": FakePet("roach-3")}
@@ -448,7 +448,10 @@ def _a4_real_app_checks(check) -> None:
         try:
             # 基线配置:仓库真配置的副本,但**基线等级(2)≠ 派生等级(5)**——
             # 否则"文件字节不变"会被"写回了同一个值"蒙混过关。
-            shutil.copyfile(repo_cfg, cfg_file)
+            if repo_cfg.exists():
+                shutil.copyfile(repo_cfg, cfg_file)
+            else:
+                real_save(cfgmod.AppConfig())
             _cfg0 = cfgmod.load_config()
             _cfg0.intelligence = 2
             real_save(_cfg0)

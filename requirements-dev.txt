@@ -1,0 +1,4 @@
+-r requirements.txt
+pytest>=8,<10
+numpy>=2,<3
+pyinstaller==6.15.0

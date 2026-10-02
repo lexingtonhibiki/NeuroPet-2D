@@ -209,6 +209,11 @@ class Timebase:
     def _tick(self):
         if self.pin:
             self.app._next_t = time.perf_counter()      # ← 钉子
+            self.app._last_tick = self.app._next_t - FRAME_DT
+        elif self.negctrl:
+            # Deliberately reproduce the retired time-debt bug in the harness,
+            # never in the production timer, for the existing negative control.
+            self.app._last_tick = self.app._next_t - FRAME_DT
         return self._orig_tick()
 
     def _step_frame(self, dt):
