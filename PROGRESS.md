@@ -70,7 +70,13 @@
 - [x] 提交 `328e8c5` 修正滚动分数换算（见下）后**重新构建**并更新同一份 v0.2.0 ZIP：21,062,758 字节，1,023 条目，SHA256 2766AEE4559864A56CFBF2C6C0BEE6DCFE738C73BB74AE8A2C9A43657AAF0019。前一次构建的产物 21,061,829 / 42E4B2B2A26BFBE73BD63841B9DCF9C1D12139699D74BCF5E5CFEDCEEB5DCEC9 作废。
 - [x] 构建后只核对静态产物：Analysis-00.toc 含 `neuropet.core.desktop` / `neuropet.core.autostart` / `neuropet.render.trail` / `neuropet.core.i18n`，包内 README.txt 含新增的中英文速度/自启动说明，ZIP 顶层清单无 data/logs。**未启动 EXE、未跑 probe/smoke、未做视觉或交互验证。**
 
-- 滚动分数换算的更正：v0.2.0 首个提交把 `xview_moveto` 的分母改成 `scrollregion 宽 − 视口宽`，并写成已确认的黑框根因；用户指出后对照 Tk `generic/tkCanvas.c`（`TK_SCROLL_MOVETO`：分母是整个 scrollregion 宽，inset=2×bd=0）复核，确认原值 `left / self.w` 才是正确的，已恢复，并把相关文档改为"未复现、未验证"的诚实口径。黑框闪烁的真实成因本轮仍未定位。
+- 滚动分数换算的更正：v0.2.0 首个提交把 `xview_moveto` 的分母改成 `scrollregion 宽 − 视口宽`，并写成已确认的黑框根因；Codex 协调时对照 Tk `generic/tkCanvas.c`（`TK_SCROLL_MOVETO`：分母是整个 scrollregion 宽，inset=2×bd=0）发现此误判，交回太空兔恢复原值 `left / self.w`，并把相关文档改为"未复现、未验证"的诚实口径。黑框闪烁的真实成因本轮仍未定位。
+
+## v0.2.0 公开交付
+
+- OC 太空兔完成实现、追加设置修复及重新构建，Codex 阻塞等待进程完成后协调发布。
+- 代码已推送 main；Release https://github.com/lexingtonhibiki/NeuroPet-2D/releases/tag/v0.2.0 对应 c1464d3，附最终 21,062,758 字节便携 ZIP。
+- 大小/语言下拉当前项与变量生命周期、设置实时保存、关闭设置的独立行为已实现；真实 UI 与黑框/边缘运动效果未运行验证，保留用户手动使用反馈边界。
 - 追加要求（docs/settings-live-save-addendum.md）的全部设置修复（实时保存、当前宠物下拉、Tk 变量强引用、关闭即关窗口、下拉点击穿透、双语错误文案）在 `328e8c5` 中原样保留，未被本次更正触及。
 
 ## 执行决定
