@@ -40,7 +40,30 @@ class AppConfig:
     # 界面语言(v0.1.1):zh-CN / en。空串 = 跟随系统语言(首次运行时判定并保存);
     # 旧配置没有本字段 → load_config 填系统语言,不改用户的文件。
     language: str = ""
+    # 全局爬行速度倍率(v0.2.0)。0.5~8,默认 2(现状明显更快);只改运动参数,
+    # **不缩放全局时间 dt** —— 饥饿、记忆、食物与飞行节奏全部照旧。吸附到
+    # CRAWL_SPEED_CHOICES 的档位,旧配置缺失时 load_config 填默认值。
+    crawl_speed: float = 2.0
+    # 高速拖尾(v0.2.0):默认开启,可在设置里关闭。
+    trail_enabled: bool = True
     # 各物种数量偏好由面板管理,不在此硬编码
+
+
+# v0.2.0 爬行速度档位(易用刻度;滑杆式下拉直接用这 7 档)。下限 0.5 保证
+# 最慢也还在动,上限 8 配合 body 的绝对安全上限(ABS_SPEED_MAX)。
+CRAWL_SPEED_CHOICES = (0.5, 1.0, 2.0, 3.0, 4.0, 6.0, 8.0)
+CRAWL_SPEED_DEFAULT = 2.0
+
+
+def snap_crawl_speed(value) -> float:
+    """任意值吸附到最近的爬行速度档位(脏值 → 默认档)。"""
+    try:
+        v = float(value)
+    except (TypeError, ValueError):
+        return CRAWL_SPEED_DEFAULT
+    if not (v == v):                       # NaN
+        return CRAWL_SPEED_DEFAULT
+    return min(CRAWL_SPEED_CHOICES, key=lambda c: abs(c - v))
 
 
 DEFAULTS: dict[str, dict] = {
@@ -61,6 +84,10 @@ def load_config() -> AppConfig:
         # 旧配置无 language / 写了不认识的值 → 跟随系统语言(中文系统中文,
         # 否则英文;检测失败回退中文)。宠物存档与其它字段一律不动。
         values["language"] = resolve_language(values.get("language"))
+        # v0.2.0 爬行速度:旧配置没有本键 → 默认档(2×);脏值同样落回默认档,
+        # 绝不因为一个坏字段让宠物不动或飞出去。trail_enabled 缺省即开。
+        values["crawl_speed"] = snap_crawl_speed(
+            values.get("crawl_speed", CRAWL_SPEED_DEFAULT))
         return AppConfig(**values)
     except Exception:
         # 首次运行/文件损坏:同样给出确定语言码,不留空串。

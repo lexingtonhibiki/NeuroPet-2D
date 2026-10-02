@@ -9,6 +9,13 @@ def main() -> None:
         from neuropet.release_probe import main as probe
         probe()
         return
+    # v0.2.0 单实例守卫:只挡"开机自启动"的重复实例(登录时被启动了两次),
+    # 手动启动与 --probe/--smoke 调试入口行为不变。已经有一份在跑就安静
+    # 退出,避免桌面上出现两套宠物窗口。
+    if "--autostart" in sys.argv:
+        from neuropet.core.autostart import acquire_single_instance
+        if not acquire_single_instance():
+            return
     from neuropet.core.windowing import set_dpi_aware
     set_dpi_aware()  # 必须先于任何窗口创建
     from neuropet.core.app import App

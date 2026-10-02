@@ -149,14 +149,23 @@ class StateArbiter:
     一次:取最高优先级意向(同优先级按提交序,先到先得)覆写 st.pos(钳屏),
     无意向则 body 积分结果自然生效。begin_pet 在每宠每帧起点清空上一帧意向
     ——功能卸载后其钩子已从管道摘除,不再有意向产生,写权自动失效。
+
+    v0.2.0:``pet_clamp_fn(pos, pet_id)`` 可选。留白**按宠物身体半径**给,
+    与 ``body/base.py`` 的软墙同一个矩形 —— 旧口径仲裁恒用整屏 60px 而身体
+    用 80px,拖到边缘时两个钳位互相拉扯,用户看到的就是"松手弹回一截"。
+    不传时退回单参 ``clamp_fn``,旧调用方(测试/插件)行为不变。
     """
 
     def __init__(self, clamp_fn: Callable[[tuple[float, float]],
-                                          tuple[float, float]]) -> None:
+                                          tuple[float, float]],
+                 pet_clamp_fn: Callable[[tuple[float, float], str],
+                                        tuple[float, float]] | None = None
+                 ) -> None:
         self._claims: dict[str, list[tuple[int, int, str, str,
                                           tuple[float, float]]]] = {}
         self._seq = 0
         self._clamp = clamp_fn
+        self._pet_clamp = pet_clamp_fn or (lambda pos, _pid: clamp_fn(pos))
         self.last_writer: dict[str, str] = {}      # 诊断:本帧胜出写者
 
     def begin_pet(self, pet_id: str) -> None:
@@ -184,7 +193,7 @@ class StateArbiter:
         if not xs:
             return
         best = max(xs, key=lambda c: (c[0], -c[1]))
-        st.pos = self._clamp(best[4])
+        st.pos = self._pet_clamp(best[4], pid)
         self.last_writer[pid] = best[2]
         self._claims.pop(pid, None)
 
@@ -205,10 +214,10 @@ class FeaturePlugin(ABC):
 class FeatureKernel:
     """功能注册表 + 主循环管道执行器 + 仲裁器宿主。"""
 
-    def __init__(self, app: Any, bus, clamp_fn) -> None:
+    def __init__(self, app: Any, bus, clamp_fn, pet_clamp_fn=None) -> None:
         self.app = app
         self.bus = bus
-        self.arbiter = StateArbiter(clamp_fn)
+        self.arbiter = StateArbiter(clamp_fn, pet_clamp_fn)
         self._features: dict[str, FeaturePlugin] = {}
         self._contexts: dict[str, FeatureContext] = {}
         self._hooks: dict[str, list[_Hook]] = {}

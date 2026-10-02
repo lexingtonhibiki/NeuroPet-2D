@@ -48,6 +48,18 @@ ESCAPE_SPRINT_DUR = (0.3, 0.5)  # 冲刺爆发时长(s,跑约 3~10 BL)
 ESCAPE_DECEL_T = 0.2            # 冲刺后减速时长(s)
 ALERT_TIME = 3.0                # 逃逸后警戒时长(s,触角高频摆动 2~5s)
 FLY_ESCAPE_CAP = 1100.0         # 果蝇飞行观赏截断上限(px/s,ADR-005:900~1100)
+# v0.2.0 速度倍率(v0.2.0 全局"爬行速度"):所有速度类参数按 **基准 × 倍率**
+# 一次算出,不累积乘法(每次滑杆只从 `_p_base` 重算)。倍率上限 8×,但保留
+# **绝对安全上限**:dt 抖动(休眠恢复/长帧)时单帧位移也远小于屏宽,宠物不会
+# 一次"穿屏",也不可能撞进任务栏。ABS 上限取 ≈45 BL/s,仍在美洲大蠊文献
+# 冲刺区间(25~50 BL/s)之内。
+SPEED_MULT_MIN = 0.5
+SPEED_MULT_MAX = 8.0
+ABS_SPEED_MAX = 5200.0          # 任何路径下的硬上限(px/s)
+# 闭合风压对逃速的加成:风压 0 时**完全等于改动前**的 `min(sprint,cap)×intensity`
+# ,风压满时 ×(1+该系数)。这样"更强的逼近 ⇒ 更快的逃逸"是单调的,又不会让
+# 日常逃逸整体变慢(身体留白口径见 core.desktop.margin_for)。
+ESCAPE_PRESSURE_GAIN = 0.6
 GLIDE_SPEED_FLOOR = 0.75        # 滑翔型前进速度下限(fly_speed 的比例):滑翔不能失速悬停
 # ---- 逃逸急停僵住(文献与 deskbug brain.py:275:_freeze_first=0.15~0.55s) ----
 ESCAPE_FREEZE_S = (0.15, 0.55)  # 默认档(蟑螂);果蝇经 params["escape_freeze_s"] 用短档
@@ -114,6 +126,10 @@ EMO_AROUSAL_LO = 0.40       # 唤醒阈值
 EMO_SWEEP_GAIN = 0.60       # 满唤醒时触角扫频增益(+60%)
 EMO_VIG_CYCLE_S = (0.85, 1.25, 1.00)   # 停顿节律周期(s;三值轮转,非等周期)
 
+# ---- v0.2.0 边界提前减速(朝可用边界走时压速,墙线截断只作最后安全网) ----
+EDGE_LOOK = 72.0         # 沿期望方向的探距(px)
+EDGE_SLOWDOWN = 0.45     # 探出可用区时的目标速度系数
+
 
 def emo_ramp(x: float, lo: float) -> float:
     """阈值以上 0→1 的 smoothstep 斜坡(纯函数;判据与运行时同口径复用)。
@@ -146,6 +162,21 @@ def ant_phase_integ_on() -> bool:
         in ("1", "true", "on")
 
 
+def _cursor_pressure(world, pos) -> float:
+    """闭合风压读数(0..1):感知层同一口径,**只读世界快照里已算好的光标运动学**。
+
+    v0.2.0:不新增任何鼠标采样 —— ``WorldView.cursor`` 是
+    ``perception.mouse.update_kinematics`` 每帧写好的同一实例,这里只是把
+    "鼠标速度向量在鼠标→宠物方向上的正投影"换算成 0..1。取不到(合成
+    快照/无光标)返回 0,行为退回改动前的下限。
+    """
+    try:
+        from neuropet.perception.mouse import closing_pressure
+        return closing_pressure(world.cursor, pos)
+    except Exception:
+        return 0.0
+
+
 def drag_lag_step(d, dd, tgt, dt: float, omega_n: float = DRAG_OMEGA_N,
                   zeta: float = DRAG_ZETA):
     """拖拽滞后二阶环节单步(分量式纯函数;测试/探针与运行时同口径复用)。
@@ -172,6 +203,19 @@ class GenericInsectBody:
     def __init__(self, state: PetState, params: dict) -> None:
         self.state = state
         self.p = params
+        # v0.2.0:速度类参数的**基准快照**。``set_speed_multiplier`` 每次都从
+        # 这里重算,不做 "当前值 ×m" —— 后者在滑杆反复升降时会让参数指数级
+        # 漂移。非速度键(几何、步态 profile、escape_freeze_s)不受影响。
+        self._p_base = {k: params[k] for k in
+                        ("cruise", "sprint", "fly_speed", "accel",
+                         "escape_sprint_cap") if k in params}
+        # 不飞物种没有 escape_sprint_cap 键(``_apply_escape`` 取模块常量),
+        # 必须把它补进基准快照:否则 8× 时 sprint 涨到 12000 而 cap 还是
+        # 1500,min() 又把倍率吃掉 —— 这正是"改了 sprint 却跑不起来"的根因。
+        self._p_base.setdefault("escape_sprint_cap", ESCAPE_SPRINT_CAP)
+        self._speed_mult = 1.0
+        self._fly_cap = FLY_ESCAPE_CAP        # 随倍率缩放的飞行/逃逸上限
+        self._bounds_now: tuple | None = None  # 本帧可用矩形(见 apply/_bounds)
         self._speed = 0.0                     # 当前速度 px/s
         self._turn_norm = 0.0                 # 归一化转向强度(供步态内外侧差速)
         self._last_heading = state.heading
@@ -255,6 +299,44 @@ class GenericInsectBody:
             _n = math.hypot(_ax, _ay) or 1.0
             self._drag_axes.append((_ax / _n, _ay / _n))
 
+    # ================= 全局速度倍率(v0.2.0) =================
+    def set_speed_multiplier(self, mult: float) -> float:
+        """把"用户爬行速度倍率 × 临时 buff"一次算进速度类基准参数。
+
+        覆盖 cruise / sprint / fly_speed / accel / escape_sprint_cap 以及
+        飞行逃逸上限(``FLY_ESCAPE_CAP`` 原来是模块常量,8× 时会被它钳死 → 本轮
+        改为按倍率缩放的实例值,保证 8× 真的跑得出来)。**不重建 body**,
+        因此 ``_speed``、步态相位、钉足世界坐标全部原地保留:滑杆升降是
+        "有限加减速",不是顿挫。
+
+        幂等:倍率不变直接返回(面板刷新、语言切换都不会重算)。
+        """
+        try:
+            m = float(mult)
+        except (TypeError, ValueError):
+            return self._speed_mult
+        if not (m == m):                      # NaN → 忽略
+            return self._speed_mult
+        m = max(SPEED_MULT_MIN, min(SPEED_MULT_MAX, m))
+        if abs(m - self._speed_mult) < 1e-9:
+            return self._speed_mult
+        self._speed_mult = m
+        p = self.p
+        base = self._p_base
+        for key, value in base.items():
+            try:
+                p[key] = float(value) * m
+            except (TypeError, ValueError):
+                continue
+        self._fly_cap = FLY_ESCAPE_CAP * m
+        # 当前速度不跳变:交给各自的加速度限幅逐步跟上新上限/下限时。
+        self._speed = min(self._speed, ABS_SPEED_MAX)
+        return m
+
+    @property
+    def speed_multiplier(self) -> float:
+        return self._speed_mult
+
     # ================= 情绪 → 步态(单元 B2;R5) =================
     def set_emotion_gait(self, fear: float, hunger: float,
                          arousal: float) -> None:
@@ -318,6 +400,9 @@ class GenericInsectBody:
         st = self.state
         self._dt = max(1e-4, float(dt))
         self._cmd = cmd
+        # 本帧可用矩形算一次(转向减速与积分软墙共用;Win32 work area 由
+        # DesktopArea 自己按 2s 节流,这里不做任何系统查询)。
+        self._bounds_now = self._bounds(world)
         b = cmd.behavior
         st.activity = b                       # activity 语义与占位版一致
         if b != Behavior.EAT:
@@ -378,8 +463,9 @@ class GenericInsectBody:
                 rate = max(self._esc_rate, math.radians(720.0))
                 st.heading = self._turn_toward(st.heading, desired, rate, dt,
                                                gain=ESCAPE_TURN_GAIN)
-            cap = min(FLY_ESCAPE_CAP, self.p["fly_speed"] * self._flight.speed_gain())
+            cap = min(self._fly_cap, self.p["fly_speed"] * self._flight.speed_gain())
             self._speed += (cap - self._speed) * min(1.0, 4.0 * dt)
+            self._speed = min(self._speed, ABS_SPEED_MAX)
             return
         # 地面逃逸:FREEZE(急停僵住)→ TURN_AWAY → SPRINT → DECEL(调研 §5 状态机)
         if self._esc is None:
@@ -424,7 +510,13 @@ class GenericInsectBody:
                 e["t"] = 0.0
         elif e["phase"] == "sprint":
             cap = float(self.p.get("escape_sprint_cap", ESCAPE_SPRINT_CAP))
-            target_v = min(self.p["sprint"], cap) * clamp(cmd.intensity, 0.6, 1.0)
+            # v0.2.0:风压持续越强 → 逃速越高。驱动力 = 脑给的刺激强度 ×
+            # (1 + 0.6×闭合风压):风压 0 时逐位等于改动前口径(不把日常逃逸
+            # 整体变慢),风压满时 ×1.6;速度仍受 accel 限幅 ⇒ 鼠标停下后
+            # 平滑回落,不突变。
+            drive = clamp(float(getattr(cmd, "intensity", 1.0)), 0.6, 1.0) * \
+                (1.0 + ESCAPE_PRESSURE_GAIN * _cursor_pressure(world, st.pos))
+            target_v = min(self.p["sprint"], cap) * drive
             self._speed += clamp(target_v - self._speed,
                                  -self.p["accel"] * 2.5 * dt, self.p["accel"] * 2.5 * dt)
             if e["t"] >= e["dur"]:
@@ -458,11 +550,12 @@ class GenericInsectBody:
         st.heading = wrap_angle(st.heading + random.uniform(-0.5, 0.5) * dt)
         target_v = self.p["fly_speed"] * clamp(cmd.intensity, 0.5, 1.0) * \
             self._flight.speed_gain()
-        target_v = min(target_v, FLY_ESCAPE_CAP)
+        target_v = min(target_v, self._fly_cap)
         if getattr(self._flight, "glide", False):
             # 滑翔型不能悬停:无论 intensity 如何,前进速度保持 ≥ fly_speed×0.75
             target_v = max(target_v, self.p["fly_speed"] * GLIDE_SPEED_FLOOR)
         self._speed += (target_v - self._speed) * min(1.0, 2.5 * dt)
+        self._speed = min(self._speed, ABS_SPEED_MAX)
 
     # ---- 降落(减速进近 → 触地收翅) ----
     def _apply_land(self, cmd: BehaviorCommand, world: WorldView, dt: float) -> None:
@@ -486,12 +579,47 @@ class GenericInsectBody:
             self._groom_anim += dt * 5.0               # 前足擦刷触角
 
     # ================= 运动积分 =================
+    def _bounds(self, world: WorldView) -> tuple[float, float, float, float]:
+        """本宠的可用矩形 (x0, y0, x1, y1):可用桌面 ∩ 自身身体留白。
+
+        任务栏已由 ``core.desktop`` 扣除;留白取 ``margin_for(window_half)``
+        —— 与拖拽仲裁(StateArbiter → world.clamp_to_screen →
+        desktop.margin_for)**同一个函数**,消除"body 说 80 / arbiter 说 60"
+        互相拉扯造成的边缘瞬移。合成快照没有 ``area()/usable`` 时退回
+        ``clamp_to_screen`` 的同源口径。
+        """
+        area = getattr(world, "area", None)
+        try:
+            half = float(self.p["window_half"])
+        except (KeyError, TypeError, ValueError):
+            half = 0.0
+        margin = 0.0
+        if area is not None:
+            try:
+                margin = float(area().margin_for(half))
+            except Exception:
+                margin = 0.0
+        if margin <= 0.0:
+            from neuropet.core.desktop import margin_for as _mf
+            margin = float(_mf(half))
+        usable = getattr(world, "usable", None)
+        if usable is not None:
+            try:
+                return usable(margin)
+            except Exception:
+                pass
+        x, y = world.clamp_to_screen(self.state.pos, margin)
+        w, h = world.screen
+        return (margin, margin, w - margin, h - margin)
+
     def _wander(self, world: WorldView) -> tuple[float, float]:
         if self._wander_target is None:
-            m = 160
-            self._wander_target = world.clamp_to_screen(
-                (random.uniform(m, world.screen[0] - m),
-                 random.uniform(m, world.screen[1] - m)))
+            x0, y0, x1, y1 = self._bounds(world)
+            if x1 <= x0 or y1 <= y0:
+                x0, y0, x1, y1 = 1.0, 1.0, max(2.0, world.screen[0] - 1.0), \
+                    max(2.0, world.screen[1] - 1.0)
+            self._wander_target = (random.uniform(x0, x1),
+                                   random.uniform(y0, y1))
         return self._wander_target
 
     def _steer_toward(self, tgt: tuple[float, float], spd: float,
@@ -502,6 +630,15 @@ class GenericInsectBody:
         st.heading = self._turn_toward(st.heading, desired, self.p["turn_rate"], dt)
         arrive = clamp(d / 90.0, 0.25, 1.0)
         target_speed = spd * arrive
+        # v0.2.0:朝边界走时**提前**减速,不靠墙线截断兜底(截断只是最后一道
+        # 安全网)。沿期望方向探一段 EDGE_LOOK px,越界则按比例压速;这样
+        # 贴边行走是"慢下来贴边",而不是"撞墙急停+枢转"。
+        x0, y0, x1, y1 = self._bounds_now or self._bounds(world)
+        look = EDGE_LOOK
+        px = st.pos[0] + math.cos(desired) * look
+        py = st.pos[1] + math.sin(desired) * look
+        if px < x0 or px > x1 or py < y0 or py > y1:
+            target_speed *= EDGE_SLOWDOWN
         acc = self.p["accel"] * (2.2 if target_speed > self._speed else 1.0)
         self._speed += clamp(target_speed - self._speed, -acc * dt, acc * dt)
         if d < 14:
@@ -556,6 +693,9 @@ class GenericInsectBody:
         # 转向强度(供步态内外侧差速,~90°/s 归一化)
         self._turn_norm = clamp(wrap_angle(st.heading - self._last_heading) /
                                 max(dt, 1e-4) / math.radians(90.0), -1.0, 1.0)
+        # 绝对安全上限(v0.2.0):任一路径(滑杆 8×、buff、抛掷)都不会超过它,
+        # dt 抖动时单帧位移 = 上限 × dt ≪ 屏宽 ⇒ 不会"穿屏"。
+        self._speed = min(self._speed, ABS_SPEED_MAX)
         vx = math.cos(st.heading) * self._speed
         vy = math.sin(st.heading) * self._speed
         # 松手抛掷(ADR-0032):外速度指数衰减;自足运动速度另算。fling
@@ -572,45 +712,52 @@ class GenericInsectBody:
                 self._fling = [fx * k, fy * k]
         own_dx, own_dy = vx * dt, vy * dt
         nx, ny = st.pos[0] + own_dx + fx * dt, st.pos[1] + own_dy + fy * dt
-        # 软墙(ADR-0031 集成验收修订):只在"自内向外本帧穿越墙线"时
-        # 反弹+钳到线上。躲藏/拖拽等外部权威可把宠物合法停在墙区(屏缘
-        # 暗缝),此时 body 侧不干预(旧版"已在墙外仍钳位+翻转朝向"会
-        # 造成权威释放后 20px 瞬移拉回,并逐帧腐蚀朝向);自足运动会
-        # 自然走回屏内。反弹即刻取消逃逸序列(撞墙即惊觉中断,语义不变)。
-        margin = 80
-        w, hgt = world.screen
-        if st.pos[0] >= margin and nx < margin:
-            if self._pivot_t is None:   # 仅首触设定:贴墙滑行期反射角随动会漂移
-                self._pivot_t = wrap_angle(math.pi - st.heading)
-            nx = margin
-            if self._fling is not None:
-                self._fling[0] = -self._fling[0] * 0.5   # 抛掷撞墙阻尼反弹
-            if self._esc is not None:
-                self._esc = None
-        elif st.pos[0] <= w - margin and nx > w - margin:
-            if self._pivot_t is None:
-                self._pivot_t = wrap_angle(math.pi - st.heading)
-            nx = w - margin
-            if self._fling is not None:
-                self._fling[0] = -self._fling[0] * 0.5
-            if self._esc is not None:
-                self._esc = None
-        if st.pos[1] >= margin and ny < margin:
-            if self._pivot_t is None:
-                self._pivot_t = wrap_angle(-st.heading)
-            ny = margin
-            if self._fling is not None:
-                self._fling[1] = -self._fling[1] * 0.5
-            if self._esc is not None:
-                self._esc = None
-        elif st.pos[1] <= hgt - margin and ny > hgt - margin:
-            if self._pivot_t is None:
-                self._pivot_t = wrap_angle(-st.heading)
-            ny = hgt - margin
-            if self._fling is not None:
-                self._fling[1] = -self._fling[1] * 0.5
-            if self._esc is not None:
-                self._esc = None
+        # v0.2.0 边界口径:与拖拽仲裁、面板落食、随机航点共用同一个"可用
+        # 桌面"(任务栏已扣除),留白由自身画布半径导出。旧口径这里是整屏 80px
+        # 常量,和仲裁的整屏 60px 不一致 —— 用户把宠物拖到屏幕下缘时会看到
+        # "松手回弹一截",任务栏在别的边时更明显。
+        x0, y0, x1, y1 = self._bounds_now or self._bounds(world)
+        inside = x0 <= st.pos[0] <= x1 and y0 <= st.pos[1] <= y1
+        if inside:
+            # 自内向外穿越墙线 → 连续截断 + 枢转。截断只作用于被挡住的那
+            # 一轴,另一轴的位移原样保留 ⇒ 贴边滑行,不"弹回远处"、不重置
+            # 位置、不随机重掷朝向(枢转角只在本帧首触设定,见下)。
+            hit_x = hit_y = False
+            if nx < x0:
+                hit_x = True
+            elif nx > x1:
+                hit_x = True
+            if ny < y0:
+                hit_y = True
+            elif ny > y1:
+                hit_y = True
+            if hit_x:
+                if self._pivot_t is None:   # 仅首触设定:贴墙滑行期反射角随动会漂移
+                    self._pivot_t = wrap_angle(math.pi - st.heading)
+                nx = min(max(nx, x0), x1)
+                if self._fling is not None:
+                    self._fling[0] = -self._fling[0] * 0.5   # 抛掷撞墙阻尼反弹
+                if self._esc is not None:
+                    self._esc = None
+            if hit_y:
+                if self._pivot_t is None:
+                    self._pivot_t = wrap_angle(-st.heading)
+                ny = min(max(ny, y0), y1)
+                if self._fling is not None:
+                    self._fling[1] = -self._fling[1] * 0.5
+                if self._esc is not None:
+                    self._esc = None
+        else:
+            # 已在可用区之外(工作区缩小/自动隐藏任务栏滑出/编排搬动):
+            # **不单帧夹回**。只朝区内最近的合法点转向,并把速度压到巡航档 ——
+            # 沿有限速度自己走回去,视觉上是"转身折返",不是瞬移。
+            tx = min(max(st.pos[0], x0), x1)
+            ty = min(max(st.pos[1], y0), y1)
+            if abs(tx - st.pos[0]) > 1e-6 or abs(ty - st.pos[1]) > 1e-6:
+                st.heading = self._turn_toward(
+                    st.heading, math.atan2(ty - st.pos[1], tx - st.pos[0]),
+                    self.p["turn_rate"] * 1.5, dt)
+            self._speed = min(self._speed, self.p["cruise"])
         # 拖拽动量观测的自身位移记账:无外拖(fling=None)时记录**实际
         # 位移表达式**(nx−pos 的同一浮点值)→ 下帧 ivx≡0 精确归零
         # (零开销不变量);有 fling 时自足部分用推断值

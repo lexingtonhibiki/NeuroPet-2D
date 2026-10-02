@@ -12,8 +12,33 @@ import atexit
 import time
 import tkinter as tk
 
+from neuropet.render.trail import TrailLayer
+
 MAGIC = "#010101"  # 色键透明色:该颜色像素透明且点击穿透
 _KEY_RGB = (1, 1, 1)  # 同上,数值形式(RGB 预合成底色,见 update_pet)
+
+# ================= v0.2.0:视口节拍(黑框闪烁的修复面) =================
+# 黑框/视觉跳变的三个成因,逐条对应下面的实现:
+#  ① 滚动原点算错:`xview_moveto(frac)` 的 frac 是**分数**,Tk 内部换算成
+#     `frac × (scrollregion 宽 − 画布宽)`;旧码传 `left / self.w`,少了
+#     `(画布宽 / self.w)` 这个因子 ⇒ 窗口移到 left 而可见左缘停在
+#     `left × (1 − vw/w)`,两者恒不同步 ⇒ 每改一次几何就跳一截。
+#  ② 中间态被呈现:旧码 geometry → update_idletasks() → 滚动。Tk 在
+#     update_idletasks 里已经跑过一次重绘,此刻窗口位置已是新的而画布原点
+#     还是旧的 ⇒ 未绘到的区域按窗口类背景刷成纯黑(≠ #010101 键色)⇒ 闪黑框。
+#     现改为:先禁用重绘,geometry 与滚动一次做完,finally 恢复后再呈现一帧。
+#  ③ 几何抖动:旧码每 ~2s 就可能改一次几何(缩边与扩边混在一起),等于把
+#     ① ② 每两秒放大一次。现改为**只扩不缩**(运动中)+ 静止一段时间才收边,
+#     扩边时新视口 ⊇ 旧视口 ∪ 内容 ⇒ 屏幕上的像素集合只增不减,运动连续。
+FIT_BOUNDS_INTERVAL_S = 0.2   # 内容包围盒重算节流(5Hz;原来每帧都算 bbox)
+FIT_EDGE = 12                  # 扩边判据的回差(px)
+FIT_MARGIN_GROW = 96           # 运动中窗口在内容外的余量(沿用旧值)
+FIT_MARGIN_SHRINK = 48         # 静止收边后的余量
+FIT_SHRINK_EAGER_S = 2.0       # 内容稳定且视口明显过大 → 提前收边
+FIT_SHRINK_QUIET_S = 6.0       # 内容稳定多久后无条件收边
+FIT_OVERWIDE = 6.0             # 视口面积 > 需要面积 ×该值 ⇒ 判"过大"
+WM_SETREDRAW = 0x000B          # Win32:开关窗口重绘
+_RDW = 0x0001 | 0x0080       # RedrawWindow: INVALIDATE | ALLCHILDREN
 
 
 def set_dpi_aware() -> None:
@@ -126,6 +151,51 @@ def display_signature(pose: dict, traits: dict, x: float, y: float,
 
 
 
+class _RedrawGuard:
+    """Win32 ``WM_SETREDRAW`` 抑制:批量改几何/滚动期间**不呈现中间态**。
+
+    色键窗在原生 resize/move 擦除期间按窗口类背景涂黑,而色键是 #010101,
+    所以"尚未绘制"的黑与键色不同 = 可见黑框;唯一不改配色也不退回全屏
+    画布的办法就是让这段过渡根本不上屏。
+
+    失败安全:任一步异常都已在 ``__exit__`` 的 finally 语义下恢复(wParam=1
+    + 一次 RedrawWindow),异常照旧向上抛由调用点兜住;非 Windows 或
+    ``ctypes`` 不可用时整个类退化为空操作,行为与修复前完全一致。
+    """
+
+    def __init__(self, *tk_windows) -> None:
+        self._wins = [w for w in tk_windows if w is not None]
+        self._user32 = None
+        self._hwnds: list[int] = []
+
+    def __enter__(self):
+        if not self._wins:
+            return self
+        try:
+            import ctypes
+            self._user32 = ctypes.windll.user32
+            self._hwnds = [int(w.winfo_id()) for w in self._wins]
+            for hwnd in self._hwnds:
+                self._user32.SendMessageW(hwnd, WM_SETREDRAW, 0, 0)
+        except Exception:
+            self._user32 = None
+            self._hwnds = []
+        return self
+
+    def __exit__(self, *exc) -> bool:
+        if self._user32 is None or not self._hwnds:
+            return False
+        try:
+            for hwnd in self._hwnds:
+                self._user32.SendMessageW(hwnd, WM_SETREDRAW, 1, 0)
+                self._user32.RedrawWindow(hwnd, None, None, _RDW)
+        except Exception:
+            pass
+        self._user32 = None
+        self._hwnds = []
+        return False        # 不吞异常
+
+
 class OverlayStage:
     """全屏共享舞台:所有宠物/食物/区域画在同一透明窗口里。"""
 
@@ -143,7 +213,9 @@ class OverlayStage:
                                 highlightthickness=0, bd=0)
         self.canvas.pack(fill="both", expand=True)
         self._viewport = (0, 0, 1, 1)
-        self._viewport_time = 0.0
+        self._fit_checked = 0.0          # 内容包围盒上次重算时刻(节流)
+        self._fit_content = None         # 上次重算到的内容矩形
+        self._fit_quiet_since = 0.0      # 内容矩形最后一次变化的时刻
         self._pet_items: dict[str, int] = {}
         # 值=(常驻 tk.PhotoImage, 尺寸):尺寸不变时原地换数据,见 update_pet
         self._pet_photos: dict[str, tuple[tk.PhotoImage, tuple[int, int]]] = {}
@@ -162,6 +234,10 @@ class OverlayStage:
         self._merged_sigs: dict[str, tuple] = {}   # 帧签名(成员图对象/坐标/遮挡)
         self._static_ids: list[int] = []
         self._handlers: dict[str, object] = {}
+        # v0.2.0 高速拖尾:矢量线段装饰层(非图像,项数与长度双重有界)。
+        # 挂在同一块画布上 ⇒ 自动参与 fit_viewport 的包围盒,复用现成的
+        # 视口节拍,不新增任何 Win32 查询或位图内存。
+        self.trail = TrailLayer(self.canvas)
         boost_timer_resolution()
 
     # ---- 宠物项 ----
@@ -266,43 +342,95 @@ class OverlayStage:
                 self.canvas.coords(self._pet_items[pid], raw[1], raw[2])
         self._merged_groups = new_groups
 
-    def fit_viewport(self, force=False) -> None:
-        """Keep screen-space drawing, allocate a window only around visible items.
+    def _content_bounds(self) -> tuple[int, int, int, int]:
+        """画布上所有"与屏幕相交"的项的包围盒(屏幕坐标)。
 
-        A 96-pixel margin avoids constantly resizing during ordinary motion. All
-        canvas items, including food and speech bubbles, participate in bounds.
+        离屏项(重叠组合成的成员单项被挪到 -9999)必须过滤掉:它们会把包围盒
+        拉成负数,与屏幕求交后得到空矩形,视口随之塌成 1×1。没有可见项时
+        返回左上角 1×1 占位(窗口缩到最小,不留全屏黑底)。
         """
         boxes = []
         for item in self.canvas.find_all():
             box = self.canvas.bbox(item)
-            if box and box[2] > 0 and box[3] > 0 and box[0] < self.w and box[1] < self.h:
+            if (box and box[2] > box[0] and box[3] > box[1]
+                    and box[2] > 0 and box[3] > 0
+                    and box[0] < self.w and box[1] < self.h):
                 boxes.append(box)
-        if boxes:
-            bounds = (max(0, min(b[0] for b in boxes)), max(0, min(b[1] for b in boxes)),
-                      min(self.w, max(b[2] for b in boxes)), min(self.h, max(b[3] for b in boxes)))
-        else:
-            bounds = (0, 0, 1, 1)
-        left, top, right, bottom = self._viewport
+        if not boxes:
+            return (0, 0, 1, 1)
+        return (max(0, min(b[0] for b in boxes)), max(0, min(b[1] for b in boxes)),
+                min(self.w, max(b[2] for b in boxes)),
+                min(self.h, max(b[3] for b in boxes)))
+
+    def fit_viewport(self, force: bool = False) -> None:
+        """屏幕坐标作画 + 窗口只包住可见内容(v0.2.0:只扩不缩 + 原子过渡)。
+
+        节流:内容包围盒按 ``FIT_BOUNDS_INTERVAL_S`` 重算(5Hz),不是每帧。
+        扩边:任何内容越出视口 ``FIT_EDGE`` 立即扩,且新视口取
+        **旧视口 ∪ 内容(+余量)** —— 屏幕上的像素集合只增不减,所以扩边本身
+        连续,不会被"新露出来的空白"闪一下。
+        收边:内容稳定 ``FIT_SHRINK_EAGER_S`` 且视口明显过大,或稳定
+        ``FIT_SHRINK_QUIET_S`` 后才收(收边时内容必然在视口内,同样连续)。
+        """
         now = time.perf_counter()
-        fits = bounds[0] >= left + 16 and bounds[1] >= top + 16 and bounds[2] <= right - 16 and bounds[3] <= bottom - 16
-        # At screen edges the extra margin cannot exist; exact containment is enough.
-        fits = fits or (bounds[0] >= left and bounds[1] >= top and bounds[2] <= right and bounds[3] <= bottom and
-                        (left == 0 or top == 0 or right == self.w or bottom == self.h))
-        if not force and fits and now - self._viewport_time < 2:
+        if not force and now - self._fit_checked < FIT_BOUNDS_INTERVAL_S:
             return
-        margin = 96 if boxes else 0
-        new = (max(0, bounds[0]-margin), max(0, bounds[1]-margin),
-               min(self.w, bounds[2]+margin), min(self.h, bounds[3]+margin))
-        self._viewport_time = now
+        self._fit_checked = now
+        content = self._content_bounds()
+        if content != self._fit_content:
+            self._fit_content = content
+            self._fit_quiet_since = now
+        left, top, right, bottom = self._viewport
+        grew = (content[0] < left - FIT_EDGE or content[1] < top - FIT_EDGE
+                or content[2] > right + FIT_EDGE or content[3] > bottom + FIT_EDGE)
+        if force or grew:
+            margin = FIT_MARGIN_GROW
+            new = (max(0, min(left, content[0] - margin)),
+                   max(0, min(top, content[1] - margin)),
+                   min(self.w, max(right, content[2] + margin)),
+                   min(self.h, max(bottom, content[3] + margin)))
+            self._apply_viewport(new)
+            return
+        quiet = now - self._fit_quiet_since
+        if quiet < FIT_SHRINK_QUIET_S and not (
+                quiet >= FIT_SHRINK_EAGER_S and self._overwide(content)):
+            return
+        if content == (0, 0, 1, 1):
+            self._apply_viewport(content)          # 无内容:收到最小窗口
+            return
+        margin = FIT_MARGIN_SHRINK
+        self._apply_viewport(
+            (max(0, content[0] - margin), max(0, content[1] - margin),
+             min(self.w, content[2] + margin), min(self.h, content[3] + margin)))
+
+    def _overwide(self, content: tuple[int, int, int, int]) -> bool:
+        """视口是否明显大于当前内容需要(面积比 > FIT_OVERWIDE)。"""
+        left, top, right, bottom = self._viewport
+        need = ((content[2] - content[0] + 2 * FIT_MARGIN_SHRINK)
+                * (content[3] - content[1] + 2 * FIT_MARGIN_SHRINK))
+        return (right - left) * (bottom - top) > FIT_OVERWIDE * max(1.0, need)
+
+    def _apply_viewport(self, new: tuple[int, int, int, int]) -> None:
+        """一次原子过渡:改几何 + 设画布原点,期间不上屏,finally 恢复重绘。
+
+        顺序不可换:必须先让 Tk 落实新的分配(画布宽),``xview_moveto`` 才能
+        按 ``left / (scrollregion 宽 − 画布宽)`` 反解出"可见左缘恰为 left"。
+        整个过程包在 ``_RedrawGuard`` 里 ⇒ 中间态不上屏,只呈现恢复后的一帧。
+        """
         if new == self._viewport:
             return
         self._viewport = new
         left, top, right, bottom = new
-        self.win.geometry(f"{max(1, right-left)}x{max(1, bottom-top)}+{left}+{top}")
-        # Update the allocation before scrolling so Tk clamps against the new size.
-        self.win.update_idletasks()
-        self.canvas.xview_moveto(left / self.w)
-        self.canvas.yview_moveto(top / self.h)
+        width = max(1, right - left)
+        height = max(1, bottom - top)
+        with _RedrawGuard(self.win, self.canvas):
+            self.win.geometry(f"{width}x{height}+{left}+{top}")
+            self.win.update_idletasks()          # 落实分配(不上屏)
+            # frac = left / (scrollregion 宽 − 画布宽):Tk 的 xview_moveto
+            # 把 frac 乘成绝对像素。视口占满整屏时分母为 1、Tk 侧夹到 0,
+            # 与 left 必为 0 一致。
+            self.canvas.xview_moveto(min(1.0, left / max(1, self.w - width)))
+            self.canvas.yview_moveto(min(1.0, top / max(1, self.h - height)))
 
     def _compute_overlap_groups(self) -> list[tuple[str, ...]]:
         ids = list(self._pet_raw)
@@ -423,6 +551,7 @@ class OverlayStage:
         self._pet_photos[pet_id] = (photo, (pil_image.size[0], pil_image.size[1]))
 
     def remove_pet(self, pet_id: str) -> None:
+        self.trail.remove(pet_id)
         if pet_id in self._pet_items:
             self.canvas.delete(self._pet_items[pet_id])
             del self._pet_items[pet_id]
@@ -497,4 +626,5 @@ class OverlayStage:
         return self.canvas
 
     def destroy(self) -> None:
+        self.trail.clear()
         self.win.destroy()

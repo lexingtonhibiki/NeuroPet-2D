@@ -108,13 +108,41 @@ STRINGS: dict[str, tuple[str, str]] = {
     "settings.size_selected": ("{name} 的显示大小", "Display size for {name}"),
     "settings.size_none": ("宠物显示大小（请先选中桌面宠物）",
                            "Pet display size (select a pet on the desk first)"),
+    "settings.size_hidden": ("{name} 已隐藏，召回后可调整大小",
+                             "{name} is hidden — recall it to change its size"),
+    "settings.pet_label": ("当前宠物", "Current pet"),
+    "settings.pet_recall": ("召回它", "Recall it"),
     "settings.startup": ("启动时打开控制面板", "Open the panel at startup"),
     "settings.click_feed": ("在桌面点击放食物（自动结束）",
                             "Click the desktop to drop food (auto-stops)"),
+    # ---- v0.2.0:爬行速度 / 拖尾 / 开机自启动 ----
+    "settings.speed": ("全局爬行速度", "Crawling speed"),
+    "settings.speed_now": ("当前 {mult:g}×（默认 2×，0.5×~8×）",
+                           "Now {mult:g}× (default 2×, 0.5× to 8×)"),
+    "settings.speed_note": ("同时作用于巡航与逃跑；不改变饥饿、记忆与食物节奏。",
+                            "Applies to cruising and fleeing; hunger, memories and "
+                            "feeding keep their own pace."),
+    "settings.trails": ("高速拖尾（跑得快才出现）",
+                        "Speed trails (only when running fast)"),
+    "settings.autostart": ("开机自启动（Windows）", "Start with Windows"),
+    "settings.autostart_note": ("勾选后在 Windows 登录时自动启动并进入托盘；"
+                                "便携文件夹移动后需重新勾选以更新路径。",
+                                "Runs at Windows sign-in and stays in the tray. "
+                                "Re-tick it after moving the portable folder so "
+                                "the path updates."),
+    "error.autostart": ("无法修改开机自启动设置。",
+                        "Could not change the start-with-Windows setting."),
+    "error.save": ("设置无法保存（文件夹可能不可写）。请检查 data/ 目录的权限。",
+                   "Could not save the settings (the folder may be read-only). "
+                   "Check the permissions of the data/ folder."),
     "settings.hint": ("关闭面板会收起程序，宠物继续活动。\n从系统托盘可再次打开。",
                       "Closing the panel hides the app; pets keep moving.\n"
                       "Reopen it from the system tray."),
-    "settings.quit": ("保存并退出程序", "Save and quit"),
+    "settings.autosave": ("改动会自动保存，无需保存按钮。\n关闭窗口不会退出程序；"
+                          "退出请用系统托盘菜单。",
+                          "Changes are saved automatically — there is no save button.\n"
+                          "Closing this window does not quit; use the tray menu."),
+    "settings.close": ("关闭设置", "Close settings"),
     # 语言选项本身两种语言下都不翻译(简体中文 / English 是语言自称),
     # 所以任何语言的用户都能找到自己的那一项。
     "settings.language_zh": ("简体中文", "简体中文"),

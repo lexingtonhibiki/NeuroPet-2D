@@ -10,10 +10,13 @@ scratch/原型测量报告.md §4 的实测结论:
   急停 jab = 高速"直指"(以轨迹笔直度近似)后速度骤降;急停但轨迹弯曲
   则退化为 idle(枚举中无独立"急停"值)。
 - compute_stimuli:按物种感知画像差异化——
-  * 果蝇:wind 通道在 gesture=rush/approach_fast 且距离<300px 时乘
-    wind_gust_gain 增益,meta 带"风向象限";当风与食物气味同时出现时在
-    风刺激 meta["coincide"]=True(供大脑 GF 门控;门控逻辑在大脑不在感知层)。
+  * 果蝇:wind 通道在 gesture=rush/approach_fast 且闭合逼近时乘
+    wind_gust_gain 增益,meta 带"风向象限"与闭合速度;当风与食物气味同时出现
+    时在风刺激 meta["coincide"]=True(供大脑 GF 门控;门控逻辑在大脑不在感知层)。
   * 蟑螂:vibration/contact 主导(光标点按 jab / 贴身 / 被抓持)。
+  * 风压(v0.2.0):**闭合速度**(鼠标速度向量在"鼠标→宠物"方向上的正投影)
+    归一后与距离衰减相乘 → 直冲才起风,静止/远离为 0,擦身保留弱剪切扰动。
+    同一纯函数 `closing_pressure` 也被身体逃逸驱动读取(不重复采样鼠标)。
   * 食物气味:多食物取"最强一束"+方向(浓度随距离单调衰减)。
   * 冷区刺激:区域内按距离衰减。
 """
@@ -53,6 +56,19 @@ JAB_R = 260.0           # 点按(jab)冲击可感半径
 # 风向象限:按"气流被光标推向的方位"8 分位(屏幕 y 向下,北 = -y)
 _WIND_QUADRANTS = ("东", "东北", "北", "西北", "西", "西南", "南", "东南")
 
+
+# ---------------- 闭合风压(v0.2.0:鼠标越快朝宠物逼近 → 风压越强) ----------------
+# 旧口径只看"鼠标总速度 × 距离衰减":横向擦过和直冲宠物给同一个强度,
+# 且与逃离方向无关。v0.2.0 改用**闭合速度** = 鼠标速度向量在"鼠标 → 宠物"
+# 方向上的正投影(>0 才算逼近),平方归一后与距离衰减相乘:
+#   闭合速度 0(静止/远离) → 风压 0;擦身而过 → 只剩下面那一项弱剪切扰动;
+#   闭合速度 CLOSE_REF → 风压到顶。平方是廉价的拟真近似(风压 ∝ 动压)。
+CLOSE_REF = 1500.0      # px/s,闭合速度归一基准
+SHEAR_GAIN = 0.35       # 擦身(横向高速但远离)的弱空气扰动系数
+PRESSURE_GAIN = 2.6     # 风压 → 刺激强度的总增益(与旧 2.4 同量级)
+# 距离衰减取平方根:线性衰减时"200px 外全速冲来"只剩 1/3 风压,手感的威胁
+# 感太弱;开根后同一情形约 0.58,贴近时仍按 (1-d/R) 单调收敛到 0。
+FALLOFF_EXP = 0.5
 
 # ================================ 光标运动学 ================================
 
@@ -164,6 +180,62 @@ def update_kinematics(history: deque[CursorSample], kin: CursorKinematics) -> No
     st["prev_s"] = kin.speed
 
 
+def closing_pressure(cur, pos, radius: float = WIND_R) -> float:
+    """闭合风压 0..1(纯函数;感知层与身体逃逸驱动共用同一口径)。
+
+    - ``cur``:``CursorKinematics``(世界模型里每帧更新的同一实例);
+    - ``pos``: 宠物世界坐标;
+    - 返回 0 = 静止或正在远离;返回 1 = 以 CLOSE_REF 的闭合速度直冲而来。
+
+    读的是**已经算好的**光标运动学,不新增任何鼠标采样(单一事实源仍是
+    ``update_kinematics``)。鼠标位置缺失(未初始化)或与宠物重合时退化为 0。
+    """
+    try:
+        cx, cy = float(cur.x), float(cur.y)
+        vx, vy = float(cur.vx), float(cur.vy)
+    except (AttributeError, TypeError, ValueError):
+        return 0.0
+    if not (cx == cx and cy == cy):       # NaN 位置
+        return 0.0
+    dx, dy = float(pos[0]) - cx, float(pos[1]) - cy
+    d = math.hypot(dx, dy)
+    if radius <= 0.0 or d >= radius or d < 1e-6:
+        return 0.0
+    ux, uy = dx / d, dy / d                # 光标 → 宠物 方向(别写成反的)
+    closing = vx * ux + vy * uy             # 正投影:>0 = 朝宠物逼近
+    if closing <= 0.0:
+        return 0.0
+    falloff = (1.0 - d / radius) ** FALLOFF_EXP
+    norm = min(1.0, closing / CLOSE_REF)
+    return clamp(norm * norm * falloff)
+
+
+def shear_pressure(cur, pos, radius: float = WIND_R) -> float:
+    """擦身而过的弱扰动 0..1:横向高速、正在远离 ⇒ 只有一点点空气扰动。"""
+    try:
+        cx, cy = float(cur.x), float(cur.y)
+        vx, vy = float(cur.vx), float(cur.vy)
+    except (AttributeError, TypeError, ValueError):
+        return 0.0
+    dx, dy = float(pos[0]) - cx, float(pos[1]) - cy
+    d = math.hypot(dx, dy)
+    speed = math.hypot(vx, vy)
+    if radius <= 0.0 or d >= radius or d < 1e-6 or speed <= 0.0:
+        return 0.0
+    ux, uy = dx / d, dy / d                # 光标 → 宠物 方向
+    if (vx * ux + vy * uy) > 0.0:          # 正在逼近 → 交给 closing_pressure
+        return 0.0
+    lateral = abs(vx * (-uy) + vy * ux)    # 垂直分量 = 擦身强度
+    norm = min(1.0, lateral / CLOSE_REF)
+    return clamp(norm * norm * (1.0 - d / radius) ** FALLOFF_EXP * SHEAR_GAIN)
+
+
+def wind_pressure(cur, pos, radius: float = WIND_R) -> float:
+    """总风压 = max(闭合逼近, 擦身剪切);两者都不看则 0。"""
+    return max(closing_pressure(cur, pos, radius),
+               shear_pressure(cur, pos, radius))
+
+
 def _wind_quadrant(vx: float, vy: float) -> str:
     """风向象限:气流被光标推向的方位(屏幕 y 向下,北 = -y);静止时返回"无"。"""
     if abs(vx) < 1e-6 and abs(vy) < 1e-6:
@@ -216,20 +288,27 @@ def compute_stimuli(state, view: WorldView, profile: dict[str, float]) -> list[S
                   "odor_strength": round(best_food.odor_strength, 3)})
         out.append(odor_stim)
 
-    # ---- 风:光标快速移动推动空气,随距离线性衰减;冲刺/快速冲近按物种增益 ----
+    # ---- 风:闭合速度 × 距离衰减(静态/远离为 0,擦身保留弱剪切扰动) ----
+    # v0.2.0:不再是"总速度 × 距离":直冲宠物才起风,横擦只留一点扰动。
+    # 冲刺/快速冲近按物种 gust_gain 放大(果蝇既有起飞反应保持不变)。
     wind_stim: Stimulus | None = None
     gusting = cur.gesture in ("rush", "approach_fast")   # 果蝇风通道增益场景
-    if d < WIND_R and cur.speed > 60.0:
-        base = (cur.speed / 2600.0) * (1.0 - d / WIND_R)
-        if gusting:
+    press = wind_pressure(cur, (px, py))
+    if press > 0.0:
+        base = press
+        if gusting and closing_pressure(cur, (px, py)) > 0.0:
             base *= gust_gain
-        inten = clamp(base) * wind_prof * 2.4
+        inten = base * wind_prof * PRESSURE_GAIN
         if inten > 0.04:
+            closing_v = ((cur.vx * (cur.x - px) + cur.vy * (cur.y - py))
+                         / max(1e-3, d)) if d > 1e-6 else 0.0
             wind_stim = Stimulus(
                 StimulusKind.WIND, source="cursor", pos=(cur.x, cur.y),
                 intensity=min(1.0, inten),
                 direction=((cur.x - px) / max(1e-3, d), (cur.y - py) / max(1e-3, d)),
                 meta={"gesture": cur.gesture, "dist": round(d, 1),
+                      "closing_v": round(closing_v, 1),
+                      "pressure": round(press, 3),
                       "wind_quadrant": _wind_quadrant(cur.vx, cur.vy),
                       "wind_vec": [round(cur.vx, 1), round(cur.vy, 1)]})
             out.append(wind_stim)

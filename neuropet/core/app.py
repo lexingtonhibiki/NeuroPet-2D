@@ -10,6 +10,7 @@ import ctypes
 import gc
 import json
 import math
+import os
 import sys
 import threading
 import time
@@ -19,13 +20,17 @@ from collections import deque
 
 from .bus import EventBus
 from .config import (DATA_DIR, PLUGINS_DIR, PETS_PATH, AppConfig, load_config,
-                     load_roster, profile_dir, save_config, save_roster)
+                     load_roster, profile_dir, save_config, save_roster,
+                     snap_crawl_speed, CRAWL_SPEED_CHOICES)
+from .desktop import DEFAULT_MARGIN
 from .contracts import (Behavior, BehaviorCommand, MovementMode,
                         PetState, StimulusKind)
 from .i18n import set_lang, t
 from .interfaces import IBody, IBrain, SpeciesPlugin
 from .plugin import PluginRegistry
 from .windowing import OverlayStage, display_signature, set_dpi_aware, working_set_mb
+from .autostart import enabled as autostart_enabled
+from .autostart import set_startup as write_autostart
 from ..perception.screen import ScreenMonitor
 from .world import WorldModel
 from ..brain.mastery import (learned_from_summary, mastery_enabled,
@@ -34,6 +39,12 @@ from . import instr as _I          # r25 U0:插桩(默认关;NEUROPET_INSTR=1 �
                                    # 只观测不改行为,关闭时入口函数首行短路
 
 FRAME_DT = 1.0 / 60.0
+
+# ================= v0.2.0:全局爬行速度 + 可用桌面 + 拖尾 =================
+# 速度倍率只作用在**运动参数**上(cruise/sprint/fly_speed/accel/escape 上限),
+# 绝不同乘全局 dt —— 否则饥饿、记忆、食物与飞行节奏会被一起改坏。
+CRAWL_SPEED_ENV = "NEUROPET_CRAWL_SPEED"   # 启动档位覆盖(验收/调试用)
+TRAIL_KEY = "trail"                        # 拖尾开关事件主题
 
 # r25 A4:熟练度重算节拍(与面板 2Hz 同拍)。等级只从经历统计里长出来,用户
 # 不再手拧;**自动派生只写 brain(内存),不写 cfg、不落盘,且只上调不下调
@@ -405,6 +416,19 @@ class App:
         self.world = WorldModel(self.root.winfo_screenwidth(), self.root.winfo_screenheight())
         self.stage = OverlayStage(self.root, *self.world.screen)
         self.stage.bind_interaction(self._on_press, self._on_drag, self._on_release)
+        try:
+            self._stage_hwnd = int(self.stage.win.winfo_id())
+        except Exception:
+            self._stage_hwnd = 0
+        # v0.2.0:可用桌面边界句柄就是 world 持有的那一份(任务栏已扣除),
+        # 身体软墙/拖拽仲裁/面板落食三处共用;2s 节流刷新在 _step_frame。
+        self._desktop_acc = 1e9      # 初值远超周期:首帧立即取一次
+        self.stage.trail.set_enabled(bool(getattr(self.cfg, "trail_enabled", True)))
+        self._crawl_speed = snap_crawl_speed(
+            getattr(self.cfg, "crawl_speed", 2.0))
+        # v0.2.0:``--autostart``(登录自启动)启动时先落托盘。默认 False —— 手动
+        # 双击仍遵循 ``cfg.panel_visible``,两个开关语义独立。
+        self._startup_tray_only = False
         # ---- C2 气泡引导层(共享画布独立 canvas 项,不进宠物精灵管线) ----
         self._static_dirty = True
         self.pets: dict[str, PetHandle] = {}
@@ -420,7 +444,8 @@ class App:
         from .kernel import FeatureKernel
         from ..features import DragFeature
         self._kernel = FeatureKernel(self, self.bus,
-                                     self.world.clamp_to_screen)
+                                     self.world.clamp_to_screen,
+                                     self._clamp_pos)
         self._kernel.mount(DragFeature(self))
         # ---- E4/A3 屏幕感知 + B4 食物效果引擎(集成接线) ----
         self._screen_mon = ScreenMonitor()   # 前台跟踪(内部 2Hz 节流,~20µs/s)
@@ -438,6 +463,11 @@ class App:
         # 面板矩形/可见性缓存:主线程每 0.5s 刷新,钩子线程只读(元组原子读,线程安全)
         self._panel_rect: tuple[int, int, int, int] | None = None
         self._panel_visible = False
+        self._panel_extra_rects: tuple = ()
+        # 点击穿透的同进程命中判断(纯 Win32,钩子线程可用):排除透明舞台,
+        # 否则铺满全屏的色键窗口会把整块桌面都当成"自己人"。
+        self._own_pid = os.getpid()
+        self._stage_hwnd = 0
         self._panel_rect_acc = 1.0       # 节流累加器(初值≥周期:首帧立即刷新)
         self._hook = None
         self._running = True
@@ -537,6 +567,9 @@ class App:
         handle = PetHandle(state, body, brain, scale=scale)
         self.pets[pet_id] = handle
         self.world.upsert_pet(state)
+        # 身体建好后按**它自己的**留白再钳一次位置(上面的钳位用的是无身体
+        # 尺寸的默认留白):体型大的蟑螂不会一出生就半个身子压在任务栏上。
+        state.pos = self.world.clamp_to_screen(state.pos, self._margin_for(handle))
         self.stage.ensure_pet_item(pet_id)
         self._load_profile(handle)
         self.bus.publish("system/pet_added", {"pet_id": pet_id, "species": species_id})
@@ -699,6 +732,15 @@ class App:
                 print(f"[app] 隐藏宠还原失败 {pid}: {exc}")
         self._write_hidden_session()
 
+    # ---------------- v0.2.0:统一边界口径(任务栏已扣除的可用桌面) ----------------
+    def _margin_for(self, h) -> float:
+        """该宠的边界留白 = 渲染半宽(与 body 软墙同一个函数,不留分歧)。"""
+        try:
+            half = h.body.window_half()
+        except Exception:
+            half = 0.0
+        return self.world.desktop.margin_for(half)
+
     # ---------------- AG5:体型缩放(五档,每宠独立) ----------------
     @staticmethod
     def _startup_scale_override() -> float | None:
@@ -731,16 +773,96 @@ class App:
         由 __init__ 重建 SkeletonSpec/LegKinematics/TripodGait —— 即"body 用
         scaled 骨架重建";与 rig.scaled(k) 的等价性见 tests/test_scaling.py)。"""
         if scale == 1.0:
-            return sp.create_body(state)
-        params = self._species_params(sp.get_manifest().id)
-        if params is None:                       # 外部插件不支持缩放:原样回退
-            return sp.create_body(state)
-        from neuropet.body.base import GenericInsectBody
-        body = GenericInsectBody(state, scale_params(params, scale))
-        # rig spec 的 scale 标记回写:参数已按 ×k 重建,from_params 会把 scale
-        # 硬编码为 1.0;这里标注真实档位(pose()["bones"]["scale"] 供渲染/诊断读)。
-        body._rig.spec["scale"] = float(scale)
+            body = sp.create_body(state)
+        else:
+            params = self._species_params(sp.get_manifest().id)
+            if params is None:                       # 外部插件不支持缩放:原样回退
+                body = sp.create_body(state)
+            else:
+                from neuropet.body.base import GenericInsectBody
+                body = GenericInsectBody(state, scale_params(params, scale))
+                # rig spec 的 scale 标记回写:参数已按 ×k 重建,from_params 会
+                # 把 scale 硬编码为 1.0;这里标注真实档位(pose()["bones"]["scale"]
+                # 供渲染/诊断读)。
+                body._rig.spec["scale"] = float(scale)
+        # v0.2.0:全局爬行速度倍率在这里一次算进速度类参数(与体型档位同一次
+        # 构建,不会累积乘法)。buff 也在同一入口叠加,见 _speed_mult。
+        self._apply_speed_multiplier_to(body, pet_id=state.pet_id)
         return body
+
+    def _apply_speed_multiplier_to(self, body, pet_id: str | None = None) -> None:
+        """把"全局倍率 × 该宠 buff"写进 body(插件 body 无此方法则跳过)。"""
+        setter = getattr(body, "set_speed_multiplier", None)
+        if setter is None:
+            return
+        buff = 1.0
+        if pet_id is not None:
+            try:
+                buff = float(self._speed_mult.get(pet_id, 1.0))
+            except Exception:
+                buff = 1.0
+        setter(self._crawl_speed * buff)
+
+    def _sync_speed_multipliers(self) -> None:
+        """把当前倍率同步给**全部**宠物(含隐藏宠:召回即生效)。"""
+        for h in list(self.pets.values()) + list(self._hidden.values()):
+            self._apply_speed_multiplier_to(h.body, pet_id=h.pet_id)
+
+    def crawl_speed(self) -> float:
+        return self._crawl_speed
+
+    def set_crawl_speed(self, mult: float) -> float:
+        """全局爬行速度档位(面板入口):吸附 → 保存 → 立即生效。
+
+        生效方式是**就地改写速度参数**,不重建 body ⇒ 当前位置、朝向、当前
+        速度、钉足世界坐标与步态相位全部连续,滑杆升降只是有限加减速。
+        """
+        value = snap_crawl_speed(mult)
+        self._crawl_speed = value
+        self.cfg.crawl_speed = value
+        save_config(self.cfg)
+        self._sync_speed_multipliers()
+        self.bus.publish("user/crawl_speed", {"mult": value})
+        return value
+
+    def set_trails(self, on: bool) -> bool:
+        """高速拖尾开关(面板入口):存配置 + 立即清/显,默认开。"""
+        self.cfg.trail_enabled = bool(on)
+        save_config(self.cfg)
+        self.stage.trail.set_enabled(self.cfg.trail_enabled)
+        self.bus.publish(TRAIL_KEY, {"on": self.cfg.trail_enabled})
+        return self.cfg.trail_enabled
+
+    def trails(self) -> bool:
+        return bool(getattr(self.stage.trail, "enabled", True))
+
+    def _clamp_pos(self, pos, pet_id: str | None = None):
+        """按宠物身体半径钳位(仲裁器专用;无该宠时用默认留白)。"""
+        h = self.pets.get(pet_id) if pet_id else None
+        margin = self._margin_for(h) if h is not None else DEFAULT_MARGIN
+        return self.world.clamp_to_screen(pos, margin)
+
+    # ---------------- Windows 开机自启动(用户级,注册表为唯一真源) ----------------
+    def autostart_enabled(self) -> bool:
+        """**读注册表**的当前状态(不是配置):便携文件夹移动后路径不再匹配
+        就会显示未勾选,提示重新启用以更新路径。"""
+        try:
+            return bool(autostart_enabled())
+        except Exception:
+            return False
+
+    def set_autostart(self, on: bool) -> bool:
+        """写/删 HKCU Run 的本程序项。返回**实际生效**状态。
+
+        失败时返回 False,面板负责回滚复选框并给双语错误 —— 绝不把
+        "配置里写了 true"当成"系统已注册"。
+        """
+        try:
+            return bool(write_autostart(bool(on)))
+        except Exception as exc:
+            from neuropet.diag import log
+            log(f"[autostart] 切换失败({on}): {exc!r}")
+            return False
 
     def pet_scale(self, pet_id: str) -> float:
         h = self.pets.get(pet_id)
@@ -936,7 +1058,12 @@ class App:
                 print("[app] 无托盘运行，收起面板后可从任务栏恢复")
         except Exception as exc:
             print(f"[app] 托盘初始化失败,无托盘运行: {exc}")
-        if not self.cfg.panel_visible:
+        # v0.2.0:``--autostart`` 启动(登录自启动)时先落托盘,不弹面板。手动双击仍
+        # 遵循 ``cfg.panel_visible`` —— 两个开关(面板可见 / 系统自启动)语义
+        # 独立,不要互相顶替。
+        if "--autostart" in sys.argv:
+            self._startup_tray_only = True
+        if self._startup_tray_only or not self.cfg.panel_visible:
             self._panel.hide()
         self._next_t = time.perf_counter()
         self._last_tick = self._next_t
@@ -983,6 +1110,15 @@ class App:
         if self._panel_rect_acc >= PANEL_RECT_REFRESH_S:
             self._panel_rect_acc = 0.0
             self._refresh_panel_rect()
+        # v0.2.0:可用桌面节流刷新(任务栏显隐/自动隐藏滑出)。DesktopArea 自己
+        # 再按 2s 判一次,这里只是给它节流的机会 —— 不会每帧每宠查 Win32。
+        self._desktop_acc += dt
+        if self._desktop_acc >= 2.0:
+            self._desktop_acc = 0.0
+            try:
+                self.world.refresh_desktop()
+            except Exception:
+                pass
         pos = self._cursor_getter()
         if pos:
             from neuropet.perception.mouse import update_kinematics
@@ -1208,7 +1344,10 @@ class App:
         st = h.state
         if st.activity != Behavior.EAT or st.stomach > 0.95:
             return
-        f = self.world.nearest_food(st.pos, max_r=52)
+        # 取食半径随身体尺寸走(至少 52px):留白随体型放大后,钉在边缘的食物
+        # 若还用固定 52px 就永远够不到,宠物会对着食物"想吃吃不到"。
+        reach = max(52.0, self._margin_for(h))
+        f = self.world.nearest_food(st.pos, max_r=reach)
         if f:
             from neuropet.feeding import FOODS, food_modifiers
             mods = food_modifiers(st.species_id, f.kind)
@@ -1268,15 +1407,12 @@ class App:
                              {"pet_id": h.pet_id, "kind": cmd.kind, "label": label})
 
     def _rebuild_with_speed(self, h: "PetHandle") -> None:
-        '''速度 buff 重建 body(set_pet_scale 同路径;到期/顶替双入口)。'''
+        '''速度 buff 重建 body(set_pet_scale 同路径;到期/顶替双入口)。
+
+        重建后立即重新套用"全局倍率 × buff"(``_build_body`` 已套一次全局,
+        这里补 buff 的那一次 —— 两者都从基准参数算,不叠乘)。'''
         sp = self.species(h.state.species_id)
-        mult = float(self._speed_mult.get(h.pet_id, 1.0))
         h.body = self._build_body(sp, h.state, h.scale)
-        if mult != 1.0 and hasattr(h.body, "p"):
-            p = h.body.p
-            for key in ("cruise", "sprint"):
-                if key in p:
-                    p[key] = float(p[key]) * mult
         h.last_disp_sig = None
         h.last_img = None
         h.last_coords = None
@@ -1296,6 +1432,18 @@ class App:
         pets = list(self.pets.values())
         self.stage.begin_frame()
         self.stage.move_pets({h.pet_id: h.state.pos for h in pets})
+        # v0.2.0 高速拖尾:每帧按**真实位移速度**记录历史点。走的是画布矢量
+        # 线项(非图像),不占渲染配额、不进显示签名,也不影响宠物上传去重。
+        trail = self.stage.trail
+        if trail.enabled:
+            for h in pets:
+                st = h.state
+                try:
+                    half = float(h.body.window_half())
+                except Exception:
+                    half = 0.0
+                trail.update(h.pet_id, st.pos[0], st.pos[1], st.speed,
+                             half, dt, now)
         quota = RENDER_QUOTA if len(pets) <= 3 else 4
         order = quota_rotation(len(pets), self._render_cursor, quota)
         # If every candidate is skipped, still rotate the starting point. A
@@ -1457,9 +1605,12 @@ class App:
         self._drag_pid = pid
         # ADR-0031:位置不再直写 st.pos —— 意向交 DragFeature,经仲裁器
         # 每帧合成(held/frozen 分支 apply_pos;与其他写者显式定序)。
+        # 边界留白用该宠自己的画布半径 ⇒ 拖拽与身体软墙是同一个矩形,
+        # 不会再出现"拖到边缘后宠物落后一段/松手弹回"。
         self._kernel.feature("drag").on_drag(
             pid, self.world.clamp_to_screen(
-                (event.x_root + h.drag_offset[0], event.y_root + h.drag_offset[1])))
+                (event.x_root + h.drag_offset[0], event.y_root + h.drag_offset[1]),
+                self._margin_for(h)))
 
     def _on_release(self, event) -> None:
         pid = getattr(self, "_drag_pid", None)
@@ -1688,6 +1839,12 @@ class App:
         缓存含 PANEL_RECT_PAD 外扩余量;面板隐藏/销毁时按不可见处理。
         写入顺序:先 rect 后 visible —— 保证钩子线程读到 visible=True 时
         rect 一定是有效值(反之先 False 再清 rect)。
+
+        v0.2.0:穿透区域从"主面板 + 已登记的可选窗口"扩到**本进程的全部 Tk
+        顶层窗口**,因此 ttk 下拉的弹出层(独立原生窗 ``.!tk::combobox::Popdown``,
+        不在 ``extra_windows`` 里)也会被放行 —— 否则投喂模式的全局鼠标钩子
+        会把点击下拉项当成"点在桌面上"而吞掉。枚举在主线程做(钩子线程禁止
+        调 Tk),透明舞台被显式排除,否则整屏都成了穿透区、投喂模式失效。
         """
         panel = self._panel
         if panel is None:
@@ -1705,36 +1862,91 @@ class App:
             x1 = x0 + int(win.winfo_width()) + PANEL_RECT_PAD * 2
             y1 = y0 + int(win.winfo_height()) + PANEL_RECT_PAD * 2
             self._panel_rect = (x0, y0, x1, y1)
-            extras = []
-            for extra in getattr(panel, "visible_windows", lambda: [])():
-                if extra is win:
-                    continue
-                ex, ey = int(extra.winfo_rootx()), int(extra.winfo_rooty())
-                extras.append((ex - PANEL_RECT_PAD, ey - PANEL_RECT_PAD,
-                               ex + int(extra.winfo_width()) + PANEL_RECT_PAD,
-                               ey + int(extra.winfo_height()) + PANEL_RECT_PAD))
-            self._panel_extra_rects = tuple(extras)
+            self._panel_extra_rects = self._own_toplevel_rects()
             self._panel_visible = True
         except Exception:
             # 窗口销毁中等 tkinter 异常:一律按不可见处理
             self._panel_visible = False
             self._panel_rect = None
 
-    def _panel_contains(self, x: int, y: int) -> bool:
-        """点 (x, y) 是否落在面板上(钩子线程调用:只读缓存,禁止 tkinter 调用)。
+    def _own_toplevel_rects(self) -> tuple:
+        """本进程可见 Tk 顶层窗口矩形(排除透明舞台),供点击穿透判定。
 
-        返回 True 的点钩子不吞左键 → 面板可正常点击(投喂模式不被全局拦截)。
+        ``winfo children .`` 只在**主线程**调用(钩子线程不碰 Tk);每个矩形
+        读 4 个 winfo,每 0.5s 一次,开销可忽略。
         """
-        if not self._panel_visible:
+        try:
+            names = self.root.tk.call("winfo", "children", ".")
+        except Exception:
+            return ()
+        try:
+            skip = int(self.stage.win.winfo_id())
+        except Exception:
+            skip = None
+        rects = []
+        for name in names or ():
+            try:
+                widget = self.root.nametowidget(name)
+                if not widget.winfo_exists() or not widget.winfo_viewable():
+                    continue
+                if skip is not None and int(widget.winfo_id()) == skip:
+                    continue
+                x, y = int(widget.winfo_rootx()), int(widget.winfo_rooty())
+                width, height = int(widget.winfo_width()), int(widget.winfo_height())
+            except Exception:
+                continue
+            if width <= 0 or height <= 0:
+                continue
+            rects.append((x - PANEL_RECT_PAD, y - PANEL_RECT_PAD,
+                          x + width + PANEL_RECT_PAD, y + height + PANEL_RECT_PAD))
+        return tuple(rects)
+
+    def _panel_contains(self, x: int, y: int) -> bool:
+        """点 (x, y) 是否落在本程序的界面上(钩子线程调用:禁止 tkinter 调用)。
+
+        返回 True 的点钩子不吞左键 → 面板、设置窗口和 ttk 下拉的弹出层都能
+        正常点击(投喂模式不被全局拦截)。
+
+        判据两层:① 主线程缓存的矩形(面板 + 全部可见顶层窗,0.5s 节流);
+        ② **同进程命中判断** —— 纯 Win32 ``WindowFromPoint`` +
+        ``GetWindowThreadProcessId``,精确无缓存延迟,所以刚弹出的下拉层第一
+        次点击就能放行;透明色键舞台被显式排除(它铺满全屏,若当成"自己人",
+        投喂模式会整体失效)。第 ② 层不碰 Tk,可在钩子线程安全调用。
+        """
+        if self._panel_visible:
+            rect = self._panel_rect    # 元组原子读,线程安全
+            if rect is not None:
+                x0, y0, x1, y1 = rect
+                if x0 <= x <= x1 and y0 <= y <= y1:
+                    return True
+            for ex0, ey0, ex1, ey1 in getattr(self, "_panel_extra_rects", ()):
+                if ex0 <= x <= ex1 and ey0 <= y <= ey1:
+                    return True
+        return self._own_ui_window_at(x, y)
+
+    def _own_ui_window_at(self, x: int, y: int) -> bool:
+        """点 (x,y) 最顶层的窗口是否属于本进程且不是透明舞台(纯 Win32)。"""
+        try:
+            import ctypes
+            from ctypes import wintypes
+
+            class POINT(ctypes.Structure):
+                _fields_ = [("x", ctypes.c_long), ("y", ctypes.c_long)]
+
+            user32 = ctypes.windll.user32
+            user32.WindowFromPoint.argtypes = [wintypes.POINT]
+            user32.WindowFromPoint.restype = wintypes.HWND
+            hwnd = user32.WindowFromPoint(POINT(int(x), int(y)))
+            if not hwnd:
+                return False
+            stage = self._stage_hwnd
+            if stage and int(hwnd) == int(stage):
+                return False                      # 透明色键舞台:不当自己人
+            pid = wintypes.DWORD()
+            user32.GetWindowThreadProcessId(wintypes.HWND(hwnd), ctypes.byref(pid))
+            return pid.value == self._own_pid
+        except Exception:
             return False
-        rect = self._panel_rect    # 元组原子读,线程安全
-        if rect is None:
-            return False
-        x0, y0, x1, y1 = rect
-        if x0 <= x <= x1 and y0 <= y <= y1:
-            return True
-        return any(ex0 <= x <= ex1 and ey0 <= y <= ey1
-                   for ex0, ey0, ex1, ey1 in getattr(self, "_panel_extra_rects", ()))
 
     def drop_food(self, x: int, y: int, kind: str | None = None) -> None:
         import random as _random

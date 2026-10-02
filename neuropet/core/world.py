@@ -20,6 +20,24 @@ try:
 except Exception:                                       # pragma: no cover
     _screen_region_of = None
 
+# v0.2.0:可用桌面边界(已扣除任务栏)的唯一事实源。WorldModel 持有一份
+# DesktopArea,``clamp_to_screen`` 一律走它 —— 身体积分、拖拽仲裁、面板落食
+# 三条路径从此是同一个口径(旧代码分别是 80 / 60 / 30px 且都以整屏为准)。
+from .desktop import DEFAULT_MARGIN, DesktopArea
+
+# 合成 WorldView(测试/离线脚本)没有 desktop 句柄时的兜底:按屏幕尺寸缓存
+# 一份,保证"没有句柄"只退化成共用同一份边界,不会退回旧的整屏 60px 口径。
+_FALLBACK_DESKTOP: dict = {}
+
+
+def _desktop_for(screen: tuple[int, int]) -> DesktopArea:
+    key = (int(screen[0]), int(screen[1]))
+    area = _FALLBACK_DESKTOP.get(key)
+    if area is None:
+        area = DesktopArea(key)
+        _FALLBACK_DESKTOP[key] = area
+    return area
+
 
 def region_of(pos: tuple[float, float], screen_w: int, screen_h: int,
               fg_rect: tuple[int, int, int, int] | None = None) -> str:
@@ -46,6 +64,14 @@ class WorldView:
     fg_window_rect: tuple[int, int, int, int] | None = None   # 前台窗 rect(l,t,r,b)
     region: str | None = None            # self 宠所在区块(region_of 产物;None=未注入)
     window_events: tuple = ()            # ScreenEvent 序列(appear|grow|vanish)
+    # v0.2.0:可用桌面边界句柄(任务栏已扣除)。缺省 None 时按屏幕尺寸取一份
+    # 共用兜底(见 ``_desktop_for``),语义与 WorldModel 持有的那一份一致。
+    desktop: object | None = None
+
+    def area(self) -> DesktopArea:
+        """本快照使用的可用区域句柄(注入的优先,否则共用兜底)。"""
+        return self.desktop if self.desktop is not None \
+            else _desktop_for(self.screen)
 
     def region_at(self, pos: tuple[float, float]) -> str | None:
         """任意点的区块分类(躲藏目的地/航点偏好共用;fg_window_rect 参与判定)。
@@ -61,10 +87,21 @@ class WorldView:
         return _screen_region_of(pos, self.screen[0], self.screen[1],
                                  self.fg_window_rect)
 
-    def clamp_to_screen(self, pos: tuple[float, float], margin: int = 60) -> tuple[float, float]:
-        w, h = self.screen
-        return (max(margin, min(w - margin, pos[0])),
-                max(margin, min(h - margin, pos[1])))
+    def clamp_to_screen(self, pos: tuple[float, float],
+                        margin: float = DEFAULT_MARGIN
+                        ) -> tuple[float, float]:
+        """可用桌面边界钳位(任务栏已扣除;``margin`` = 身体留白)。
+
+        ``margin`` 语义统一为"身体留白":``desktop.margin_for(画布半径)``
+        给出的值覆盖整个画布,面板落食用 ``margin=30`` 这类小值仍是"贴边"
+        的显式意图。
+        """
+        return self.area().clamp(pos, margin)
+
+    def usable(self, margin: float = DEFAULT_MARGIN
+               ) -> tuple[float, float, float, float]:
+        """可用矩形 (x0, y0, x1, y1);身体积分的软墙与运动目标共用它。"""
+        return self.area().inset(margin)
 
     def nearest_food(self, pos: tuple[float, float], max_r: float = 1e9) -> FoodItem | None:
         """大脑在快照上查询最近食物(只读)。"""
@@ -79,6 +116,7 @@ class WorldView:
 class WorldModel:
     def __init__(self, screen_w: int, screen_h: int) -> None:
         self.screen = (screen_w, screen_h)
+        self.desktop = DesktopArea(self.screen)
         self.pets: dict[str, PetState] = {}
         self.foods: dict[str, FoodItem] = {}
         self.zones: dict[str, Zone] = {}
@@ -150,6 +188,7 @@ class WorldModel:
             cursor=self.cursor,
             fg_window_rect=fg_window_rect, region=region,
             window_events=tuple(window_events),
+            desktop=self.desktop,
         )
 
     # ---- 查询 ----
@@ -161,9 +200,16 @@ class WorldModel:
                 best, bd = f, d
         return best
 
-    def clamp_to_screen(self, pos: tuple[float, float], margin: int = 60) -> tuple[float, float]:
-        w, h = self.screen
-        return (
-            max(margin, min(w - margin, pos[0])),
-            max(margin, min(h - margin, pos[1])),
-        )
+    def clamp_to_screen(self, pos: tuple[float, float],
+                        margin: float = DEFAULT_MARGIN
+                        ) -> tuple[float, float]:
+        """可用桌面边界钳位(任务栏已扣除;见 WorldView 同名方法)。"""
+        return self.desktop.clamp(pos, margin)
+
+    def usable(self, margin: float = DEFAULT_MARGIN
+               ) -> tuple[float, float, float, float]:
+        return self.desktop.inset(margin)
+
+    def refresh_desktop(self, force: bool = False) -> bool:
+        """节流重取 work area(任务栏显隐/自动隐藏滑出);返回是否变化。"""
+        return self.desktop.refresh(force)

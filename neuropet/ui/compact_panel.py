@@ -8,7 +8,7 @@ from __future__ import annotations
 import tkinter as tk
 from tkinter import messagebox, ttk
 
-from neuropet.core.config import save_config
+from neuropet.core.config import save_config, CRAWL_SPEED_CHOICES
 from neuropet.core.i18n import get_lang, t
 from neuropet.feeding import FoodKind
 
@@ -75,6 +75,13 @@ class ControlPanel:
         self.detail_var = tk.StringVar(self.win, t("panel.select_hint"))
         self.food_var = tk.StringVar(self.win, _food_label(self._food_kind))
         self.feeding_var = tk.BooleanVar(self.win, bool(app.feeding))
+        self._settings_pid = None            # 设置窗口的作用宠物(按 id 保存)
+        self._settings_wrap = None            # 设置窗口滚动容器(重建时销毁)
+        self._settings_frame = None
+        self._settings_vars: dict = {}       # 设置窗口全部 Tk 变量的强引用
+        self._settings_loading = False        # 填值期间禁止任何写配置/注册表
+        self._settings_size_row = None
+        self._settings_recall_btn = None
         self._configure_style()
         outer = ttk.Frame(self.win, padding=(16, 14), style="Pet2D.TFrame")
         outer.pack(fill="both", expand=True)
@@ -348,9 +355,10 @@ class ControlPanel:
             self.refresh_pets()
             self.status_var.set(t("panel.removed"))
 
-    def _optional_window(self, key, title, pid_attr=None, pid=None):
+    def _optional_window(self, key, title, pid_attr=None, pid=None, height=430):
         """取(或建)可选窗口。同一只宠重复打开只置顶不重建;换了宠物才重建。
-        返回窗口;已存在并置顶时返回 None。"""
+        返回窗口;已存在并置顶时返回 None。``height`` 由内容多少决定(设置
+        窗口控件更多,给得更高)。"""
         previous = self.extra_windows.get(key)
         if previous is not None and previous.winfo_exists() and pid_attr \
                 and getattr(self, pid_attr, None) != pid:
@@ -368,14 +376,38 @@ class ControlPanel:
         win.title(title)
         win.configure(background=BACKGROUND)
         win.attributes("-topmost", True)
-        width, height = round(350*self._scale), round(430*self._scale)
-        win.geometry(f"{width}x{height}+{self.win.winfo_rootx()+20}+{self.win.winfo_rooty()+40}")
+        width = round(350*self._scale)
+        win.geometry(f"{width}x{round(height*self._scale)}"
+                     f"+{self.win.winfo_rootx()+20}+{self.win.winfo_rooty()+40}")
         win.minsize(width, round(300*self._scale))
         win.transient(self.win)
         self.extra_windows[key] = win
         win.bind("<Configure>", lambda event: self.app._refresh_panel_rect())
         win.bind("<Escape>", lambda event: win.destroy())
         return win
+
+    def _scrollable(self, win, padding=16):
+        """可竖直滚动的内容容器(v0.2.0 设置窗口控件增多,高 DPI 下不溢出)。
+
+        滚轮绑在外层 Frame 上:Tk 的事件会从命中的子控件向上冒泡,所以下拉框/
+        列表框之外的区域滚轮都能用;列表框内部仍由它自己处理(符合直觉)。
+        """
+        wrap = tk.Frame(win, background=BACKGROUND)
+        wrap.pack(fill="both", expand=True)
+        canvas = tk.Canvas(wrap, background=BACKGROUND, highlightthickness=0, bd=0)
+        bar = ttk.Scrollbar(wrap, orient="vertical", command=canvas.yview)
+        canvas.configure(yscrollcommand=bar.set)
+        bar.pack(side="right", fill="y")
+        canvas.pack(side="left", fill="both", expand=True)
+        inner = ttk.Frame(canvas, padding=padding, style="Pet2D.TFrame")
+        window_id = canvas.create_window((0, 0), window=inner, anchor="nw")
+        inner.bind("<Configure>",
+                   lambda event: canvas.configure(scrollregion=canvas.bbox("all")))
+        canvas.bind("<Configure>",
+                    lambda event: canvas.itemconfigure(window_id, width=event.width))
+        wrap.bind("<MouseWheel>", lambda event: canvas.yview_scroll(
+            -1 if event.delta > 0 else 1, "units"))
+        return wrap, inner
 
     def open_memory(self):
         pid = self.selected()
@@ -417,59 +449,343 @@ class ControlPanel:
         ttk.Button(controls, text=t("memory.clear"), command=clear, style="Pet2D.TButton").pack(side="right")
         refresh()
 
+    def _settings_target_pid(self):
+        """设置窗口的作用对象(按 ID 保存,不依赖过期的窗口局部变量)。
+
+        顺序:面板当前选中 → 上次在设置里选的 → 第一只**可见**宠 → 第一只
+        隐藏宠(并在下拉里标注"已隐藏")。绝不再"没有选中就静默禁用大小"。
+        """
+        for pid in (self.selected(), getattr(self, "_settings_pid", None)):
+            if pid and (pid in self.app.pets or pid in self.app.hidden_pets()):
+                return pid
+        if self.app.pets:
+            return next(iter(self.app.pets))
+        if self.app.hidden_pets():
+            return next(iter(self.app.hidden_pets()))
+        return None
+
+    def _settings_pet_labels(self) -> tuple[str, ...]:
+        """当前宠物下拉的选项(可见宠在前;隐藏宠标注状态)。顺序稳定。"""
+        hidden = self.app.hidden_pets()
+        out = []
+        for pid in self.app.pets:
+            out.append(self._display_name(pid))
+        for pid in hidden:
+            out.append(f"{self._display_name(pid)} · {t('activity.hidden')}")
+        return tuple(out)
+
+    def _settings_pid_from_label(self, label: str):
+        """下拉显示文字 → pet_id(文字不唯一时取第一个)。"""
+        hidden = self.app.hidden_pets()
+        suffix = f" · {t('activity.hidden')}"
+        for pid in list(self.app.pets) + list(hidden):
+            if self._display_name(pid) == label or \
+                    self._display_name(pid) + suffix == label:
+                return pid
+        return None
+
+    def _combo(self, win, frame, values, current: str):
+        """只读下拉框 + 强引用变量:初始值与 values 对齐并显式 current()。
+
+        ``tkinter.Variable`` 是 Python 对象,函数结束即被回收,``__del__`` 会
+        ``unset`` 掉 Tcl 变量,Tk 的变量 trace 于是把下拉框重置为默认(空)——
+        这就是"语言下拉不显示默认项"的根因。变量统一存在 ``self._settings_vars``
+        里,随窗口存活。
+        """
+        values = tuple(values)
+        var = tk.StringVar(win, current)
+        box = ttk.Combobox(frame, textvariable=var, values=values,
+                           state="readonly", style="Pet2D.TCombobox")
+        index = list(values).index(current) if current in values else -1
+        if index >= 0:
+            var.set(values[index])
+            box.current(index)
+        self._settings_vars[id(box)] = (var, box)
+        return var, box
+
+    def _settings_release(self):
+        """释放设置窗口的全部 Tk 变量引用(重建或关闭时调用)。"""
+        self._settings_vars.clear()
+
+    def _guard(self, win, action, revert=None):
+        """设置回调的统一保护:失败落 diag + 双语提示 + 回退显示值。"""
+        try:
+            return action()
+        except Exception:
+            from neuropet.diag import log_exc
+            log_exc("settings")
+            try:
+                messagebox.showerror(t("settings.title"), t("error.save"),
+                                     parent=win)
+            except Exception:
+                pass
+            if revert is not None:
+                try:
+                    revert()
+                except Exception:
+                    pass
+            return None
+
     def open_settings(self):
-        pid = self.selected()
         win = self._optional_window("settings", t("settings.title"),
-                                    pid_attr="_settings_pid", pid=pid)
+                                    pid_attr="_settings_pid",
+                                    pid=self._settings_target_pid(),
+                                    height=600)
         if win is None:
             return
         self._build_settings(win)
 
     def _build_settings(self, win):
-        """设置窗口内容。语言入口永远在最上方,两种语言下都易于找到。"""
-        pid = getattr(self, "_settings_pid", None)
-        frame = getattr(self, "_settings_frame", None)
-        if frame is not None and frame.winfo_exists():
-            frame.destroy()
+        """设置窗口内容(v0.2.0 追加要求:显式现值、可用的大小、实时保存)。
+
+        规则:
+
+        - 语言入口永远在最上方,两种语言下都易于找到;
+        - 开窗就把当前语言 / 当前宠物 / 该宠物实际大小 / 当前速度**明确显示**
+          出来,不留空(所有 Tk 变量由 ``self._settings_vars`` 强引用);
+        - 每一项改动立刻生效并落盘,没有"保存"按钮;程序填值(开窗、切语言
+          重建)**不会**触发任何回调(``<<ComboboxSelected>>`` 只由用户操作
+          产生,且额外有 ``_loading`` 闸门);
+        - 关闭窗口(Esc / X / 按钮)只销毁这一个窗口,不动 app、不隐藏主面板;
+        - 内容放在可滚动容器里,控件变多或高 DPI 都不溢出。
+        """
+        self._settings_release()
+        wrap = getattr(self, "_settings_wrap", None)
+        if wrap is not None and wrap.winfo_exists():
+            wrap.destroy()          # 语言刷新:整只滚动容器重建,不留旧控件
         win.title(t("settings.title"))
-        frame = ttk.Frame(win, padding=16, style="Pet2D.TFrame")
-        frame.pack(fill="both", expand=True)
+        wrap, frame = self._scrollable(win)
+        self._settings_wrap = wrap
         self._settings_frame = frame
+        self._settings_loading = True       # 填值期间的写入门闸
+        try:
+            self._build_settings_rows(win, frame)
+        finally:
+            self._settings_loading = False
+        self.app._refresh_panel_rect()
+
+    def _build_settings_rows(self, win, frame):
+        loading = getattr(self, "_settings_loading", False)
+        V = self._settings_vars
+        sizes = (0.5, 0.75, 1.0, 1.5, 2.0)
+
+        # ---- 语言 ----
         ttk.Label(frame, text=t("settings.language"), style="Pet2D.TLabel").pack(anchor="w")
-        language = tk.StringVar(win, _language_label(get_lang()))
-        language_box = ttk.Combobox(frame, textvariable=language, values=_language_labels(),
-                                    state="readonly", style="Pet2D.TCombobox")
+        labels = _language_labels()
+        code = get_lang()
+        current = _language_label(code)
+        language, language_box = self._combo(win, frame, labels, current)
         language_box.pack(fill="x", pady=(7, 15))
+
         def choose_language(event=None):
+            if loading:
+                return
             index = language_box.current()
             if not 0 <= index < len(LANGUAGES):
                 return
-            code = LANGUAGES[index][0]
-            if code == get_lang():
+            picked = LANGUAGES[index][0]
+            if picked == get_lang():
                 return
             # 下一个空闲周期再切换:本次事件正由将被重建的下拉框发出。
-            self.win.after_idle(self.app.set_language, code)
+            self.win.after_idle(self.app.set_language, picked)
         language_box.bind("<<ComboboxSelected>>", choose_language)
-        label = t("settings.size_selected", name=self._display_name(pid)) if pid in self.app.pets \
-            else t("settings.size_none")
-        ttk.Label(frame, text=label, style="Pet2D.TLabel", wraplength=300).pack(anchor="w")
-        sizes = (0.5, 0.75, 1.0, 1.5, 2.0)
-        size = tk.StringVar(win, f"{self.app.pet_scale(pid):g}×" if pid in self.app.pets else "1×")
-        box = ttk.Combobox(frame, textvariable=size, values=[f"{k:g}×" for k in sizes], state="readonly", style="Pet2D.TCombobox")
-        box.pack(fill="x", pady=(7, 15))
-        if pid not in self.app.pets:
-            box.configure(state="disabled")
-        box.bind("<<ComboboxSelected>>", lambda event: self.app.set_pet_scale(pid, float(size.get().rstrip("×"))))
-        startup = tk.BooleanVar(win, self.app.cfg.panel_visible)
-        def save_startup():
-            self.app.cfg.panel_visible = startup.get()
-            save_config(self.app.cfg)
-        ttk.Checkbutton(frame, text=t("settings.startup"), variable=startup, command=save_startup, style="Pet2D.TCheckbutton").pack(anchor="w", pady=5)
+
+        # ---- 当前宠物(大小下拉的作用对象;设置内可直接切换/召回) ----
+        ttk.Label(frame, text=t("settings.pet_label"),
+                  style="Pet2D.TLabel").pack(anchor="w")
+        pid = self._settings_target_pid()
+        pet_labels = self._settings_pet_labels()
+        pet, pet_box = self._combo(
+            win, frame, pet_labels, self._settings_pet_label_for(pid, pet_labels))
+        pet_box.pack(fill="x", pady=(7, 4))
+        pet_row = ttk.Frame(frame, style="Pet2D.TFrame")
+        pet_row.pack(fill="x")
+        recall_btn = ttk.Button(pet_row, text=t("settings.pet_recall"),
+                                style="Pet2D.TButton", command=self._settings_recall)
+        self._settings_recall_btn = recall_btn
+
+        def choose_pet(event=None):
+            if loading:
+                return
+            picked = self._settings_pid_from_label(pet.get())
+            if not picked:
+                return
+            self._settings_pid = picked
+            # 设置里选的宠物同步为主面板的选中项:两处显示同一个"当前宠物",
+            # 之后重新打开设置也不会弹回另一只。
+            if self.tree.exists(picked):
+                self.tree.selection_set(picked)
+                self.tree.focus(picked)
+                self._refresh_selection()
+            self._rebuild_settings_deferred(win)
+        pet_box.bind("<<ComboboxSelected>>", choose_pet)
+
+        # ---- 大小 ----
+        size_row = ttk.Frame(frame, style="Pet2D.TFrame")
+        size_row.pack(fill="x", pady=(14, 0))
+        size_label = ttk.Label(size_row, style="Pet2D.TLabel", wraplength=290)
+        size_label.pack(side="left", fill="x", expand=True)
+        values = tuple(f"{k:g}×" for k in sizes)
+        shown = f"{self.app.pet_scale(pid):g}×" if pid in self.app.pets else values[2]
+        size, size_box = self._combo(win, size_row, values, shown)
+        size_box.configure(width=7)
+        size_box.pack(side="right")
+        self._settings_size_row = (size_label, size_box)
+
+        def choose_size(event=None):
+            if loading:
+                return
+            target = self._settings_target_pid()
+            if target not in self.app.pets:
+                return
+            try:
+                value = float(size.get().rstrip("×"))
+            except ValueError:
+                return
+            actual = self._guard(win, lambda: self.app.set_pet_scale(target, value))
+            size.set(f"{actual if actual is not None else self.app.pet_scale(target):g}×")
+        size_box.bind("<<ComboboxSelected>>", choose_size)
+        self._settings_sync_pet_rows()
+
+        # ---- 全局爬行速度(7 档,即时生效 + 落盘) ----
+        ttk.Label(frame, text=t("settings.speed"), style="Pet2D.TLabel").pack(anchor="w", pady=(16, 0))
+        speed, speed_box = self._combo(win, frame, tuple(f"{k:g}×" for k in CRAWL_SPEED_CHOICES),
+                                       f"{self.app.crawl_speed():g}×")
+        speed_box.pack(fill="x", pady=(7, 4))
+
+        def choose_speed(event=None):
+            if loading:
+                return
+            try:
+                value = float(speed.get().rstrip("×"))
+            except ValueError:
+                return
+            actual = self._guard(win, lambda: self.app.set_crawl_speed(value))
+            speed.set(f"{actual if actual is not None else self.app.crawl_speed():g}×")
+        speed_box.bind("<<ComboboxSelected>>", choose_speed)
+        speed_now = ttk.Label(frame, text=t("settings.speed_now", mult=self.app.crawl_speed()),
+                              style="Pet2D.Muted.TLabel")
+        speed_now.pack(anchor="w")
+        ttk.Label(frame, text=t("settings.speed_note"),
+                  style="Pet2D.Muted.TLabel", wraplength=300).pack(anchor="w", pady=(2, 14))
+
+        # ---- 开关类(每一项改动立即落盘) ----
+        startup = tk.BooleanVar(win, bool(self.app.cfg.panel_visible))
+        V["startup"] = startup
+
+        def toggle_startup():
+            if loading:
+                return
+            self.app.cfg.panel_visible = bool(startup.get())
+            if not self._guard(win, lambda: save_config(self.app.cfg)):
+                startup.set(bool(self.app.cfg.panel_visible))
+        ttk.Checkbutton(frame, text=t("settings.startup"), variable=startup,
+                        command=toggle_startup, style="Pet2D.TCheckbutton").pack(anchor="w", pady=5)
+        trails = tk.BooleanVar(win, bool(self.app.trails()))
+        V["trails"] = trails
+
+        def toggle_trails():
+            if loading:
+                return
+            trails.set(bool(self._guard(win, lambda: self.app.set_trails(trails.get()))))
+        ttk.Checkbutton(frame, text=t("settings.trails"), variable=trails,
+                        command=toggle_trails, style="Pet2D.TCheckbutton").pack(anchor="w", pady=5)
+        autostart = tk.BooleanVar(win, bool(self.app.autostart_enabled()))
+        V["autostart"] = autostart
+
+        def toggle_autostart():
+            if loading:
+                return
+            want = bool(autostart.get())
+            ok = bool(self._guard(win, lambda: self.app.set_autostart(want)))
+            if ok != want:
+                # 写入失败:回滚复选框到注册表真实状态 + 双语错误。
+                autostart.set(bool(self.app.autostart_enabled()))
+                try:
+                    messagebox.showerror(t("settings.autostart"),
+                                         t("error.autostart"), parent=win)
+                except Exception:
+                    pass
+        ttk.Checkbutton(frame, text=t("settings.autostart"), variable=autostart,
+                        command=toggle_autostart,
+                        style="Pet2D.TCheckbutton").pack(anchor="w", pady=5)
+        ttk.Label(frame, text=t("settings.autostart_note"),
+                  style="Pet2D.Muted.TLabel", wraplength=300).pack(anchor="w")
+
         def toggle_click_feed():
+            if loading:
+                return
             self.app.toggle_feeding(self.feeding_var.get())
-        ttk.Checkbutton(frame, text=t("settings.click_feed"), variable=self.feeding_var, command=toggle_click_feed, style="Pet2D.TCheckbutton").pack(anchor="w", pady=5)
-        ttk.Label(frame, text=t("settings.hint"), style="Pet2D.Muted.TLabel", wraplength=300).pack(anchor="w", pady=(15, 14))
-        ttk.Button(frame, text=t("settings.quit"), command=self.app.shutdown, style="Pet2D.TButton").pack(fill="x")
+        ttk.Checkbutton(frame, text=t("settings.click_feed"), variable=self.feeding_var,
+                        command=toggle_click_feed,
+                        style="Pet2D.TCheckbutton").pack(anchor="w", pady=5)
+        ttk.Label(frame, text=t("settings.hint"), style="Pet2D.Muted.TLabel",
+                  wraplength=300).pack(anchor="w", pady=(16, 10))
+        ttk.Label(frame, text=t("settings.autosave"), style="Pet2D.Muted.TLabel",
+                  wraplength=300).pack(anchor="w", pady=(0, 12))
+        ttk.Button(frame, text=t("settings.close"),
+                   command=lambda: win.destroy(),
+                   style="Pet2D.TButton").pack(fill="x")
+
+    def _settings_pet_label_for(self, pid, labels):
+        """pid 在下拉里对应的显示文字(找不到就返回第一项,不留空)。"""
+        if not labels:
+            return ""
+        hidden = self.app.hidden_pets()
+        suffix = f" · {t('activity.hidden')}"
+        for handle_pid in list(self.app.pets) + list(hidden):
+            if handle_pid != pid:
+                continue
+            name = self._display_name(handle_pid)
+            return name + (suffix if handle_pid in hidden else "")
+        return labels[0]
+
+    def _settings_sync_pet_rows(self):
+        """按当前目标宠物刷新"大小"行(标签、可用性、召回按钮)。"""
+        pid = self._settings_target_pid()
+        row = getattr(self, "_settings_size_row", None)
+        if row is None or not row[0].winfo_exists():
+            return
+        size_label, size_box = row
+        visible = pid in self.app.pets
+        hidden = pid is not None and pid in self.app.hidden_pets()
+        if pid is None:
+            size_label.configure(text=t("settings.size_none"))
+            size_box.configure(state="disabled")
+        elif visible:
+            size_label.configure(text=t("settings.size_selected",
+                                        name=self._display_name(pid)))
+            size_box.configure(state="readonly")
+        else:
+            size_label.configure(text=t("settings.size_hidden",
+                                        name=self._display_name(pid)))
+            size_box.configure(state="disabled")
+        button = getattr(self, "_settings_recall_btn", None)
+        if button is not None and button.winfo_exists():
+            if hidden:
+                button.configure(text=t("settings.pet_recall"))
+                button.configure(state="normal", command=self._settings_recall)
+                button.pack(side="left", padx=(0, 8))
+            else:
+                button.pack_forget()
+
+    def _rebuild_settings_deferred(self, win):
+        """下一个空闲周期重建设置内容(不在控件自己的事件回调里销毁自己)。"""
+        def run():
+            if win.winfo_exists():
+                self._build_settings(win)
+        win.after_idle(run)
+
+    def _settings_recall(self):
+        """设置窗口内直接召回当前目标宠(不用回主面板找)。"""
+        pid = self._settings_target_pid()
+        if pid and self.app.recall_pet(pid):
+            self._settings_pid = pid
+        else:
+            self._settings_pid = self._settings_target_pid()
+        win = self.extra_windows.get("settings")
+        if win is not None and win.winfo_exists():
+            self._rebuild_settings_deferred(win)
 
     def visible_windows(self):
         return [win for win in (self.win, *self.extra_windows.values())
@@ -483,7 +799,9 @@ class ControlPanel:
             if win.winfo_exists():
                 win.destroy()
         self.extra_windows.clear()
-        self._settings_frame = self._memory_frame = None
+        self._settings_frame = self._memory_frame = self._settings_wrap = None
+        self._settings_release()
+        self._settings_size_row = self._settings_recall_btn = None
         if getattr(self.app, "_tray", None) is None:
             self.win.iconify()  # Taskbar recovery if the optional tray is unavailable.
         else:
