@@ -1,0 +1,133 @@
+{
+ "schema_version": 1,
+ "species": "fruitfly",
+ "preset": "sprint",
+ "provenance": {
+  "algorithm": "sep-CMA-ES(diag)+IPOP-style-sigma-halving-restart",
+  "seed": 20260916,
+  "generations": 13,
+  "evaluations": 26624,
+  "fitness_history": [
+   [
+    0.682375,
+    0.071018
+   ],
+   [
+    0.702003,
+    0.218638
+   ],
+   [
+    0.789597,
+    0.314979
+   ],
+   [
+    0.796952,
+    0.36784
+   ],
+   [
+    0.799891,
+    0.403568
+   ],
+   [
+    0.800569,
+    0.445939
+   ],
+   [
+    0.802385,
+    0.510931
+   ],
+   [
+    0.803068,
+    0.556556
+   ],
+   [
+    0.803068,
+    0.58653
+   ],
+   [
+    0.803068,
+    0.606439
+   ],
+   [
+    0.803068,
+    0.630099
+   ],
+   [
+    0.803068,
+    0.646029
+   ],
+   [
+    0.803068,
+    0.668432
+   ]
+  ],
+  "code_version": "ag2-train-1.3",
+  "lambda": 2048,
+  "mu": 1024,
+  "sigma0": 0.25,
+  "iters_requested": 60,
+  "restarts": 0,
+  "budget_hit": true,
+  "wall_s": 159.67,
+  "fitness_final": 0.847241,
+  "fitness_baseline_default": 0.421817,
+  "improvement": 0.382101,
+  "fitness_raw_best_unprojected": 0.803068,
+  "ship_source": "trained",
+  "speeds_px": [
+   54.0,
+   90.0,
+   135.0,
+   180.0,
+   240.0
+  ],
+  "train_seeds": [
+   null,
+   20260916
+  ],
+  "eval_seeds": [
+   null,
+   20260916
+  ],
+  "n_frames": 240,
+  "warmup_frames": 60,
+  "consistency_max_err_px": 0.0,
+  "projection": "monotone-hz/duty + unidentifiable-dims->default (gait_sim.project_params)",
+  "revalidated": "r24: gait_sim 评估器在 0d620e0(第八轮)相对本产物落盘(6cff690)有口径演进,蟑螂两档逐位一致、果蝇两档复算漂移;本值为当前评估器对落盘 params 的复算快照(2026-09-20),params 未动,复算值 0.803918 -> 0.847241"
+ },
+ "params": {
+  "hz_rest": 1.5,
+  "hz_cruise": 8.0,
+  "hz_sprint": 14.0,
+  "duty_patrol": 0.75,
+  "duty_cruise": 0.5,
+  "duty_sprint": 0.5,
+  "trigger_k": 0.3,
+  "trigger_min_k": 0.1,
+  "trigger_max_k": 0.4,
+  "rest_cap_k": 0.78,
+  "land_cap_k": 0.86,
+  "over_k": 0.94,
+  "ff_gain": 0.3,
+  "diff_k_in": 0.2,
+  "diff_k_out": 0.2,
+  "metachronal_deg": 0.0,
+  "emergency_err_k": 3.0,
+  "emergency_stride_k": 1.3,
+  "swing_win_k": 0.7,
+  "sway_amp_px": 0.0,
+  "sway_freq_ratio": 1.0,
+  "pitch_amp_deg": 0.0,
+  "sag_tau_ms": 60.0,
+  "sag_max_deg": 4.0,
+  "group_phase": [
+   0.0,
+   0.5
+  ],
+  "lift_k": [
+   0.31246979247618634,
+   0.47933177680111727,
+   0.1
+  ]
+ }
+}

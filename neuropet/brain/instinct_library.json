@@ -1,0 +1,8138 @@
+[
+ {
+  "id": "fly.cursor_rush_wind.soft.baseline",
+  "species": "fly",
+  "stimulus": {
+   "kinds": [
+    "wind"
+   ],
+   "gesture": "rush",
+   "min_intensity": 0.39
+  },
+  "internal": {
+   "fear_gt": 0.0,
+   "hunger_gt": 0.0
+  },
+  "reaction": {
+   "behavior": "escape",
+   "gain": 1.44,
+   "dir": "away"
+  },
+  "valence_prior": -0.315
+ },
+ {
+  "id": "fly.cursor_rush_wind.soft.hungry",
+  "species": "fly",
+  "stimulus": {
+   "kinds": [
+    "wind"
+   ],
+   "gesture": "rush",
+   "min_intensity": 0.39
+  },
+  "internal": {
+   "fear_gt": 0.0,
+   "hunger_gt": 0.55
+  },
+  "reaction": {
+   "behavior": "escape",
+   "gain": 1.37,
+   "dir": "away"
+  },
+  "valence_prior": -0.315
+ },
+ {
+  "id": "fly.cursor_rush_wind.soft.scared",
+  "species": "fly",
+  "stimulus": {
+   "kinds": [
+    "wind"
+   ],
+   "gesture": "rush",
+   "min_intensity": 0.39
+  },
+  "internal": {
+   "fear_gt": 0.5,
+   "hunger_gt": 0.0
+  },
+  "reaction": {
+   "behavior": "escape",
+   "gain": 1.8,
+   "dir": "away"
+  },
+  "valence_prior": -0.315
+ },
+ {
+  "id": "fly.cursor_rush_wind.soft.stressed",
+  "species": "fly",
+  "stimulus": {
+   "kinds": [
+    "wind"
+   ],
+   "gesture": "rush",
+   "min_intensity": 0.39
+  },
+  "internal": {
+   "fear_gt": 0.5,
+   "hunger_gt": 0.55
+  },
+  "reaction": {
+   "behavior": "escape",
+   "gain": 1.94,
+   "dir": "away"
+  },
+  "valence_prior": -0.315
+ },
+ {
+  "id": "fly.cursor_rush_wind.mid.baseline",
+  "species": "fly",
+  "stimulus": {
+   "kinds": [
+    "wind"
+   ],
+   "gesture": "rush",
+   "min_intensity": 0.55
+  },
+  "internal": {
+   "fear_gt": 0.0,
+   "hunger_gt": 0.0
+  },
+  "reaction": {
+   "behavior": "escape",
+   "gain": 1.44,
+   "dir": "away"
+  },
+  "valence_prior": -0.517
+ },
+ {
+  "id": "fly.cursor_rush_wind.mid.hungry",
+  "species": "fly",
+  "stimulus": {
+   "kinds": [
+    "wind"
+   ],
+   "gesture": "rush",
+   "min_intensity": 0.55
+  },
+  "internal": {
+   "fear_gt": 0.0,
+   "hunger_gt": 0.55
+  },
+  "reaction": {
+   "behavior": "escape",
+   "gain": 1.37,
+   "dir": "away"
+  },
+  "valence_prior": -0.517
+ },
+ {
+  "id": "fly.cursor_rush_wind.mid.scared",
+  "species": "fly",
+  "stimulus": {
+   "kinds": [
+    "wind"
+   ],
+   "gesture": "rush",
+   "min_intensity": 0.55
+  },
+  "internal": {
+   "fear_gt": 0.5,
+   "hunger_gt": 0.0
+  },
+  "reaction": {
+   "behavior": "escape",
+   "gain": 1.8,
+   "dir": "away"
+  },
+  "valence_prior": -0.517
+ },
+ {
+  "id": "fly.cursor_rush_wind.mid.stressed",
+  "species": "fly",
+  "stimulus": {
+   "kinds": [
+    "wind"
+   ],
+   "gesture": "rush",
+   "min_intensity": 0.55
+  },
+  "internal": {
+   "fear_gt": 0.5,
+   "hunger_gt": 0.55
+  },
+  "reaction": {
+   "behavior": "escape",
+   "gain": 1.94,
+   "dir": "away"
+  },
+  "valence_prior": -0.517
+ },
+ {
+  "id": "fly.cursor_rush_wind.strong.baseline",
+  "species": "fly",
+  "stimulus": {
+   "kinds": [
+    "wind"
+   ],
+   "gesture": "rush",
+   "min_intensity": 0.72
+  },
+  "internal": {
+   "fear_gt": 0.0,
+   "hunger_gt": 0.0
+  },
+  "reaction": {
+   "behavior": "escape",
+   "gain": 1.44,
+   "dir": "away"
+  },
+  "valence_prior": -0.72
+ },
+ {
+  "id": "fly.cursor_rush_wind.strong.hungry",
+  "species": "fly",
+  "stimulus": {
+   "kinds": [
+    "wind"
+   ],
+   "gesture": "rush",
+   "min_intensity": 0.72
+  },
+  "internal": {
+   "fear_gt": 0.0,
+   "hunger_gt": 0.55
+  },
+  "reaction": {
+   "behavior": "escape",
+   "gain": 1.37,
+   "dir": "away"
+  },
+  "valence_prior": -0.72
+ },
+ {
+  "id": "fly.cursor_rush_wind.strong.scared",
+  "species": "fly",
+  "stimulus": {
+   "kinds": [
+    "wind"
+   ],
+   "gesture": "rush",
+   "min_intensity": 0.72
+  },
+  "internal": {
+   "fear_gt": 0.5,
+   "hunger_gt": 0.0
+  },
+  "reaction": {
+   "behavior": "escape",
+   "gain": 1.8,
+   "dir": "away"
+  },
+  "valence_prior": -0.72
+ },
+ {
+  "id": "fly.cursor_rush_wind.strong.stressed",
+  "species": "fly",
+  "stimulus": {
+   "kinds": [
+    "wind"
+   ],
+   "gesture": "rush",
+   "min_intensity": 0.72
+  },
+  "internal": {
+   "fear_gt": 0.5,
+   "hunger_gt": 0.55
+  },
+  "reaction": {
+   "behavior": "escape",
+   "gain": 1.94,
+   "dir": "away"
+  },
+  "valence_prior": -0.72
+ },
+ {
+  "id": "fly.wind_gust.soft.baseline",
+  "species": "fly",
+  "stimulus": {
+   "kinds": [
+    "wind"
+   ],
+   "gesture": null,
+   "min_intensity": 0.1
+  },
+  "internal": {
+   "fear_gt": 0.0,
+   "hunger_gt": 0.0
+  },
+  "reaction": {
+   "behavior": "explore",
+   "gain": 0.84,
+   "dir": "away"
+  },
+  "valence_prior": -0.035
+ },
+ {
+  "id": "fly.wind_gust.soft.hungry",
+  "species": "fly",
+  "stimulus": {
+   "kinds": [
+    "wind"
+   ],
+   "gesture": null,
+   "min_intensity": 0.1
+  },
+  "internal": {
+   "fear_gt": 0.0,
+   "hunger_gt": 0.55
+  },
+  "reaction": {
+   "behavior": "explore",
+   "gain": 0.84,
+   "dir": "away"
+  },
+  "valence_prior": -0.035
+ },
+ {
+  "id": "fly.wind_gust.soft.scared",
+  "species": "fly",
+  "stimulus": {
+   "kinds": [
+    "wind"
+   ],
+   "gesture": null,
+   "min_intensity": 0.1
+  },
+  "internal": {
+   "fear_gt": 0.5,
+   "hunger_gt": 0.0
+  },
+  "reaction": {
+   "behavior": "explore",
+   "gain": 0.84,
+   "dir": "away"
+  },
+  "valence_prior": -0.035
+ },
+ {
+  "id": "fly.wind_gust.soft.stressed",
+  "species": "fly",
+  "stimulus": {
+   "kinds": [
+    "wind"
+   ],
+   "gesture": null,
+   "min_intensity": 0.1
+  },
+  "internal": {
+   "fear_gt": 0.5,
+   "hunger_gt": 0.55
+  },
+  "reaction": {
+   "behavior": "explore",
+   "gain": 0.84,
+   "dir": "away"
+  },
+  "valence_prior": -0.035
+ },
+ {
+  "id": "fly.wind_gust.mid.baseline",
+  "species": "fly",
+  "stimulus": {
+   "kinds": [
+    "wind"
+   ],
+   "gesture": null,
+   "min_intensity": 0.15
+  },
+  "internal": {
+   "fear_gt": 0.0,
+   "hunger_gt": 0.0
+  },
+  "reaction": {
+   "behavior": "explore",
+   "gain": 0.84,
+   "dir": "away"
+  },
+  "valence_prior": -0.057
+ },
+ {
+  "id": "fly.wind_gust.mid.hungry",
+  "species": "fly",
+  "stimulus": {
+   "kinds": [
+    "wind"
+   ],
+   "gesture": null,
+   "min_intensity": 0.15
+  },
+  "internal": {
+   "fear_gt": 0.0,
+   "hunger_gt": 0.55
+  },
+  "reaction": {
+   "behavior": "explore",
+   "gain": 0.84,
+   "dir": "away"
+  },
+  "valence_prior": -0.057
+ },
+ {
+  "id": "fly.wind_gust.mid.scared",
+  "species": "fly",
+  "stimulus": {
+   "kinds": [
+    "wind"
+   ],
+   "gesture": null,
+   "min_intensity": 0.15
+  },
+  "internal": {
+   "fear_gt": 0.5,
+   "hunger_gt": 0.0
+  },
+  "reaction": {
+   "behavior": "explore",
+   "gain": 0.84,
+   "dir": "away"
+  },
+  "valence_prior": -0.057
+ },
+ {
+  "id": "fly.wind_gust.mid.stressed",
+  "species": "fly",
+  "stimulus": {
+   "kinds": [
+    "wind"
+   ],
+   "gesture": null,
+   "min_intensity": 0.15
+  },
+  "internal": {
+   "fear_gt": 0.5,
+   "hunger_gt": 0.55
+  },
+  "reaction": {
+   "behavior": "explore",
+   "gain": 0.84,
+   "dir": "away"
+  },
+  "valence_prior": -0.057
+ },
+ {
+  "id": "fly.wind_gust.strong.baseline",
+  "species": "fly",
+  "stimulus": {
+   "kinds": [
+    "wind"
+   ],
+   "gesture": null,
+   "min_intensity": 0.2
+  },
+  "internal": {
+   "fear_gt": 0.0,
+   "hunger_gt": 0.0
+  },
+  "reaction": {
+   "behavior": "explore",
+   "gain": 0.84,
+   "dir": "away"
+  },
+  "valence_prior": -0.08
+ },
+ {
+  "id": "fly.wind_gust.strong.hungry",
+  "species": "fly",
+  "stimulus": {
+   "kinds": [
+    "wind"
+   ],
+   "gesture": null,
+   "min_intensity": 0.2
+  },
+  "internal": {
+   "fear_gt": 0.0,
+   "hunger_gt": 0.55
+  },
+  "reaction": {
+   "behavior": "explore",
+   "gain": 0.84,
+   "dir": "away"
+  },
+  "valence_prior": -0.08
+ },
+ {
+  "id": "fly.wind_gust.strong.scared",
+  "species": "fly",
+  "stimulus": {
+   "kinds": [
+    "wind"
+   ],
+   "gesture": null,
+   "min_intensity": 0.2
+  },
+  "internal": {
+   "fear_gt": 0.5,
+   "hunger_gt": 0.0
+  },
+  "reaction": {
+   "behavior": "explore",
+   "gain": 0.84,
+   "dir": "away"
+  },
+  "valence_prior": -0.08
+ },
+ {
+  "id": "fly.wind_gust.strong.stressed",
+  "species": "fly",
+  "stimulus": {
+   "kinds": [
+    "wind"
+   ],
+   "gesture": null,
+   "min_intensity": 0.2
+  },
+  "internal": {
+   "fear_gt": 0.5,
+   "hunger_gt": 0.55
+  },
+  "reaction": {
+   "behavior": "explore",
+   "gain": 0.84,
+   "dir": "away"
+  },
+  "valence_prior": -0.08
+ },
+ {
+  "id": "fly.looming_shadow.soft.baseline",
+  "species": "fly",
+  "stimulus": {
+   "kinds": [
+    "shadow"
+   ],
+   "gesture": "approach_fast",
+   "min_intensity": 0.35
+  },
+  "internal": {
+   "fear_gt": 0.0,
+   "hunger_gt": 0.0
+  },
+  "reaction": {
+   "behavior": "escape",
+   "gain": 1.54,
+   "dir": "away"
+  },
+  "valence_prior": -0.63
+ },
+ {
+  "id": "fly.looming_shadow.soft.hungry",
+  "species": "fly",
+  "stimulus": {
+   "kinds": [
+    "shadow"
+   ],
+   "gesture": "approach_fast",
+   "min_intensity": 0.35
+  },
+  "internal": {
+   "fear_gt": 0.0,
+   "hunger_gt": 0.55
+  },
+  "reaction": {
+   "behavior": "escape",
+   "gain": 1.46,
+   "dir": "away"
+  },
+  "valence_prior": -0.63
+ },
+ {
+  "id": "fly.looming_shadow.soft.scared",
+  "species": "fly",
+  "stimulus": {
+   "kinds": [
+    "shadow"
+   ],
+   "gesture": "approach_fast",
+   "min_intensity": 0.35
+  },
+  "internal": {
+   "fear_gt": 0.5,
+   "hunger_gt": 0.0
+  },
+  "reaction": {
+   "behavior": "escape",
+   "gain": 1.93,
+   "dir": "away"
+  },
+  "valence_prior": -0.63
+ },
+ {
+  "id": "fly.looming_shadow.soft.stressed",
+  "species": "fly",
+  "stimulus": {
+   "kinds": [
+    "shadow"
+   ],
+   "gesture": "approach_fast",
+   "min_intensity": 0.35
+  },
+  "internal": {
+   "fear_gt": 0.5,
+   "hunger_gt": 0.55
+  },
+  "reaction": {
+   "behavior": "escape",
+   "gain": 2.0,
+   "dir": "away"
+  },
+  "valence_prior": -0.63
+ },
+ {
+  "id": "fly.looming_shadow.mid.baseline",
+  "species": "fly",
+  "stimulus": {
+   "kinds": [
+    "shadow"
+   ],
+   "gesture": "approach_fast",
+   "min_intensity": 0.5
+  },
+  "internal": {
+   "fear_gt": 0.0,
+   "hunger_gt": 0.0
+  },
+  "reaction": {
+   "behavior": "escape",
+   "gain": 1.54,
+   "dir": "away"
+  },
+  "valence_prior": -1.0
+ },
+ {
+  "id": "fly.looming_shadow.mid.hungry",
+  "species": "fly",
+  "stimulus": {
+   "kinds": [
+    "shadow"
+   ],
+   "gesture": "approach_fast",
+   "min_intensity": 0.5
+  },
+  "internal": {
+   "fear_gt": 0.0,
+   "hunger_gt": 0.55
+  },
+  "reaction": {
+   "behavior": "escape",
+   "gain": 1.46,
+   "dir": "away"
+  },
+  "valence_prior": -1.0
+ },
+ {
+  "id": "fly.looming_shadow.mid.scared",
+  "species": "fly",
+  "stimulus": {
+   "kinds": [
+    "shadow"
+   ],
+   "gesture": "approach_fast",
+   "min_intensity": 0.5
+  },
+  "internal": {
+   "fear_gt": 0.5,
+   "hunger_gt": 0.0
+  },
+  "reaction": {
+   "behavior": "escape",
+   "gain": 1.93,
+   "dir": "away"
+  },
+  "valence_prior": -1.0
+ },
+ {
+  "id": "fly.looming_shadow.mid.stressed",
+  "species": "fly",
+  "stimulus": {
+   "kinds": [
+    "shadow"
+   ],
+   "gesture": "approach_fast",
+   "min_intensity": 0.5
+  },
+  "internal": {
+   "fear_gt": 0.5,
+   "hunger_gt": 0.55
+  },
+  "reaction": {
+   "behavior": "escape",
+   "gain": 2.0,
+   "dir": "away"
+  },
+  "valence_prior": -1.0
+ },
+ {
+  "id": "fly.looming_shadow.strong.baseline",
+  "species": "fly",
+  "stimulus": {
+   "kinds": [
+    "shadow"
+   ],
+   "gesture": "approach_fast",
+   "min_intensity": 0.65
+  },
+  "internal": {
+   "fear_gt": 0.0,
+   "hunger_gt": 0.0
+  },
+  "reaction": {
+   "behavior": "escape",
+   "gain": 1.54,
+   "dir": "away"
+  },
+  "valence_prior": -1.0
+ },
+ {
+  "id": "fly.looming_shadow.strong.hungry",
+  "species": "fly",
+  "stimulus": {
+   "kinds": [
+    "shadow"
+   ],
+   "gesture": "approach_fast",
+   "min_intensity": 0.65
+  },
+  "internal": {
+   "fear_gt": 0.0,
+   "hunger_gt": 0.55
+  },
+  "reaction": {
+   "behavior": "escape",
+   "gain": 1.46,
+   "dir": "away"
+  },
+  "valence_prior": -1.0
+ },
+ {
+  "id": "fly.looming_shadow.strong.scared",
+  "species": "fly",
+  "stimulus": {
+   "kinds": [
+    "shadow"
+   ],
+   "gesture": "approach_fast",
+   "min_intensity": 0.65
+  },
+  "internal": {
+   "fear_gt": 0.5,
+   "hunger_gt": 0.0
+  },
+  "reaction": {
+   "behavior": "escape",
+   "gain": 1.93,
+   "dir": "away"
+  },
+  "valence_prior": -1.0
+ },
+ {
+  "id": "fly.looming_shadow.strong.stressed",
+  "species": "fly",
+  "stimulus": {
+   "kinds": [
+    "shadow"
+   ],
+   "gesture": "approach_fast",
+   "min_intensity": 0.65
+  },
+  "internal": {
+   "fear_gt": 0.5,
+   "hunger_gt": 0.55
+  },
+  "reaction": {
+   "behavior": "escape",
+   "gain": 2.0,
+   "dir": "away"
+  },
+  "valence_prior": -1.0
+ },
+ {
+  "id": "fly.shadow_pass.soft.baseline",
+  "species": "fly",
+  "stimulus": {
+   "kinds": [
+    "shadow"
+   ],
+   "gesture": "approach_slow",
+   "min_intensity": 0.13
+  },
+  "internal": {
+   "fear_gt": 0.0,
+   "hunger_gt": 0.0
+  },
+  "reaction": {
+   "behavior": "explore",
+   "gain": 0.88,
+   "dir": "away"
+  },
+  "valence_prior": -0.175
+ },
+ {
+  "id": "fly.shadow_pass.soft.hungry",
+  "species": "fly",
+  "stimulus": {
+   "kinds": [
+    "shadow"
+   ],
+   "gesture": "approach_slow",
+   "min_intensity": 0.13
+  },
+  "internal": {
+   "fear_gt": 0.0,
+   "hunger_gt": 0.55
+  },
+  "reaction": {
+   "behavior": "explore",
+   "gain": 0.88,
+   "dir": "away"
+  },
+  "valence_prior": -0.175
+ },
+ {
+  "id": "fly.shadow_pass.soft.scared",
+  "species": "fly",
+  "stimulus": {
+   "kinds": [
+    "shadow"
+   ],
+   "gesture": "approach_slow",
+   "min_intensity": 0.13
+  },
+  "internal": {
+   "fear_gt": 0.5,
+   "hunger_gt": 0.0
+  },
+  "reaction": {
+   "behavior": "explore",
+   "gain": 0.88,
+   "dir": "away"
+  },
+  "valence_prior": -0.175
+ },
+ {
+  "id": "fly.shadow_pass.soft.stressed",
+  "species": "fly",
+  "stimulus": {
+   "kinds": [
+    "shadow"
+   ],
+   "gesture": "approach_slow",
+   "min_intensity": 0.13
+  },
+  "internal": {
+   "fear_gt": 0.5,
+   "hunger_gt": 0.55
+  },
+  "reaction": {
+   "behavior": "explore",
+   "gain": 0.88,
+   "dir": "away"
+  },
+  "valence_prior": -0.175
+ },
+ {
+  "id": "fly.shadow_pass.mid.baseline",
+  "species": "fly",
+  "stimulus": {
+   "kinds": [
+    "shadow"
+   ],
+   "gesture": "approach_slow",
+   "min_intensity": 0.18
+  },
+  "internal": {
+   "fear_gt": 0.0,
+   "hunger_gt": 0.0
+  },
+  "reaction": {
+   "behavior": "explore",
+   "gain": 0.88,
+   "dir": "away"
+  },
+  "valence_prior": -0.287
+ },
+ {
+  "id": "fly.shadow_pass.mid.hungry",
+  "species": "fly",
+  "stimulus": {
+   "kinds": [
+    "shadow"
+   ],
+   "gesture": "approach_slow",
+   "min_intensity": 0.18
+  },
+  "internal": {
+   "fear_gt": 0.0,
+   "hunger_gt": 0.55
+  },
+  "reaction": {
+   "behavior": "explore",
+   "gain": 0.88,
+   "dir": "away"
+  },
+  "valence_prior": -0.287
+ },
+ {
+  "id": "fly.shadow_pass.mid.scared",
+  "species": "fly",
+  "stimulus": {
+   "kinds": [
+    "shadow"
+   ],
+   "gesture": "approach_slow",
+   "min_intensity": 0.18
+  },
+  "internal": {
+   "fear_gt": 0.5,
+   "hunger_gt": 0.0
+  },
+  "reaction": {
+   "behavior": "explore",
+   "gain": 0.88,
+   "dir": "away"
+  },
+  "valence_prior": -0.287
+ },
+ {
+  "id": "fly.shadow_pass.mid.stressed",
+  "species": "fly",
+  "stimulus": {
+   "kinds": [
+    "shadow"
+   ],
+   "gesture": "approach_slow",
+   "min_intensity": 0.18
+  },
+  "internal": {
+   "fear_gt": 0.5,
+   "hunger_gt": 0.55
+  },
+  "reaction": {
+   "behavior": "explore",
+   "gain": 0.88,
+   "dir": "away"
+  },
+  "valence_prior": -0.287
+ },
+ {
+  "id": "fly.shadow_pass.strong.baseline",
+  "species": "fly",
+  "stimulus": {
+   "kinds": [
+    "shadow"
+   ],
+   "gesture": "approach_slow",
+   "min_intensity": 0.23
+  },
+  "internal": {
+   "fear_gt": 0.0,
+   "hunger_gt": 0.0
+  },
+  "reaction": {
+   "behavior": "explore",
+   "gain": 0.88,
+   "dir": "away"
+  },
+  "valence_prior": -0.4
+ },
+ {
+  "id": "fly.shadow_pass.strong.hungry",
+  "species": "fly",
+  "stimulus": {
+   "kinds": [
+    "shadow"
+   ],
+   "gesture": "approach_slow",
+   "min_intensity": 0.23
+  },
+  "internal": {
+   "fear_gt": 0.0,
+   "hunger_gt": 0.55
+  },
+  "reaction": {
+   "behavior": "explore",
+   "gain": 0.88,
+   "dir": "away"
+  },
+  "valence_prior": -0.4
+ },
+ {
+  "id": "fly.shadow_pass.strong.scared",
+  "species": "fly",
+  "stimulus": {
+   "kinds": [
+    "shadow"
+   ],
+   "gesture": "approach_slow",
+   "min_intensity": 0.23
+  },
+  "internal": {
+   "fear_gt": 0.5,
+   "hunger_gt": 0.0
+  },
+  "reaction": {
+   "behavior": "explore",
+   "gain": 0.88,
+   "dir": "away"
+  },
+  "valence_prior": -0.4
+ },
+ {
+  "id": "fly.shadow_pass.strong.stressed",
+  "species": "fly",
+  "stimulus": {
+   "kinds": [
+    "shadow"
+   ],
+   "gesture": "approach_slow",
+   "min_intensity": 0.23
+  },
+  "internal": {
+   "fear_gt": 0.5,
+   "hunger_gt": 0.55
+  },
+  "reaction": {
+   "behavior": "explore",
+   "gain": 0.88,
+   "dir": "away"
+  },
+  "valence_prior": -0.4
+ },
+ {
+  "id": "fly.vibration_tap.soft.baseline",
+  "species": "fly",
+  "stimulus": {
+   "kinds": [
+    "vibration"
+   ],
+   "gesture": null,
+   "min_intensity": 0.28
+  },
+  "internal": {
+   "fear_gt": 0.0,
+   "hunger_gt": 0.0
+  },
+  "reaction": {
+   "behavior": "escape",
+   "gain": 1.3,
+   "dir": "away"
+  },
+  "valence_prior": -0.56
+ },
+ {
+  "id": "fly.vibration_tap.soft.hungry",
+  "species": "fly",
+  "stimulus": {
+   "kinds": [
+    "vibration"
+   ],
+   "gesture": null,
+   "min_intensity": 0.28
+  },
+  "internal": {
+   "fear_gt": 0.0,
+   "hunger_gt": 0.55
+  },
+  "reaction": {
+   "behavior": "escape",
+   "gain": 1.23,
+   "dir": "away"
+  },
+  "valence_prior": -0.56
+ },
+ {
+  "id": "fly.vibration_tap.soft.scared",
+  "species": "fly",
+  "stimulus": {
+   "kinds": [
+    "vibration"
+   ],
+   "gesture": null,
+   "min_intensity": 0.28
+  },
+  "internal": {
+   "fear_gt": 0.5,
+   "hunger_gt": 0.0
+  },
+  "reaction": {
+   "behavior": "escape",
+   "gain": 1.62,
+   "dir": "away"
+  },
+  "valence_prior": -0.56
+ },
+ {
+  "id": "fly.vibration_tap.soft.stressed",
+  "species": "fly",
+  "stimulus": {
+   "kinds": [
+    "vibration"
+   ],
+   "gesture": null,
+   "min_intensity": 0.28
+  },
+  "internal": {
+   "fear_gt": 0.5,
+   "hunger_gt": 0.55
+  },
+  "reaction": {
+   "behavior": "escape",
+   "gain": 1.76,
+   "dir": "away"
+  },
+  "valence_prior": -0.56
+ },
+ {
+  "id": "fly.vibration_tap.mid.baseline",
+  "species": "fly",
+  "stimulus": {
+   "kinds": [
+    "vibration"
+   ],
+   "gesture": null,
+   "min_intensity": 0.4
+  },
+  "internal": {
+   "fear_gt": 0.0,
+   "hunger_gt": 0.0
+  },
+  "reaction": {
+   "behavior": "escape",
+   "gain": 1.3,
+   "dir": "away"
+  },
+  "valence_prior": -0.92
+ },
+ {
+  "id": "fly.vibration_tap.mid.hungry",
+  "species": "fly",
+  "stimulus": {
+   "kinds": [
+    "vibration"
+   ],
+   "gesture": null,
+   "min_intensity": 0.4
+  },
+  "internal": {
+   "fear_gt": 0.0,
+   "hunger_gt": 0.55
+  },
+  "reaction": {
+   "behavior": "escape",
+   "gain": 1.23,
+   "dir": "away"
+  },
+  "valence_prior": -0.92
+ },
+ {
+  "id": "fly.vibration_tap.mid.scared",
+  "species": "fly",
+  "stimulus": {
+   "kinds": [
+    "vibration"
+   ],
+   "gesture": null,
+   "min_intensity": 0.4
+  },
+  "internal": {
+   "fear_gt": 0.5,
+   "hunger_gt": 0.0
+  },
+  "reaction": {
+   "behavior": "escape",
+   "gain": 1.62,
+   "dir": "away"
+  },
+  "valence_prior": -0.92
+ },
+ {
+  "id": "fly.vibration_tap.mid.stressed",
+  "species": "fly",
+  "stimulus": {
+   "kinds": [
+    "vibration"
+   ],
+   "gesture": null,
+   "min_intensity": 0.4
+  },
+  "internal": {
+   "fear_gt": 0.5,
+   "hunger_gt": 0.55
+  },
+  "reaction": {
+   "behavior": "escape",
+   "gain": 1.76,
+   "dir": "away"
+  },
+  "valence_prior": -0.92
+ },
+ {
+  "id": "fly.vibration_tap.strong.baseline",
+  "species": "fly",
+  "stimulus": {
+   "kinds": [
+    "vibration"
+   ],
+   "gesture": null,
+   "min_intensity": 0.52
+  },
+  "internal": {
+   "fear_gt": 0.0,
+   "hunger_gt": 0.0
+  },
+  "reaction": {
+   "behavior": "escape",
+   "gain": 1.3,
+   "dir": "away"
+  },
+  "valence_prior": -1.0
+ },
+ {
+  "id": "fly.vibration_tap.strong.hungry",
+  "species": "fly",
+  "stimulus": {
+   "kinds": [
+    "vibration"
+   ],
+   "gesture": null,
+   "min_intensity": 0.52
+  },
+  "internal": {
+   "fear_gt": 0.0,
+   "hunger_gt": 0.55
+  },
+  "reaction": {
+   "behavior": "escape",
+   "gain": 1.23,
+   "dir": "away"
+  },
+  "valence_prior": -1.0
+ },
+ {
+  "id": "fly.vibration_tap.strong.scared",
+  "species": "fly",
+  "stimulus": {
+   "kinds": [
+    "vibration"
+   ],
+   "gesture": null,
+   "min_intensity": 0.52
+  },
+  "internal": {
+   "fear_gt": 0.5,
+   "hunger_gt": 0.0
+  },
+  "reaction": {
+   "behavior": "escape",
+   "gain": 1.62,
+   "dir": "away"
+  },
+  "valence_prior": -1.0
+ },
+ {
+  "id": "fly.vibration_tap.strong.stressed",
+  "species": "fly",
+  "stimulus": {
+   "kinds": [
+    "vibration"
+   ],
+   "gesture": null,
+   "min_intensity": 0.52
+  },
+  "internal": {
+   "fear_gt": 0.5,
+   "hunger_gt": 0.55
+  },
+  "reaction": {
+   "behavior": "escape",
+   "gain": 1.76,
+   "dir": "away"
+  },
+  "valence_prior": -1.0
+ },
+ {
+  "id": "fly.contact_grab.soft.baseline",
+  "species": "fly",
+  "stimulus": {
+   "kinds": [
+    "contact"
+   ],
+   "gesture": null,
+   "min_intensity": 0.24
+  },
+  "internal": {
+   "fear_gt": 0.0,
+   "hunger_gt": 0.0
+  },
+  "reaction": {
+   "behavior": "escape",
+   "gain": 1.4,
+   "dir": "away"
+  },
+  "valence_prior": -0.63
+ },
+ {
+  "id": "fly.contact_grab.soft.hungry",
+  "species": "fly",
+  "stimulus": {
+   "kinds": [
+    "contact"
+   ],
+   "gesture": null,
+   "min_intensity": 0.24
+  },
+  "internal": {
+   "fear_gt": 0.0,
+   "hunger_gt": 0.55
+  },
+  "reaction": {
+   "behavior": "escape",
+   "gain": 1.33,
+   "dir": "away"
+  },
+  "valence_prior": -0.63
+ },
+ {
+  "id": "fly.contact_grab.soft.scared",
+  "species": "fly",
+  "stimulus": {
+   "kinds": [
+    "contact"
+   ],
+   "gesture": null,
+   "min_intensity": 0.24
+  },
+  "internal": {
+   "fear_gt": 0.5,
+   "hunger_gt": 0.0
+  },
+  "reaction": {
+   "behavior": "escape",
+   "gain": 1.75,
+   "dir": "away"
+  },
+  "valence_prior": -0.63
+ },
+ {
+  "id": "fly.contact_grab.soft.stressed",
+  "species": "fly",
+  "stimulus": {
+   "kinds": [
+    "contact"
+   ],
+   "gesture": null,
+   "min_intensity": 0.24
+  },
+  "internal": {
+   "fear_gt": 0.5,
+   "hunger_gt": 0.55
+  },
+  "reaction": {
+   "behavior": "escape",
+   "gain": 1.89,
+   "dir": "away"
+  },
+  "valence_prior": -0.63
+ },
+ {
+  "id": "fly.contact_grab.mid.baseline",
+  "species": "fly",
+  "stimulus": {
+   "kinds": [
+    "contact"
+   ],
+   "gesture": null,
+   "min_intensity": 0.35
+  },
+  "internal": {
+   "fear_gt": 0.0,
+   "hunger_gt": 0.0
+  },
+  "reaction": {
+   "behavior": "escape",
+   "gain": 1.4,
+   "dir": "away"
+  },
+  "valence_prior": -1.0
+ },
+ {
+  "id": "fly.contact_grab.mid.hungry",
+  "species": "fly",
+  "stimulus": {
+   "kinds": [
+    "contact"
+   ],
+   "gesture": null,
+   "min_intensity": 0.35
+  },
+  "internal": {
+   "fear_gt": 0.0,
+   "hunger_gt": 0.55
+  },
+  "reaction": {
+   "behavior": "escape",
+   "gain": 1.33,
+   "dir": "away"
+  },
+  "valence_prior": -1.0
+ },
+ {
+  "id": "fly.contact_grab.mid.scared",
+  "species": "fly",
+  "stimulus": {
+   "kinds": [
+    "contact"
+   ],
+   "gesture": null,
+   "min_intensity": 0.35
+  },
+  "internal": {
+   "fear_gt": 0.5,
+   "hunger_gt": 0.0
+  },
+  "reaction": {
+   "behavior": "escape",
+   "gain": 1.75,
+   "dir": "away"
+  },
+  "valence_prior": -1.0
+ },
+ {
+  "id": "fly.contact_grab.mid.stressed",
+  "species": "fly",
+  "stimulus": {
+   "kinds": [
+    "contact"
+   ],
+   "gesture": null,
+   "min_intensity": 0.35
+  },
+  "internal": {
+   "fear_gt": 0.5,
+   "hunger_gt": 0.55
+  },
+  "reaction": {
+   "behavior": "escape",
+   "gain": 1.89,
+   "dir": "away"
+  },
+  "valence_prior": -1.0
+ },
+ {
+  "id": "fly.contact_grab.strong.baseline",
+  "species": "fly",
+  "stimulus": {
+   "kinds": [
+    "contact"
+   ],
+   "gesture": null,
+   "min_intensity": 0.45
+  },
+  "internal": {
+   "fear_gt": 0.0,
+   "hunger_gt": 0.0
+  },
+  "reaction": {
+   "behavior": "escape",
+   "gain": 1.4,
+   "dir": "away"
+  },
+  "valence_prior": -1.0
+ },
+ {
+  "id": "fly.contact_grab.strong.hungry",
+  "species": "fly",
+  "stimulus": {
+   "kinds": [
+    "contact"
+   ],
+   "gesture": null,
+   "min_intensity": 0.45
+  },
+  "internal": {
+   "fear_gt": 0.0,
+   "hunger_gt": 0.55
+  },
+  "reaction": {
+   "behavior": "escape",
+   "gain": 1.33,
+   "dir": "away"
+  },
+  "valence_prior": -1.0
+ },
+ {
+  "id": "fly.contact_grab.strong.scared",
+  "species": "fly",
+  "stimulus": {
+   "kinds": [
+    "contact"
+   ],
+   "gesture": null,
+   "min_intensity": 0.45
+  },
+  "internal": {
+   "fear_gt": 0.5,
+   "hunger_gt": 0.0
+  },
+  "reaction": {
+   "behavior": "escape",
+   "gain": 1.75,
+   "dir": "away"
+  },
+  "valence_prior": -1.0
+ },
+ {
+  "id": "fly.contact_grab.strong.stressed",
+  "species": "fly",
+  "stimulus": {
+   "kinds": [
+    "contact"
+   ],
+   "gesture": null,
+   "min_intensity": 0.45
+  },
+  "internal": {
+   "fear_gt": 0.5,
+   "hunger_gt": 0.55
+  },
+  "reaction": {
+   "behavior": "escape",
+   "gain": 1.89,
+   "dir": "away"
+  },
+  "valence_prior": -1.0
+ },
+ {
+  "id": "fly.food_odor.soft.baseline",
+  "species": "fly",
+  "stimulus": {
+   "kinds": [
+    "odor_food"
+   ],
+   "gesture": null,
+   "min_intensity": 0.07
+  },
+  "internal": {
+   "fear_gt": 0.0,
+   "hunger_gt": 0.0
+  },
+  "reaction": {
+   "behavior": "seek_food",
+   "gain": 1.0,
+   "dir": "toward"
+  },
+  "valence_prior": 0.385
+ },
+ {
+  "id": "fly.food_odor.soft.hungry",
+  "species": "fly",
+  "stimulus": {
+   "kinds": [
+    "odor_food"
+   ],
+   "gesture": null,
+   "min_intensity": 0.07
+  },
+  "internal": {
+   "fear_gt": 0.0,
+   "hunger_gt": 0.55
+  },
+  "reaction": {
+   "behavior": "seek_food",
+   "gain": 1.3,
+   "dir": "toward"
+  },
+  "valence_prior": 0.385
+ },
+ {
+  "id": "fly.food_odor.soft.scared",
+  "species": "fly",
+  "stimulus": {
+   "kinds": [
+    "odor_food"
+   ],
+   "gesture": null,
+   "min_intensity": 0.07
+  },
+  "internal": {
+   "fear_gt": 0.5,
+   "hunger_gt": 0.0
+  },
+  "reaction": {
+   "behavior": "seek_food",
+   "gain": 0.7,
+   "dir": "toward"
+  },
+  "valence_prior": 0.385
+ },
+ {
+  "id": "fly.food_odor.soft.stressed",
+  "species": "fly",
+  "stimulus": {
+   "kinds": [
+    "odor_food"
+   ],
+   "gesture": null,
+   "min_intensity": 0.07
+  },
+  "internal": {
+   "fear_gt": 0.5,
+   "hunger_gt": 0.55
+  },
+  "reaction": {
+   "behavior": "seek_food",
+   "gain": 0.6,
+   "dir": "toward"
+  },
+  "valence_prior": 0.385
+ },
+ {
+  "id": "fly.food_odor.mid.baseline",
+  "species": "fly",
+  "stimulus": {
+   "kinds": [
+    "odor_food"
+   ],
+   "gesture": null,
+   "min_intensity": 0.1
+  },
+  "internal": {
+   "fear_gt": 0.0,
+   "hunger_gt": 0.0
+  },
+  "reaction": {
+   "behavior": "seek_food",
+   "gain": 1.0,
+   "dir": "toward"
+  },
+  "valence_prior": 0.632
+ },
+ {
+  "id": "fly.food_odor.mid.hungry",
+  "species": "fly",
+  "stimulus": {
+   "kinds": [
+    "odor_food"
+   ],
+   "gesture": null,
+   "min_intensity": 0.1
+  },
+  "internal": {
+   "fear_gt": 0.0,
+   "hunger_gt": 0.55
+  },
+  "reaction": {
+   "behavior": "seek_food",
+   "gain": 1.3,
+   "dir": "toward"
+  },
+  "valence_prior": 0.632
+ },
+ {
+  "id": "fly.food_odor.mid.scared",
+  "species": "fly",
+  "stimulus": {
+   "kinds": [
+    "odor_food"
+   ],
+   "gesture": null,
+   "min_intensity": 0.1
+  },
+  "internal": {
+   "fear_gt": 0.5,
+   "hunger_gt": 0.0
+  },
+  "reaction": {
+   "behavior": "seek_food",
+   "gain": 0.7,
+   "dir": "toward"
+  },
+  "valence_prior": 0.632
+ },
+ {
+  "id": "fly.food_odor.mid.stressed",
+  "species": "fly",
+  "stimulus": {
+   "kinds": [
+    "odor_food"
+   ],
+   "gesture": null,
+   "min_intensity": 0.1
+  },
+  "internal": {
+   "fear_gt": 0.5,
+   "hunger_gt": 0.55
+  },
+  "reaction": {
+   "behavior": "seek_food",
+   "gain": 0.6,
+   "dir": "toward"
+  },
+  "valence_prior": 0.632
+ },
+ {
+  "id": "fly.food_odor.strong.baseline",
+  "species": "fly",
+  "stimulus": {
+   "kinds": [
+    "odor_food"
+   ],
+   "gesture": null,
+   "min_intensity": 0.13
+  },
+  "internal": {
+   "fear_gt": 0.0,
+   "hunger_gt": 0.0
+  },
+  "reaction": {
+   "behavior": "seek_food",
+   "gain": 1.0,
+   "dir": "toward"
+  },
+  "valence_prior": 0.88
+ },
+ {
+  "id": "fly.food_odor.strong.hungry",
+  "species": "fly",
+  "stimulus": {
+   "kinds": [
+    "odor_food"
+   ],
+   "gesture": null,
+   "min_intensity": 0.13
+  },
+  "internal": {
+   "fear_gt": 0.0,
+   "hunger_gt": 0.55
+  },
+  "reaction": {
+   "behavior": "seek_food",
+   "gain": 1.3,
+   "dir": "toward"
+  },
+  "valence_prior": 0.88
+ },
+ {
+  "id": "fly.food_odor.strong.scared",
+  "species": "fly",
+  "stimulus": {
+   "kinds": [
+    "odor_food"
+   ],
+   "gesture": null,
+   "min_intensity": 0.13
+  },
+  "internal": {
+   "fear_gt": 0.5,
+   "hunger_gt": 0.0
+  },
+  "reaction": {
+   "behavior": "seek_food",
+   "gain": 0.7,
+   "dir": "toward"
+  },
+  "valence_prior": 0.88
+ },
+ {
+  "id": "fly.food_odor.strong.stressed",
+  "species": "fly",
+  "stimulus": {
+   "kinds": [
+    "odor_food"
+   ],
+   "gesture": null,
+   "min_intensity": 0.13
+  },
+  "internal": {
+   "fear_gt": 0.5,
+   "hunger_gt": 0.55
+  },
+  "reaction": {
+   "behavior": "seek_food",
+   "gain": 0.6,
+   "dir": "toward"
+  },
+  "valence_prior": 0.88
+ },
+ {
+  "id": "fly.feed_context.soft.baseline",
+  "species": "fly",
+  "stimulus": {
+   "kinds": [
+    "odor_food"
+   ],
+   "gesture": "approach_slow",
+   "min_intensity": 0.07
+  },
+  "internal": {
+   "fear_gt": 0.0,
+   "hunger_gt": 0.0
+  },
+  "reaction": {
+   "behavior": "seek_food",
+   "gain": 0.9,
+   "dir": "toward"
+  },
+  "valence_prior": 0.245
+ },
+ {
+  "id": "fly.feed_context.soft.hungry",
+  "species": "fly",
+  "stimulus": {
+   "kinds": [
+    "odor_food"
+   ],
+   "gesture": "approach_slow",
+   "min_intensity": 0.07
+  },
+  "internal": {
+   "fear_gt": 0.0,
+   "hunger_gt": 0.55
+  },
+  "reaction": {
+   "behavior": "seek_food",
+   "gain": 1.17,
+   "dir": "toward"
+  },
+  "valence_prior": 0.245
+ },
+ {
+  "id": "fly.feed_context.soft.scared",
+  "species": "fly",
+  "stimulus": {
+   "kinds": [
+    "odor_food"
+   ],
+   "gesture": "approach_slow",
+   "min_intensity": 0.07
+  },
+  "internal": {
+   "fear_gt": 0.5,
+   "hunger_gt": 0.0
+  },
+  "reaction": {
+   "behavior": "seek_food",
+   "gain": 0.63,
+   "dir": "toward"
+  },
+  "valence_prior": 0.245
+ },
+ {
+  "id": "fly.feed_context.soft.stressed",
+  "species": "fly",
+  "stimulus": {
+   "kinds": [
+    "odor_food"
+   ],
+   "gesture": "approach_slow",
+   "min_intensity": 0.07
+  },
+  "internal": {
+   "fear_gt": 0.5,
+   "hunger_gt": 0.55
+  },
+  "reaction": {
+   "behavior": "seek_food",
+   "gain": 0.54,
+   "dir": "toward"
+  },
+  "valence_prior": 0.245
+ },
+ {
+  "id": "fly.feed_context.mid.baseline",
+  "species": "fly",
+  "stimulus": {
+   "kinds": [
+    "odor_food"
+   ],
+   "gesture": "approach_slow",
+   "min_intensity": 0.1
+  },
+  "internal": {
+   "fear_gt": 0.0,
+   "hunger_gt": 0.0
+  },
+  "reaction": {
+   "behavior": "seek_food",
+   "gain": 0.9,
+   "dir": "toward"
+  },
+  "valence_prior": 0.402
+ },
+ {
+  "id": "fly.feed_context.mid.hungry",
+  "species": "fly",
+  "stimulus": {
+   "kinds": [
+    "odor_food"
+   ],
+   "gesture": "approach_slow",
+   "min_intensity": 0.1
+  },
+  "internal": {
+   "fear_gt": 0.0,
+   "hunger_gt": 0.55
+  },
+  "reaction": {
+   "behavior": "seek_food",
+   "gain": 1.17,
+   "dir": "toward"
+  },
+  "valence_prior": 0.402
+ },
+ {
+  "id": "fly.feed_context.mid.scared",
+  "species": "fly",
+  "stimulus": {
+   "kinds": [
+    "odor_food"
+   ],
+   "gesture": "approach_slow",
+   "min_intensity": 0.1
+  },
+  "internal": {
+   "fear_gt": 0.5,
+   "hunger_gt": 0.0
+  },
+  "reaction": {
+   "behavior": "seek_food",
+   "gain": 0.63,
+   "dir": "toward"
+  },
+  "valence_prior": 0.402
+ },
+ {
+  "id": "fly.feed_context.mid.stressed",
+  "species": "fly",
+  "stimulus": {
+   "kinds": [
+    "odor_food"
+   ],
+   "gesture": "approach_slow",
+   "min_intensity": 0.1
+  },
+  "internal": {
+   "fear_gt": 0.5,
+   "hunger_gt": 0.55
+  },
+  "reaction": {
+   "behavior": "seek_food",
+   "gain": 0.54,
+   "dir": "toward"
+  },
+  "valence_prior": 0.402
+ },
+ {
+  "id": "fly.feed_context.strong.baseline",
+  "species": "fly",
+  "stimulus": {
+   "kinds": [
+    "odor_food"
+   ],
+   "gesture": "approach_slow",
+   "min_intensity": 0.13
+  },
+  "internal": {
+   "fear_gt": 0.0,
+   "hunger_gt": 0.0
+  },
+  "reaction": {
+   "behavior": "seek_food",
+   "gain": 0.9,
+   "dir": "toward"
+  },
+  "valence_prior": 0.56
+ },
+ {
+  "id": "fly.feed_context.strong.hungry",
+  "species": "fly",
+  "stimulus": {
+   "kinds": [
+    "odor_food"
+   ],
+   "gesture": "approach_slow",
+   "min_intensity": 0.13
+  },
+  "internal": {
+   "fear_gt": 0.0,
+   "hunger_gt": 0.55
+  },
+  "reaction": {
+   "behavior": "seek_food",
+   "gain": 1.17,
+   "dir": "toward"
+  },
+  "valence_prior": 0.56
+ },
+ {
+  "id": "fly.feed_context.strong.scared",
+  "species": "fly",
+  "stimulus": {
+   "kinds": [
+    "odor_food"
+   ],
+   "gesture": "approach_slow",
+   "min_intensity": 0.13
+  },
+  "internal": {
+   "fear_gt": 0.5,
+   "hunger_gt": 0.0
+  },
+  "reaction": {
+   "behavior": "seek_food",
+   "gain": 0.63,
+   "dir": "toward"
+  },
+  "valence_prior": 0.56
+ },
+ {
+  "id": "fly.feed_context.strong.stressed",
+  "species": "fly",
+  "stimulus": {
+   "kinds": [
+    "odor_food"
+   ],
+   "gesture": "approach_slow",
+   "min_intensity": 0.13
+  },
+  "internal": {
+   "fear_gt": 0.5,
+   "hunger_gt": 0.55
+  },
+  "reaction": {
+   "behavior": "seek_food",
+   "gain": 0.54,
+   "dir": "toward"
+  },
+  "valence_prior": 0.56
+ },
+ {
+  "id": "fly.mate_odor.soft.baseline",
+  "species": "fly",
+  "stimulus": {
+   "kinds": [
+    "odor_mate"
+   ],
+   "gesture": null,
+   "min_intensity": 0.08
+  },
+  "internal": {
+   "fear_gt": 0.0,
+   "hunger_gt": 0.0
+  },
+  "reaction": {
+   "behavior": "explore",
+   "gain": 0.8,
+   "dir": "toward"
+  },
+  "valence_prior": 0.175
+ },
+ {
+  "id": "fly.mate_odor.soft.hungry",
+  "species": "fly",
+  "stimulus": {
+   "kinds": [
+    "odor_mate"
+   ],
+   "gesture": null,
+   "min_intensity": 0.08
+  },
+  "internal": {
+   "fear_gt": 0.0,
+   "hunger_gt": 0.55
+  },
+  "reaction": {
+   "behavior": "explore",
+   "gain": 0.8,
+   "dir": "toward"
+  },
+  "valence_prior": 0.175
+ },
+ {
+  "id": "fly.mate_odor.soft.scared",
+  "species": "fly",
+  "stimulus": {
+   "kinds": [
+    "odor_mate"
+   ],
+   "gesture": null,
+   "min_intensity": 0.08
+  },
+  "internal": {
+   "fear_gt": 0.5,
+   "hunger_gt": 0.0
+  },
+  "reaction": {
+   "behavior": "explore",
+   "gain": 0.8,
+   "dir": "toward"
+  },
+  "valence_prior": 0.175
+ },
+ {
+  "id": "fly.mate_odor.soft.stressed",
+  "species": "fly",
+  "stimulus": {
+   "kinds": [
+    "odor_mate"
+   ],
+   "gesture": null,
+   "min_intensity": 0.08
+  },
+  "internal": {
+   "fear_gt": 0.5,
+   "hunger_gt": 0.55
+  },
+  "reaction": {
+   "behavior": "explore",
+   "gain": 0.8,
+   "dir": "toward"
+  },
+  "valence_prior": 0.175
+ },
+ {
+  "id": "fly.mate_odor.mid.baseline",
+  "species": "fly",
+  "stimulus": {
+   "kinds": [
+    "odor_mate"
+   ],
+   "gesture": null,
+   "min_intensity": 0.12
+  },
+  "internal": {
+   "fear_gt": 0.0,
+   "hunger_gt": 0.0
+  },
+  "reaction": {
+   "behavior": "explore",
+   "gain": 0.8,
+   "dir": "toward"
+  },
+  "valence_prior": 0.287
+ },
+ {
+  "id": "fly.mate_odor.mid.hungry",
+  "species": "fly",
+  "stimulus": {
+   "kinds": [
+    "odor_mate"
+   ],
+   "gesture": null,
+   "min_intensity": 0.12
+  },
+  "internal": {
+   "fear_gt": 0.0,
+   "hunger_gt": 0.55
+  },
+  "reaction": {
+   "behavior": "explore",
+   "gain": 0.8,
+   "dir": "toward"
+  },
+  "valence_prior": 0.287
+ },
+ {
+  "id": "fly.mate_odor.mid.scared",
+  "species": "fly",
+  "stimulus": {
+   "kinds": [
+    "odor_mate"
+   ],
+   "gesture": null,
+   "min_intensity": 0.12
+  },
+  "internal": {
+   "fear_gt": 0.5,
+   "hunger_gt": 0.0
+  },
+  "reaction": {
+   "behavior": "explore",
+   "gain": 0.8,
+   "dir": "toward"
+  },
+  "valence_prior": 0.287
+ },
+ {
+  "id": "fly.mate_odor.mid.stressed",
+  "species": "fly",
+  "stimulus": {
+   "kinds": [
+    "odor_mate"
+   ],
+   "gesture": null,
+   "min_intensity": 0.12
+  },
+  "internal": {
+   "fear_gt": 0.5,
+   "hunger_gt": 0.55
+  },
+  "reaction": {
+   "behavior": "explore",
+   "gain": 0.8,
+   "dir": "toward"
+  },
+  "valence_prior": 0.287
+ },
+ {
+  "id": "fly.mate_odor.strong.baseline",
+  "species": "fly",
+  "stimulus": {
+   "kinds": [
+    "odor_mate"
+   ],
+   "gesture": null,
+   "min_intensity": 0.16
+  },
+  "internal": {
+   "fear_gt": 0.0,
+   "hunger_gt": 0.0
+  },
+  "reaction": {
+   "behavior": "explore",
+   "gain": 0.8,
+   "dir": "toward"
+  },
+  "valence_prior": 0.4
+ },
+ {
+  "id": "fly.mate_odor.strong.hungry",
+  "species": "fly",
+  "stimulus": {
+   "kinds": [
+    "odor_mate"
+   ],
+   "gesture": null,
+   "min_intensity": 0.16
+  },
+  "internal": {
+   "fear_gt": 0.0,
+   "hunger_gt": 0.55
+  },
+  "reaction": {
+   "behavior": "explore",
+   "gain": 0.8,
+   "dir": "toward"
+  },
+  "valence_prior": 0.4
+ },
+ {
+  "id": "fly.mate_odor.strong.scared",
+  "species": "fly",
+  "stimulus": {
+   "kinds": [
+    "odor_mate"
+   ],
+   "gesture": null,
+   "min_intensity": 0.16
+  },
+  "internal": {
+   "fear_gt": 0.5,
+   "hunger_gt": 0.0
+  },
+  "reaction": {
+   "behavior": "explore",
+   "gain": 0.8,
+   "dir": "toward"
+  },
+  "valence_prior": 0.4
+ },
+ {
+  "id": "fly.mate_odor.strong.stressed",
+  "species": "fly",
+  "stimulus": {
+   "kinds": [
+    "odor_mate"
+   ],
+   "gesture": null,
+   "min_intensity": 0.16
+  },
+  "internal": {
+   "fear_gt": 0.5,
+   "hunger_gt": 0.55
+  },
+  "reaction": {
+   "behavior": "explore",
+   "gain": 0.8,
+   "dir": "toward"
+  },
+  "valence_prior": 0.4
+ },
+ {
+  "id": "fly.cold_zone.soft.baseline",
+  "species": "fly",
+  "stimulus": {
+   "kinds": [
+    "cold"
+   ],
+   "gesture": null,
+   "min_intensity": 0.08
+  },
+  "internal": {
+   "fear_gt": 0.0,
+   "hunger_gt": 0.0
+  },
+  "reaction": {
+   "behavior": "explore",
+   "gain": 0.9,
+   "dir": "away"
+  },
+  "valence_prior": -0.42
+ },
+ {
+  "id": "fly.cold_zone.soft.hungry",
+  "species": "fly",
+  "stimulus": {
+   "kinds": [
+    "cold"
+   ],
+   "gesture": null,
+   "min_intensity": 0.08
+  },
+  "internal": {
+   "fear_gt": 0.0,
+   "hunger_gt": 0.55
+  },
+  "reaction": {
+   "behavior": "explore",
+   "gain": 0.9,
+   "dir": "away"
+  },
+  "valence_prior": -0.42
+ },
+ {
+  "id": "fly.cold_zone.soft.scared",
+  "species": "fly",
+  "stimulus": {
+   "kinds": [
+    "cold"
+   ],
+   "gesture": null,
+   "min_intensity": 0.08
+  },
+  "internal": {
+   "fear_gt": 0.5,
+   "hunger_gt": 0.0
+  },
+  "reaction": {
+   "behavior": "explore",
+   "gain": 0.9,
+   "dir": "away"
+  },
+  "valence_prior": -0.42
+ },
+ {
+  "id": "fly.cold_zone.soft.stressed",
+  "species": "fly",
+  "stimulus": {
+   "kinds": [
+    "cold"
+   ],
+   "gesture": null,
+   "min_intensity": 0.08
+  },
+  "internal": {
+   "fear_gt": 0.5,
+   "hunger_gt": 0.55
+  },
+  "reaction": {
+   "behavior": "explore",
+   "gain": 0.9,
+   "dir": "away"
+  },
+  "valence_prior": -0.42
+ },
+ {
+  "id": "fly.cold_zone.mid.baseline",
+  "species": "fly",
+  "stimulus": {
+   "kinds": [
+    "cold"
+   ],
+   "gesture": null,
+   "min_intensity": 0.12
+  },
+  "internal": {
+   "fear_gt": 0.0,
+   "hunger_gt": 0.0
+  },
+  "reaction": {
+   "behavior": "explore",
+   "gain": 0.9,
+   "dir": "away"
+  },
+  "valence_prior": -0.69
+ },
+ {
+  "id": "fly.cold_zone.mid.hungry",
+  "species": "fly",
+  "stimulus": {
+   "kinds": [
+    "cold"
+   ],
+   "gesture": null,
+   "min_intensity": 0.12
+  },
+  "internal": {
+   "fear_gt": 0.0,
+   "hunger_gt": 0.55
+  },
+  "reaction": {
+   "behavior": "explore",
+   "gain": 0.9,
+   "dir": "away"
+  },
+  "valence_prior": -0.69
+ },
+ {
+  "id": "fly.cold_zone.mid.scared",
+  "species": "fly",
+  "stimulus": {
+   "kinds": [
+    "cold"
+   ],
+   "gesture": null,
+   "min_intensity": 0.12
+  },
+  "internal": {
+   "fear_gt": 0.5,
+   "hunger_gt": 0.0
+  },
+  "reaction": {
+   "behavior": "explore",
+   "gain": 0.9,
+   "dir": "away"
+  },
+  "valence_prior": -0.69
+ },
+ {
+  "id": "fly.cold_zone.mid.stressed",
+  "species": "fly",
+  "stimulus": {
+   "kinds": [
+    "cold"
+   ],
+   "gesture": null,
+   "min_intensity": 0.12
+  },
+  "internal": {
+   "fear_gt": 0.5,
+   "hunger_gt": 0.55
+  },
+  "reaction": {
+   "behavior": "explore",
+   "gain": 0.9,
+   "dir": "away"
+  },
+  "valence_prior": -0.69
+ },
+ {
+  "id": "fly.cold_zone.strong.baseline",
+  "species": "fly",
+  "stimulus": {
+   "kinds": [
+    "cold"
+   ],
+   "gesture": null,
+   "min_intensity": 0.16
+  },
+  "internal": {
+   "fear_gt": 0.0,
+   "hunger_gt": 0.0
+  },
+  "reaction": {
+   "behavior": "explore",
+   "gain": 0.9,
+   "dir": "away"
+  },
+  "valence_prior": -0.96
+ },
+ {
+  "id": "fly.cold_zone.strong.hungry",
+  "species": "fly",
+  "stimulus": {
+   "kinds": [
+    "cold"
+   ],
+   "gesture": null,
+   "min_intensity": 0.16
+  },
+  "internal": {
+   "fear_gt": 0.0,
+   "hunger_gt": 0.55
+  },
+  "reaction": {
+   "behavior": "explore",
+   "gain": 0.9,
+   "dir": "away"
+  },
+  "valence_prior": -0.96
+ },
+ {
+  "id": "fly.cold_zone.strong.scared",
+  "species": "fly",
+  "stimulus": {
+   "kinds": [
+    "cold"
+   ],
+   "gesture": null,
+   "min_intensity": 0.16
+  },
+  "internal": {
+   "fear_gt": 0.5,
+   "hunger_gt": 0.0
+  },
+  "reaction": {
+   "behavior": "explore",
+   "gain": 0.9,
+   "dir": "away"
+  },
+  "valence_prior": -0.96
+ },
+ {
+  "id": "fly.cold_zone.strong.stressed",
+  "species": "fly",
+  "stimulus": {
+   "kinds": [
+    "cold"
+   ],
+   "gesture": null,
+   "min_intensity": 0.16
+  },
+  "internal": {
+   "fear_gt": 0.5,
+   "hunger_gt": 0.55
+  },
+  "reaction": {
+   "behavior": "explore",
+   "gain": 0.9,
+   "dir": "away"
+  },
+  "valence_prior": -0.96
+ },
+ {
+  "id": "fly.light_glare.soft.baseline",
+  "species": "fly",
+  "stimulus": {
+   "kinds": [
+    "light"
+   ],
+   "gesture": null,
+   "min_intensity": 0.15
+  },
+  "internal": {
+   "fear_gt": 0.0,
+   "hunger_gt": 0.0
+  },
+  "reaction": {
+   "behavior": "explore",
+   "gain": 1.0,
+   "dir": "away"
+  },
+  "valence_prior": -0.35
+ },
+ {
+  "id": "fly.light_glare.soft.hungry",
+  "species": "fly",
+  "stimulus": {
+   "kinds": [
+    "light"
+   ],
+   "gesture": null,
+   "min_intensity": 0.15
+  },
+  "internal": {
+   "fear_gt": 0.0,
+   "hunger_gt": 0.55
+  },
+  "reaction": {
+   "behavior": "explore",
+   "gain": 1.0,
+   "dir": "away"
+  },
+  "valence_prior": -0.35
+ },
+ {
+  "id": "fly.light_glare.soft.scared",
+  "species": "fly",
+  "stimulus": {
+   "kinds": [
+    "light"
+   ],
+   "gesture": null,
+   "min_intensity": 0.15
+  },
+  "internal": {
+   "fear_gt": 0.5,
+   "hunger_gt": 0.0
+  },
+  "reaction": {
+   "behavior": "explore",
+   "gain": 1.0,
+   "dir": "away"
+  },
+  "valence_prior": -0.35
+ },
+ {
+  "id": "fly.light_glare.soft.stressed",
+  "species": "fly",
+  "stimulus": {
+   "kinds": [
+    "light"
+   ],
+   "gesture": null,
+   "min_intensity": 0.15
+  },
+  "internal": {
+   "fear_gt": 0.5,
+   "hunger_gt": 0.55
+  },
+  "reaction": {
+   "behavior": "explore",
+   "gain": 1.0,
+   "dir": "away"
+  },
+  "valence_prior": -0.35
+ },
+ {
+  "id": "fly.light_glare.mid.baseline",
+  "species": "fly",
+  "stimulus": {
+   "kinds": [
+    "light"
+   ],
+   "gesture": null,
+   "min_intensity": 0.22
+  },
+  "internal": {
+   "fear_gt": 0.0,
+   "hunger_gt": 0.0
+  },
+  "reaction": {
+   "behavior": "explore",
+   "gain": 1.0,
+   "dir": "away"
+  },
+  "valence_prior": -0.575
+ },
+ {
+  "id": "fly.light_glare.mid.hungry",
+  "species": "fly",
+  "stimulus": {
+   "kinds": [
+    "light"
+   ],
+   "gesture": null,
+   "min_intensity": 0.22
+  },
+  "internal": {
+   "fear_gt": 0.0,
+   "hunger_gt": 0.55
+  },
+  "reaction": {
+   "behavior": "explore",
+   "gain": 1.0,
+   "dir": "away"
+  },
+  "valence_prior": -0.575
+ },
+ {
+  "id": "fly.light_glare.mid.scared",
+  "species": "fly",
+  "stimulus": {
+   "kinds": [
+    "light"
+   ],
+   "gesture": null,
+   "min_intensity": 0.22
+  },
+  "internal": {
+   "fear_gt": 0.5,
+   "hunger_gt": 0.0
+  },
+  "reaction": {
+   "behavior": "explore",
+   "gain": 1.0,
+   "dir": "away"
+  },
+  "valence_prior": -0.575
+ },
+ {
+  "id": "fly.light_glare.mid.stressed",
+  "species": "fly",
+  "stimulus": {
+   "kinds": [
+    "light"
+   ],
+   "gesture": null,
+   "min_intensity": 0.22
+  },
+  "internal": {
+   "fear_gt": 0.5,
+   "hunger_gt": 0.55
+  },
+  "reaction": {
+   "behavior": "explore",
+   "gain": 1.0,
+   "dir": "away"
+  },
+  "valence_prior": -0.575
+ },
+ {
+  "id": "fly.light_glare.strong.baseline",
+  "species": "fly",
+  "stimulus": {
+   "kinds": [
+    "light"
+   ],
+   "gesture": null,
+   "min_intensity": 0.29
+  },
+  "internal": {
+   "fear_gt": 0.0,
+   "hunger_gt": 0.0
+  },
+  "reaction": {
+   "behavior": "explore",
+   "gain": 1.0,
+   "dir": "away"
+  },
+  "valence_prior": -0.8
+ },
+ {
+  "id": "fly.light_glare.strong.hungry",
+  "species": "fly",
+  "stimulus": {
+   "kinds": [
+    "light"
+   ],
+   "gesture": null,
+   "min_intensity": 0.29
+  },
+  "internal": {
+   "fear_gt": 0.0,
+   "hunger_gt": 0.55
+  },
+  "reaction": {
+   "behavior": "explore",
+   "gain": 1.0,
+   "dir": "away"
+  },
+  "valence_prior": -0.8
+ },
+ {
+  "id": "fly.light_glare.strong.scared",
+  "species": "fly",
+  "stimulus": {
+   "kinds": [
+    "light"
+   ],
+   "gesture": null,
+   "min_intensity": 0.29
+  },
+  "internal": {
+   "fear_gt": 0.5,
+   "hunger_gt": 0.0
+  },
+  "reaction": {
+   "behavior": "explore",
+   "gain": 1.0,
+   "dir": "away"
+  },
+  "valence_prior": -0.8
+ },
+ {
+  "id": "fly.light_glare.strong.stressed",
+  "species": "fly",
+  "stimulus": {
+   "kinds": [
+    "light"
+   ],
+   "gesture": null,
+   "min_intensity": 0.29
+  },
+  "internal": {
+   "fear_gt": 0.5,
+   "hunger_gt": 0.55
+  },
+  "reaction": {
+   "behavior": "explore",
+   "gain": 1.0,
+   "dir": "away"
+  },
+  "valence_prior": -0.8
+ },
+ {
+  "id": "fly.cursor_idle_near.soft.baseline",
+  "species": "fly",
+  "stimulus": {
+   "kinds": [
+    "contact",
+    "shadow"
+   ],
+   "gesture": "idle",
+   "min_intensity": 0.03
+  },
+  "internal": {
+   "fear_gt": 0.0,
+   "hunger_gt": 0.0
+  },
+  "reaction": {
+   "behavior": "groom",
+   "gain": 0.66,
+   "dir": "stay"
+  },
+  "valence_prior": 0.035
+ },
+ {
+  "id": "fly.cursor_idle_near.soft.hungry",
+  "species": "fly",
+  "stimulus": {
+   "kinds": [
+    "contact",
+    "shadow"
+   ],
+   "gesture": "idle",
+   "min_intensity": 0.03
+  },
+  "internal": {
+   "fear_gt": 0.0,
+   "hunger_gt": 0.55
+  },
+  "reaction": {
+   "behavior": "groom",
+   "gain": 0.66,
+   "dir": "stay"
+  },
+  "valence_prior": 0.035
+ },
+ {
+  "id": "fly.cursor_idle_near.soft.scared",
+  "species": "fly",
+  "stimulus": {
+   "kinds": [
+    "contact",
+    "shadow"
+   ],
+   "gesture": "idle",
+   "min_intensity": 0.03
+  },
+  "internal": {
+   "fear_gt": 0.5,
+   "hunger_gt": 0.0
+  },
+  "reaction": {
+   "behavior": "groom",
+   "gain": 0.66,
+   "dir": "stay"
+  },
+  "valence_prior": 0.035
+ },
+ {
+  "id": "fly.cursor_idle_near.soft.stressed",
+  "species": "fly",
+  "stimulus": {
+   "kinds": [
+    "contact",
+    "shadow"
+   ],
+   "gesture": "idle",
+   "min_intensity": 0.03
+  },
+  "internal": {
+   "fear_gt": 0.5,
+   "hunger_gt": 0.55
+  },
+  "reaction": {
+   "behavior": "groom",
+   "gain": 0.66,
+   "dir": "stay"
+  },
+  "valence_prior": 0.035
+ },
+ {
+  "id": "fly.cursor_idle_near.mid.baseline",
+  "species": "fly",
+  "stimulus": {
+   "kinds": [
+    "contact",
+    "shadow"
+   ],
+   "gesture": "idle",
+   "min_intensity": 0.05
+  },
+  "internal": {
+   "fear_gt": 0.0,
+   "hunger_gt": 0.0
+  },
+  "reaction": {
+   "behavior": "groom",
+   "gain": 0.66,
+   "dir": "stay"
+  },
+  "valence_prior": 0.057
+ },
+ {
+  "id": "fly.cursor_idle_near.mid.hungry",
+  "species": "fly",
+  "stimulus": {
+   "kinds": [
+    "contact",
+    "shadow"
+   ],
+   "gesture": "idle",
+   "min_intensity": 0.05
+  },
+  "internal": {
+   "fear_gt": 0.0,
+   "hunger_gt": 0.55
+  },
+  "reaction": {
+   "behavior": "groom",
+   "gain": 0.66,
+   "dir": "stay"
+  },
+  "valence_prior": 0.057
+ },
+ {
+  "id": "fly.cursor_idle_near.mid.scared",
+  "species": "fly",
+  "stimulus": {
+   "kinds": [
+    "contact",
+    "shadow"
+   ],
+   "gesture": "idle",
+   "min_intensity": 0.05
+  },
+  "internal": {
+   "fear_gt": 0.5,
+   "hunger_gt": 0.0
+  },
+  "reaction": {
+   "behavior": "groom",
+   "gain": 0.66,
+   "dir": "stay"
+  },
+  "valence_prior": 0.057
+ },
+ {
+  "id": "fly.cursor_idle_near.mid.stressed",
+  "species": "fly",
+  "stimulus": {
+   "kinds": [
+    "contact",
+    "shadow"
+   ],
+   "gesture": "idle",
+   "min_intensity": 0.05
+  },
+  "internal": {
+   "fear_gt": 0.5,
+   "hunger_gt": 0.55
+  },
+  "reaction": {
+   "behavior": "groom",
+   "gain": 0.66,
+   "dir": "stay"
+  },
+  "valence_prior": 0.057
+ },
+ {
+  "id": "fly.cursor_idle_near.strong.baseline",
+  "species": "fly",
+  "stimulus": {
+   "kinds": [
+    "contact",
+    "shadow"
+   ],
+   "gesture": "idle",
+   "min_intensity": 0.07
+  },
+  "internal": {
+   "fear_gt": 0.0,
+   "hunger_gt": 0.0
+  },
+  "reaction": {
+   "behavior": "groom",
+   "gain": 0.66,
+   "dir": "stay"
+  },
+  "valence_prior": 0.08
+ },
+ {
+  "id": "fly.cursor_idle_near.strong.hungry",
+  "species": "fly",
+  "stimulus": {
+   "kinds": [
+    "contact",
+    "shadow"
+   ],
+   "gesture": "idle",
+   "min_intensity": 0.07
+  },
+  "internal": {
+   "fear_gt": 0.0,
+   "hunger_gt": 0.55
+  },
+  "reaction": {
+   "behavior": "groom",
+   "gain": 0.66,
+   "dir": "stay"
+  },
+  "valence_prior": 0.08
+ },
+ {
+  "id": "fly.cursor_idle_near.strong.scared",
+  "species": "fly",
+  "stimulus": {
+   "kinds": [
+    "contact",
+    "shadow"
+   ],
+   "gesture": "idle",
+   "min_intensity": 0.07
+  },
+  "internal": {
+   "fear_gt": 0.5,
+   "hunger_gt": 0.0
+  },
+  "reaction": {
+   "behavior": "groom",
+   "gain": 0.66,
+   "dir": "stay"
+  },
+  "valence_prior": 0.08
+ },
+ {
+  "id": "fly.cursor_idle_near.strong.stressed",
+  "species": "fly",
+  "stimulus": {
+   "kinds": [
+    "contact",
+    "shadow"
+   ],
+   "gesture": "idle",
+   "min_intensity": 0.07
+  },
+  "internal": {
+   "fear_gt": 0.5,
+   "hunger_gt": 0.55
+  },
+  "reaction": {
+   "behavior": "groom",
+   "gain": 0.66,
+   "dir": "stay"
+  },
+  "valence_prior": 0.08
+ },
+ {
+  "id": "fly.cursor_orbit.soft.baseline",
+  "species": "fly",
+  "stimulus": {
+   "kinds": [
+    "wind",
+    "shadow"
+   ],
+   "gesture": "orbit",
+   "min_intensity": 0.07
+  },
+  "internal": {
+   "fear_gt": 0.0,
+   "hunger_gt": 0.0
+  },
+  "reaction": {
+   "behavior": "turn",
+   "gain": 0.84,
+   "dir": "away"
+  },
+  "valence_prior": -0.07
+ },
+ {
+  "id": "fly.cursor_orbit.soft.hungry",
+  "species": "fly",
+  "stimulus": {
+   "kinds": [
+    "wind",
+    "shadow"
+   ],
+   "gesture": "orbit",
+   "min_intensity": 0.07
+  },
+  "internal": {
+   "fear_gt": 0.0,
+   "hunger_gt": 0.55
+  },
+  "reaction": {
+   "behavior": "turn",
+   "gain": 0.8,
+   "dir": "away"
+  },
+  "valence_prior": -0.07
+ },
+ {
+  "id": "fly.cursor_orbit.soft.scared",
+  "species": "fly",
+  "stimulus": {
+   "kinds": [
+    "wind",
+    "shadow"
+   ],
+   "gesture": "orbit",
+   "min_intensity": 0.07
+  },
+  "internal": {
+   "fear_gt": 0.5,
+   "hunger_gt": 0.0
+  },
+  "reaction": {
+   "behavior": "turn",
+   "gain": 1.05,
+   "dir": "away"
+  },
+  "valence_prior": -0.07
+ },
+ {
+  "id": "fly.cursor_orbit.soft.stressed",
+  "species": "fly",
+  "stimulus": {
+   "kinds": [
+    "wind",
+    "shadow"
+   ],
+   "gesture": "orbit",
+   "min_intensity": 0.07
+  },
+  "internal": {
+   "fear_gt": 0.5,
+   "hunger_gt": 0.55
+  },
+  "reaction": {
+   "behavior": "turn",
+   "gain": 1.13,
+   "dir": "away"
+  },
+  "valence_prior": -0.07
+ },
+ {
+  "id": "fly.cursor_orbit.mid.baseline",
+  "species": "fly",
+  "stimulus": {
+   "kinds": [
+    "wind",
+    "shadow"
+   ],
+   "gesture": "orbit",
+   "min_intensity": 0.1
+  },
+  "internal": {
+   "fear_gt": 0.0,
+   "hunger_gt": 0.0
+  },
+  "reaction": {
+   "behavior": "turn",
+   "gain": 0.84,
+   "dir": "away"
+  },
+  "valence_prior": -0.115
+ },
+ {
+  "id": "fly.cursor_orbit.mid.hungry",
+  "species": "fly",
+  "stimulus": {
+   "kinds": [
+    "wind",
+    "shadow"
+   ],
+   "gesture": "orbit",
+   "min_intensity": 0.1
+  },
+  "internal": {
+   "fear_gt": 0.0,
+   "hunger_gt": 0.55
+  },
+  "reaction": {
+   "behavior": "turn",
+   "gain": 0.8,
+   "dir": "away"
+  },
+  "valence_prior": -0.115
+ },
+ {
+  "id": "fly.cursor_orbit.mid.scared",
+  "species": "fly",
+  "stimulus": {
+   "kinds": [
+    "wind",
+    "shadow"
+   ],
+   "gesture": "orbit",
+   "min_intensity": 0.1
+  },
+  "internal": {
+   "fear_gt": 0.5,
+   "hunger_gt": 0.0
+  },
+  "reaction": {
+   "behavior": "turn",
+   "gain": 1.05,
+   "dir": "away"
+  },
+  "valence_prior": -0.115
+ },
+ {
+  "id": "fly.cursor_orbit.mid.stressed",
+  "species": "fly",
+  "stimulus": {
+   "kinds": [
+    "wind",
+    "shadow"
+   ],
+   "gesture": "orbit",
+   "min_intensity": 0.1
+  },
+  "internal": {
+   "fear_gt": 0.5,
+   "hunger_gt": 0.55
+  },
+  "reaction": {
+   "behavior": "turn",
+   "gain": 1.13,
+   "dir": "away"
+  },
+  "valence_prior": -0.115
+ },
+ {
+  "id": "fly.cursor_orbit.strong.baseline",
+  "species": "fly",
+  "stimulus": {
+   "kinds": [
+    "wind",
+    "shadow"
+   ],
+   "gesture": "orbit",
+   "min_intensity": 0.13
+  },
+  "internal": {
+   "fear_gt": 0.0,
+   "hunger_gt": 0.0
+  },
+  "reaction": {
+   "behavior": "turn",
+   "gain": 0.84,
+   "dir": "away"
+  },
+  "valence_prior": -0.16
+ },
+ {
+  "id": "fly.cursor_orbit.strong.hungry",
+  "species": "fly",
+  "stimulus": {
+   "kinds": [
+    "wind",
+    "shadow"
+   ],
+   "gesture": "orbit",
+   "min_intensity": 0.13
+  },
+  "internal": {
+   "fear_gt": 0.0,
+   "hunger_gt": 0.55
+  },
+  "reaction": {
+   "behavior": "turn",
+   "gain": 0.8,
+   "dir": "away"
+  },
+  "valence_prior": -0.16
+ },
+ {
+  "id": "fly.cursor_orbit.strong.scared",
+  "species": "fly",
+  "stimulus": {
+   "kinds": [
+    "wind",
+    "shadow"
+   ],
+   "gesture": "orbit",
+   "min_intensity": 0.13
+  },
+  "internal": {
+   "fear_gt": 0.5,
+   "hunger_gt": 0.0
+  },
+  "reaction": {
+   "behavior": "turn",
+   "gain": 1.05,
+   "dir": "away"
+  },
+  "valence_prior": -0.16
+ },
+ {
+  "id": "fly.cursor_orbit.strong.stressed",
+  "species": "fly",
+  "stimulus": {
+   "kinds": [
+    "wind",
+    "shadow"
+   ],
+   "gesture": "orbit",
+   "min_intensity": 0.13
+  },
+  "internal": {
+   "fear_gt": 0.5,
+   "hunger_gt": 0.55
+  },
+  "reaction": {
+   "behavior": "turn",
+   "gain": 1.13,
+   "dir": "away"
+  },
+  "valence_prior": -0.16
+ },
+ {
+  "id": "fly.cursor_jab.soft.baseline",
+  "species": "fly",
+  "stimulus": {
+   "kinds": [
+    "vibration",
+    "wind"
+   ],
+   "gesture": "jab",
+   "min_intensity": 0.32
+  },
+  "internal": {
+   "fear_gt": 0.0,
+   "hunger_gt": 0.0
+  },
+  "reaction": {
+   "behavior": "escape",
+   "gain": 1.5,
+   "dir": "away"
+  },
+  "valence_prior": -0.49
+ },
+ {
+  "id": "fly.cursor_jab.soft.hungry",
+  "species": "fly",
+  "stimulus": {
+   "kinds": [
+    "vibration",
+    "wind"
+   ],
+   "gesture": "jab",
+   "min_intensity": 0.32
+  },
+  "internal": {
+   "fear_gt": 0.0,
+   "hunger_gt": 0.55
+  },
+  "reaction": {
+   "behavior": "escape",
+   "gain": 1.43,
+   "dir": "away"
+  },
+  "valence_prior": -0.49
+ },
+ {
+  "id": "fly.cursor_jab.soft.scared",
+  "species": "fly",
+  "stimulus": {
+   "kinds": [
+    "vibration",
+    "wind"
+   ],
+   "gesture": "jab",
+   "min_intensity": 0.32
+  },
+  "internal": {
+   "fear_gt": 0.5,
+   "hunger_gt": 0.0
+  },
+  "reaction": {
+   "behavior": "escape",
+   "gain": 1.88,
+   "dir": "away"
+  },
+  "valence_prior": -0.49
+ },
+ {
+  "id": "fly.cursor_jab.soft.stressed",
+  "species": "fly",
+  "stimulus": {
+   "kinds": [
+    "vibration",
+    "wind"
+   ],
+   "gesture": "jab",
+   "min_intensity": 0.32
+  },
+  "internal": {
+   "fear_gt": 0.5,
+   "hunger_gt": 0.55
+  },
+  "reaction": {
+   "behavior": "escape",
+   "gain": 2.0,
+   "dir": "away"
+  },
+  "valence_prior": -0.49
+ },
+ {
+  "id": "fly.cursor_jab.mid.baseline",
+  "species": "fly",
+  "stimulus": {
+   "kinds": [
+    "vibration",
+    "wind"
+   ],
+   "gesture": "jab",
+   "min_intensity": 0.45
+  },
+  "internal": {
+   "fear_gt": 0.0,
+   "hunger_gt": 0.0
+  },
+  "reaction": {
+   "behavior": "escape",
+   "gain": 1.5,
+   "dir": "away"
+  },
+  "valence_prior": -0.805
+ },
+ {
+  "id": "fly.cursor_jab.mid.hungry",
+  "species": "fly",
+  "stimulus": {
+   "kinds": [
+    "vibration",
+    "wind"
+   ],
+   "gesture": "jab",
+   "min_intensity": 0.45
+  },
+  "internal": {
+   "fear_gt": 0.0,
+   "hunger_gt": 0.55
+  },
+  "reaction": {
+   "behavior": "escape",
+   "gain": 1.43,
+   "dir": "away"
+  },
+  "valence_prior": -0.805
+ },
+ {
+  "id": "fly.cursor_jab.mid.scared",
+  "species": "fly",
+  "stimulus": {
+   "kinds": [
+    "vibration",
+    "wind"
+   ],
+   "gesture": "jab",
+   "min_intensity": 0.45
+  },
+  "internal": {
+   "fear_gt": 0.5,
+   "hunger_gt": 0.0
+  },
+  "reaction": {
+   "behavior": "escape",
+   "gain": 1.88,
+   "dir": "away"
+  },
+  "valence_prior": -0.805
+ },
+ {
+  "id": "fly.cursor_jab.mid.stressed",
+  "species": "fly",
+  "stimulus": {
+   "kinds": [
+    "vibration",
+    "wind"
+   ],
+   "gesture": "jab",
+   "min_intensity": 0.45
+  },
+  "internal": {
+   "fear_gt": 0.5,
+   "hunger_gt": 0.55
+  },
+  "reaction": {
+   "behavior": "escape",
+   "gain": 2.0,
+   "dir": "away"
+  },
+  "valence_prior": -0.805
+ },
+ {
+  "id": "fly.cursor_jab.strong.baseline",
+  "species": "fly",
+  "stimulus": {
+   "kinds": [
+    "vibration",
+    "wind"
+   ],
+   "gesture": "jab",
+   "min_intensity": 0.59
+  },
+  "internal": {
+   "fear_gt": 0.0,
+   "hunger_gt": 0.0
+  },
+  "reaction": {
+   "behavior": "escape",
+   "gain": 1.5,
+   "dir": "away"
+  },
+  "valence_prior": -1.0
+ },
+ {
+  "id": "fly.cursor_jab.strong.hungry",
+  "species": "fly",
+  "stimulus": {
+   "kinds": [
+    "vibration",
+    "wind"
+   ],
+   "gesture": "jab",
+   "min_intensity": 0.59
+  },
+  "internal": {
+   "fear_gt": 0.0,
+   "hunger_gt": 0.55
+  },
+  "reaction": {
+   "behavior": "escape",
+   "gain": 1.43,
+   "dir": "away"
+  },
+  "valence_prior": -1.0
+ },
+ {
+  "id": "fly.cursor_jab.strong.scared",
+  "species": "fly",
+  "stimulus": {
+   "kinds": [
+    "vibration",
+    "wind"
+   ],
+   "gesture": "jab",
+   "min_intensity": 0.59
+  },
+  "internal": {
+   "fear_gt": 0.5,
+   "hunger_gt": 0.0
+  },
+  "reaction": {
+   "behavior": "escape",
+   "gain": 1.88,
+   "dir": "away"
+  },
+  "valence_prior": -1.0
+ },
+ {
+  "id": "fly.cursor_jab.strong.stressed",
+  "species": "fly",
+  "stimulus": {
+   "kinds": [
+    "vibration",
+    "wind"
+   ],
+   "gesture": "jab",
+   "min_intensity": 0.59
+  },
+  "internal": {
+   "fear_gt": 0.5,
+   "hunger_gt": 0.55
+  },
+  "reaction": {
+   "behavior": "escape",
+   "gain": 2.0,
+   "dir": "away"
+  },
+  "valence_prior": -1.0
+ },
+ {
+  "id": "fly.retreat_release.soft.baseline",
+  "species": "fly",
+  "stimulus": {
+   "kinds": [
+    "wind"
+   ],
+   "gesture": "retreat",
+   "min_intensity": 0.07
+  },
+  "internal": {
+   "fear_gt": 0.0,
+   "hunger_gt": 0.0
+  },
+  "reaction": {
+   "behavior": "explore",
+   "gain": 0.96,
+   "dir": "toward"
+  },
+  "valence_prior": 0.14
+ },
+ {
+  "id": "fly.retreat_release.soft.hungry",
+  "species": "fly",
+  "stimulus": {
+   "kinds": [
+    "wind"
+   ],
+   "gesture": "retreat",
+   "min_intensity": 0.07
+  },
+  "internal": {
+   "fear_gt": 0.0,
+   "hunger_gt": 0.55
+  },
+  "reaction": {
+   "behavior": "explore",
+   "gain": 0.96,
+   "dir": "toward"
+  },
+  "valence_prior": 0.14
+ },
+ {
+  "id": "fly.retreat_release.soft.scared",
+  "species": "fly",
+  "stimulus": {
+   "kinds": [
+    "wind"
+   ],
+   "gesture": "retreat",
+   "min_intensity": 0.07
+  },
+  "internal": {
+   "fear_gt": 0.5,
+   "hunger_gt": 0.0
+  },
+  "reaction": {
+   "behavior": "explore",
+   "gain": 0.96,
+   "dir": "toward"
+  },
+  "valence_prior": 0.14
+ },
+ {
+  "id": "fly.retreat_release.soft.stressed",
+  "species": "fly",
+  "stimulus": {
+   "kinds": [
+    "wind"
+   ],
+   "gesture": "retreat",
+   "min_intensity": 0.07
+  },
+  "internal": {
+   "fear_gt": 0.5,
+   "hunger_gt": 0.55
+  },
+  "reaction": {
+   "behavior": "explore",
+   "gain": 0.96,
+   "dir": "toward"
+  },
+  "valence_prior": 0.14
+ },
+ {
+  "id": "fly.retreat_release.mid.baseline",
+  "species": "fly",
+  "stimulus": {
+   "kinds": [
+    "wind"
+   ],
+   "gesture": "retreat",
+   "min_intensity": 0.1
+  },
+  "internal": {
+   "fear_gt": 0.0,
+   "hunger_gt": 0.0
+  },
+  "reaction": {
+   "behavior": "explore",
+   "gain": 0.96,
+   "dir": "toward"
+  },
+  "valence_prior": 0.23
+ },
+ {
+  "id": "fly.retreat_release.mid.hungry",
+  "species": "fly",
+  "stimulus": {
+   "kinds": [
+    "wind"
+   ],
+   "gesture": "retreat",
+   "min_intensity": 0.1
+  },
+  "internal": {
+   "fear_gt": 0.0,
+   "hunger_gt": 0.55
+  },
+  "reaction": {
+   "behavior": "explore",
+   "gain": 0.96,
+   "dir": "toward"
+  },
+  "valence_prior": 0.23
+ },
+ {
+  "id": "fly.retreat_release.mid.scared",
+  "species": "fly",
+  "stimulus": {
+   "kinds": [
+    "wind"
+   ],
+   "gesture": "retreat",
+   "min_intensity": 0.1
+  },
+  "internal": {
+   "fear_gt": 0.5,
+   "hunger_gt": 0.0
+  },
+  "reaction": {
+   "behavior": "explore",
+   "gain": 0.96,
+   "dir": "toward"
+  },
+  "valence_prior": 0.23
+ },
+ {
+  "id": "fly.retreat_release.mid.stressed",
+  "species": "fly",
+  "stimulus": {
+   "kinds": [
+    "wind"
+   ],
+   "gesture": "retreat",
+   "min_intensity": 0.1
+  },
+  "internal": {
+   "fear_gt": 0.5,
+   "hunger_gt": 0.55
+  },
+  "reaction": {
+   "behavior": "explore",
+   "gain": 0.96,
+   "dir": "toward"
+  },
+  "valence_prior": 0.23
+ },
+ {
+  "id": "fly.retreat_release.strong.baseline",
+  "species": "fly",
+  "stimulus": {
+   "kinds": [
+    "wind"
+   ],
+   "gesture": "retreat",
+   "min_intensity": 0.13
+  },
+  "internal": {
+   "fear_gt": 0.0,
+   "hunger_gt": 0.0
+  },
+  "reaction": {
+   "behavior": "explore",
+   "gain": 0.96,
+   "dir": "toward"
+  },
+  "valence_prior": 0.32
+ },
+ {
+  "id": "fly.retreat_release.strong.hungry",
+  "species": "fly",
+  "stimulus": {
+   "kinds": [
+    "wind"
+   ],
+   "gesture": "retreat",
+   "min_intensity": 0.13
+  },
+  "internal": {
+   "fear_gt": 0.0,
+   "hunger_gt": 0.55
+  },
+  "reaction": {
+   "behavior": "explore",
+   "gain": 0.96,
+   "dir": "toward"
+  },
+  "valence_prior": 0.32
+ },
+ {
+  "id": "fly.retreat_release.strong.scared",
+  "species": "fly",
+  "stimulus": {
+   "kinds": [
+    "wind"
+   ],
+   "gesture": "retreat",
+   "min_intensity": 0.13
+  },
+  "internal": {
+   "fear_gt": 0.5,
+   "hunger_gt": 0.0
+  },
+  "reaction": {
+   "behavior": "explore",
+   "gain": 0.96,
+   "dir": "toward"
+  },
+  "valence_prior": 0.32
+ },
+ {
+  "id": "fly.retreat_release.strong.stressed",
+  "species": "fly",
+  "stimulus": {
+   "kinds": [
+    "wind"
+   ],
+   "gesture": "retreat",
+   "min_intensity": 0.13
+  },
+  "internal": {
+   "fear_gt": 0.5,
+   "hunger_gt": 0.55
+  },
+  "reaction": {
+   "behavior": "explore",
+   "gain": 0.96,
+   "dir": "toward"
+  },
+  "valence_prior": 0.32
+ },
+ {
+  "id": "fly.story_hint.soft.baseline",
+  "species": "fly",
+  "stimulus": {
+   "kinds": [
+    "story"
+   ],
+   "gesture": null,
+   "min_intensity": 0.0
+  },
+  "internal": {
+   "fear_gt": 0.0,
+   "hunger_gt": 0.0
+  },
+  "reaction": {
+   "behavior": "explore",
+   "gain": 0.5,
+   "dir": "toward"
+  },
+  "valence_prior": 0.0
+ },
+ {
+  "id": "fly.story_hint.soft.hungry",
+  "species": "fly",
+  "stimulus": {
+   "kinds": [
+    "story"
+   ],
+   "gesture": null,
+   "min_intensity": 0.0
+  },
+  "internal": {
+   "fear_gt": 0.0,
+   "hunger_gt": 0.55
+  },
+  "reaction": {
+   "behavior": "explore",
+   "gain": 0.5,
+   "dir": "toward"
+  },
+  "valence_prior": 0.0
+ },
+ {
+  "id": "fly.story_hint.soft.scared",
+  "species": "fly",
+  "stimulus": {
+   "kinds": [
+    "story"
+   ],
+   "gesture": null,
+   "min_intensity": 0.0
+  },
+  "internal": {
+   "fear_gt": 0.5,
+   "hunger_gt": 0.0
+  },
+  "reaction": {
+   "behavior": "explore",
+   "gain": 0.5,
+   "dir": "toward"
+  },
+  "valence_prior": 0.0
+ },
+ {
+  "id": "fly.story_hint.soft.stressed",
+  "species": "fly",
+  "stimulus": {
+   "kinds": [
+    "story"
+   ],
+   "gesture": null,
+   "min_intensity": 0.0
+  },
+  "internal": {
+   "fear_gt": 0.5,
+   "hunger_gt": 0.55
+  },
+  "reaction": {
+   "behavior": "explore",
+   "gain": 0.5,
+   "dir": "toward"
+  },
+  "valence_prior": 0.0
+ },
+ {
+  "id": "fly.story_hint.mid.baseline",
+  "species": "fly",
+  "stimulus": {
+   "kinds": [
+    "story"
+   ],
+   "gesture": null,
+   "min_intensity": 0.0
+  },
+  "internal": {
+   "fear_gt": 0.0,
+   "hunger_gt": 0.0
+  },
+  "reaction": {
+   "behavior": "explore",
+   "gain": 0.5,
+   "dir": "toward"
+  },
+  "valence_prior": 0.0
+ },
+ {
+  "id": "fly.story_hint.mid.hungry",
+  "species": "fly",
+  "stimulus": {
+   "kinds": [
+    "story"
+   ],
+   "gesture": null,
+   "min_intensity": 0.0
+  },
+  "internal": {
+   "fear_gt": 0.0,
+   "hunger_gt": 0.55
+  },
+  "reaction": {
+   "behavior": "explore",
+   "gain": 0.5,
+   "dir": "toward"
+  },
+  "valence_prior": 0.0
+ },
+ {
+  "id": "fly.story_hint.mid.scared",
+  "species": "fly",
+  "stimulus": {
+   "kinds": [
+    "story"
+   ],
+   "gesture": null,
+   "min_intensity": 0.0
+  },
+  "internal": {
+   "fear_gt": 0.5,
+   "hunger_gt": 0.0
+  },
+  "reaction": {
+   "behavior": "explore",
+   "gain": 0.5,
+   "dir": "toward"
+  },
+  "valence_prior": 0.0
+ },
+ {
+  "id": "fly.story_hint.mid.stressed",
+  "species": "fly",
+  "stimulus": {
+   "kinds": [
+    "story"
+   ],
+   "gesture": null,
+   "min_intensity": 0.0
+  },
+  "internal": {
+   "fear_gt": 0.5,
+   "hunger_gt": 0.55
+  },
+  "reaction": {
+   "behavior": "explore",
+   "gain": 0.5,
+   "dir": "toward"
+  },
+  "valence_prior": 0.0
+ },
+ {
+  "id": "fly.story_hint.strong.baseline",
+  "species": "fly",
+  "stimulus": {
+   "kinds": [
+    "story"
+   ],
+   "gesture": null,
+   "min_intensity": 0.0
+  },
+  "internal": {
+   "fear_gt": 0.0,
+   "hunger_gt": 0.0
+  },
+  "reaction": {
+   "behavior": "explore",
+   "gain": 0.5,
+   "dir": "toward"
+  },
+  "valence_prior": 0.0
+ },
+ {
+  "id": "fly.story_hint.strong.hungry",
+  "species": "fly",
+  "stimulus": {
+   "kinds": [
+    "story"
+   ],
+   "gesture": null,
+   "min_intensity": 0.0
+  },
+  "internal": {
+   "fear_gt": 0.0,
+   "hunger_gt": 0.55
+  },
+  "reaction": {
+   "behavior": "explore",
+   "gain": 0.5,
+   "dir": "toward"
+  },
+  "valence_prior": 0.0
+ },
+ {
+  "id": "fly.story_hint.strong.scared",
+  "species": "fly",
+  "stimulus": {
+   "kinds": [
+    "story"
+   ],
+   "gesture": null,
+   "min_intensity": 0.0
+  },
+  "internal": {
+   "fear_gt": 0.5,
+   "hunger_gt": 0.0
+  },
+  "reaction": {
+   "behavior": "explore",
+   "gain": 0.5,
+   "dir": "toward"
+  },
+  "valence_prior": 0.0
+ },
+ {
+  "id": "fly.story_hint.strong.stressed",
+  "species": "fly",
+  "stimulus": {
+   "kinds": [
+    "story"
+   ],
+   "gesture": null,
+   "min_intensity": 0.0
+  },
+  "internal": {
+   "fear_gt": 0.5,
+   "hunger_gt": 0.55
+  },
+  "reaction": {
+   "behavior": "explore",
+   "gain": 0.5,
+   "dir": "toward"
+  },
+  "valence_prior": 0.0
+ },
+ {
+  "id": "roach.cursor_rush_wind.soft.baseline",
+  "species": "roach",
+  "stimulus": {
+   "kinds": [
+    "wind"
+   ],
+   "gesture": "rush",
+   "min_intensity": 0.39
+  },
+  "internal": {
+   "fear_gt": 0.0,
+   "hunger_gt": 0.0
+  },
+  "reaction": {
+   "behavior": "escape",
+   "gain": 1.2,
+   "dir": "away"
+  },
+  "valence_prior": -0.315
+ },
+ {
+  "id": "roach.cursor_rush_wind.soft.hungry",
+  "species": "roach",
+  "stimulus": {
+   "kinds": [
+    "wind"
+   ],
+   "gesture": "rush",
+   "min_intensity": 0.39
+  },
+  "internal": {
+   "fear_gt": 0.0,
+   "hunger_gt": 0.55
+  },
+  "reaction": {
+   "behavior": "escape",
+   "gain": 1.14,
+   "dir": "away"
+  },
+  "valence_prior": -0.315
+ },
+ {
+  "id": "roach.cursor_rush_wind.soft.scared",
+  "species": "roach",
+  "stimulus": {
+   "kinds": [
+    "wind"
+   ],
+   "gesture": "rush",
+   "min_intensity": 0.39
+  },
+  "internal": {
+   "fear_gt": 0.5,
+   "hunger_gt": 0.0
+  },
+  "reaction": {
+   "behavior": "escape",
+   "gain": 1.5,
+   "dir": "away"
+  },
+  "valence_prior": -0.315
+ },
+ {
+  "id": "roach.cursor_rush_wind.soft.stressed",
+  "species": "roach",
+  "stimulus": {
+   "kinds": [
+    "wind"
+   ],
+   "gesture": "rush",
+   "min_intensity": 0.39
+  },
+  "internal": {
+   "fear_gt": 0.5,
+   "hunger_gt": 0.55
+  },
+  "reaction": {
+   "behavior": "escape",
+   "gain": 1.62,
+   "dir": "away"
+  },
+  "valence_prior": -0.315
+ },
+ {
+  "id": "roach.cursor_rush_wind.mid.baseline",
+  "species": "roach",
+  "stimulus": {
+   "kinds": [
+    "wind"
+   ],
+   "gesture": "rush",
+   "min_intensity": 0.55
+  },
+  "internal": {
+   "fear_gt": 0.0,
+   "hunger_gt": 0.0
+  },
+  "reaction": {
+   "behavior": "escape",
+   "gain": 1.2,
+   "dir": "away"
+  },
+  "valence_prior": -0.517
+ },
+ {
+  "id": "roach.cursor_rush_wind.mid.hungry",
+  "species": "roach",
+  "stimulus": {
+   "kinds": [
+    "wind"
+   ],
+   "gesture": "rush",
+   "min_intensity": 0.55
+  },
+  "internal": {
+   "fear_gt": 0.0,
+   "hunger_gt": 0.55
+  },
+  "reaction": {
+   "behavior": "escape",
+   "gain": 1.14,
+   "dir": "away"
+  },
+  "valence_prior": -0.517
+ },
+ {
+  "id": "roach.cursor_rush_wind.mid.scared",
+  "species": "roach",
+  "stimulus": {
+   "kinds": [
+    "wind"
+   ],
+   "gesture": "rush",
+   "min_intensity": 0.55
+  },
+  "internal": {
+   "fear_gt": 0.5,
+   "hunger_gt": 0.0
+  },
+  "reaction": {
+   "behavior": "escape",
+   "gain": 1.5,
+   "dir": "away"
+  },
+  "valence_prior": -0.517
+ },
+ {
+  "id": "roach.cursor_rush_wind.mid.stressed",
+  "species": "roach",
+  "stimulus": {
+   "kinds": [
+    "wind"
+   ],
+   "gesture": "rush",
+   "min_intensity": 0.55
+  },
+  "internal": {
+   "fear_gt": 0.5,
+   "hunger_gt": 0.55
+  },
+  "reaction": {
+   "behavior": "escape",
+   "gain": 1.62,
+   "dir": "away"
+  },
+  "valence_prior": -0.517
+ },
+ {
+  "id": "roach.cursor_rush_wind.strong.baseline",
+  "species": "roach",
+  "stimulus": {
+   "kinds": [
+    "wind"
+   ],
+   "gesture": "rush",
+   "min_intensity": 0.72
+  },
+  "internal": {
+   "fear_gt": 0.0,
+   "hunger_gt": 0.0
+  },
+  "reaction": {
+   "behavior": "escape",
+   "gain": 1.2,
+   "dir": "away"
+  },
+  "valence_prior": -0.72
+ },
+ {
+  "id": "roach.cursor_rush_wind.strong.hungry",
+  "species": "roach",
+  "stimulus": {
+   "kinds": [
+    "wind"
+   ],
+   "gesture": "rush",
+   "min_intensity": 0.72
+  },
+  "internal": {
+   "fear_gt": 0.0,
+   "hunger_gt": 0.55
+  },
+  "reaction": {
+   "behavior": "escape",
+   "gain": 1.14,
+   "dir": "away"
+  },
+  "valence_prior": -0.72
+ },
+ {
+  "id": "roach.cursor_rush_wind.strong.scared",
+  "species": "roach",
+  "stimulus": {
+   "kinds": [
+    "wind"
+   ],
+   "gesture": "rush",
+   "min_intensity": 0.72
+  },
+  "internal": {
+   "fear_gt": 0.5,
+   "hunger_gt": 0.0
+  },
+  "reaction": {
+   "behavior": "escape",
+   "gain": 1.5,
+   "dir": "away"
+  },
+  "valence_prior": -0.72
+ },
+ {
+  "id": "roach.cursor_rush_wind.strong.stressed",
+  "species": "roach",
+  "stimulus": {
+   "kinds": [
+    "wind"
+   ],
+   "gesture": "rush",
+   "min_intensity": 0.72
+  },
+  "internal": {
+   "fear_gt": 0.5,
+   "hunger_gt": 0.55
+  },
+  "reaction": {
+   "behavior": "escape",
+   "gain": 1.62,
+   "dir": "away"
+  },
+  "valence_prior": -0.72
+ },
+ {
+  "id": "roach.wind_gust.soft.baseline",
+  "species": "roach",
+  "stimulus": {
+   "kinds": [
+    "wind"
+   ],
+   "gesture": null,
+   "min_intensity": 0.1
+  },
+  "internal": {
+   "fear_gt": 0.0,
+   "hunger_gt": 0.0
+  },
+  "reaction": {
+   "behavior": "explore",
+   "gain": 0.7,
+   "dir": "away"
+  },
+  "valence_prior": -0.035
+ },
+ {
+  "id": "roach.wind_gust.soft.hungry",
+  "species": "roach",
+  "stimulus": {
+   "kinds": [
+    "wind"
+   ],
+   "gesture": null,
+   "min_intensity": 0.1
+  },
+  "internal": {
+   "fear_gt": 0.0,
+   "hunger_gt": 0.55
+  },
+  "reaction": {
+   "behavior": "explore",
+   "gain": 0.7,
+   "dir": "away"
+  },
+  "valence_prior": -0.035
+ },
+ {
+  "id": "roach.wind_gust.soft.scared",
+  "species": "roach",
+  "stimulus": {
+   "kinds": [
+    "wind"
+   ],
+   "gesture": null,
+   "min_intensity": 0.1
+  },
+  "internal": {
+   "fear_gt": 0.5,
+   "hunger_gt": 0.0
+  },
+  "reaction": {
+   "behavior": "explore",
+   "gain": 0.7,
+   "dir": "away"
+  },
+  "valence_prior": -0.035
+ },
+ {
+  "id": "roach.wind_gust.soft.stressed",
+  "species": "roach",
+  "stimulus": {
+   "kinds": [
+    "wind"
+   ],
+   "gesture": null,
+   "min_intensity": 0.1
+  },
+  "internal": {
+   "fear_gt": 0.5,
+   "hunger_gt": 0.55
+  },
+  "reaction": {
+   "behavior": "explore",
+   "gain": 0.7,
+   "dir": "away"
+  },
+  "valence_prior": -0.035
+ },
+ {
+  "id": "roach.wind_gust.mid.baseline",
+  "species": "roach",
+  "stimulus": {
+   "kinds": [
+    "wind"
+   ],
+   "gesture": null,
+   "min_intensity": 0.15
+  },
+  "internal": {
+   "fear_gt": 0.0,
+   "hunger_gt": 0.0
+  },
+  "reaction": {
+   "behavior": "explore",
+   "gain": 0.7,
+   "dir": "away"
+  },
+  "valence_prior": -0.057
+ },
+ {
+  "id": "roach.wind_gust.mid.hungry",
+  "species": "roach",
+  "stimulus": {
+   "kinds": [
+    "wind"
+   ],
+   "gesture": null,
+   "min_intensity": 0.15
+  },
+  "internal": {
+   "fear_gt": 0.0,
+   "hunger_gt": 0.55
+  },
+  "reaction": {
+   "behavior": "explore",
+   "gain": 0.7,
+   "dir": "away"
+  },
+  "valence_prior": -0.057
+ },
+ {
+  "id": "roach.wind_gust.mid.scared",
+  "species": "roach",
+  "stimulus": {
+   "kinds": [
+    "wind"
+   ],
+   "gesture": null,
+   "min_intensity": 0.15
+  },
+  "internal": {
+   "fear_gt": 0.5,
+   "hunger_gt": 0.0
+  },
+  "reaction": {
+   "behavior": "explore",
+   "gain": 0.7,
+   "dir": "away"
+  },
+  "valence_prior": -0.057
+ },
+ {
+  "id": "roach.wind_gust.mid.stressed",
+  "species": "roach",
+  "stimulus": {
+   "kinds": [
+    "wind"
+   ],
+   "gesture": null,
+   "min_intensity": 0.15
+  },
+  "internal": {
+   "fear_gt": 0.5,
+   "hunger_gt": 0.55
+  },
+  "reaction": {
+   "behavior": "explore",
+   "gain": 0.7,
+   "dir": "away"
+  },
+  "valence_prior": -0.057
+ },
+ {
+  "id": "roach.wind_gust.strong.baseline",
+  "species": "roach",
+  "stimulus": {
+   "kinds": [
+    "wind"
+   ],
+   "gesture": null,
+   "min_intensity": 0.2
+  },
+  "internal": {
+   "fear_gt": 0.0,
+   "hunger_gt": 0.0
+  },
+  "reaction": {
+   "behavior": "explore",
+   "gain": 0.7,
+   "dir": "away"
+  },
+  "valence_prior": -0.08
+ },
+ {
+  "id": "roach.wind_gust.strong.hungry",
+  "species": "roach",
+  "stimulus": {
+   "kinds": [
+    "wind"
+   ],
+   "gesture": null,
+   "min_intensity": 0.2
+  },
+  "internal": {
+   "fear_gt": 0.0,
+   "hunger_gt": 0.55
+  },
+  "reaction": {
+   "behavior": "explore",
+   "gain": 0.7,
+   "dir": "away"
+  },
+  "valence_prior": -0.08
+ },
+ {
+  "id": "roach.wind_gust.strong.scared",
+  "species": "roach",
+  "stimulus": {
+   "kinds": [
+    "wind"
+   ],
+   "gesture": null,
+   "min_intensity": 0.2
+  },
+  "internal": {
+   "fear_gt": 0.5,
+   "hunger_gt": 0.0
+  },
+  "reaction": {
+   "behavior": "explore",
+   "gain": 0.7,
+   "dir": "away"
+  },
+  "valence_prior": -0.08
+ },
+ {
+  "id": "roach.wind_gust.strong.stressed",
+  "species": "roach",
+  "stimulus": {
+   "kinds": [
+    "wind"
+   ],
+   "gesture": null,
+   "min_intensity": 0.2
+  },
+  "internal": {
+   "fear_gt": 0.5,
+   "hunger_gt": 0.55
+  },
+  "reaction": {
+   "behavior": "explore",
+   "gain": 0.7,
+   "dir": "away"
+  },
+  "valence_prior": -0.08
+ },
+ {
+  "id": "roach.looming_shadow.soft.baseline",
+  "species": "roach",
+  "stimulus": {
+   "kinds": [
+    "shadow"
+   ],
+   "gesture": "approach_fast",
+   "min_intensity": 0.35
+  },
+  "internal": {
+   "fear_gt": 0.0,
+   "hunger_gt": 0.0
+  },
+  "reaction": {
+   "behavior": "escape",
+   "gain": 1.4,
+   "dir": "away"
+  },
+  "valence_prior": -0.63
+ },
+ {
+  "id": "roach.looming_shadow.soft.hungry",
+  "species": "roach",
+  "stimulus": {
+   "kinds": [
+    "shadow"
+   ],
+   "gesture": "approach_fast",
+   "min_intensity": 0.35
+  },
+  "internal": {
+   "fear_gt": 0.0,
+   "hunger_gt": 0.55
+  },
+  "reaction": {
+   "behavior": "escape",
+   "gain": 1.33,
+   "dir": "away"
+  },
+  "valence_prior": -0.63
+ },
+ {
+  "id": "roach.looming_shadow.soft.scared",
+  "species": "roach",
+  "stimulus": {
+   "kinds": [
+    "shadow"
+   ],
+   "gesture": "approach_fast",
+   "min_intensity": 0.35
+  },
+  "internal": {
+   "fear_gt": 0.5,
+   "hunger_gt": 0.0
+  },
+  "reaction": {
+   "behavior": "escape",
+   "gain": 1.75,
+   "dir": "away"
+  },
+  "valence_prior": -0.63
+ },
+ {
+  "id": "roach.looming_shadow.soft.stressed",
+  "species": "roach",
+  "stimulus": {
+   "kinds": [
+    "shadow"
+   ],
+   "gesture": "approach_fast",
+   "min_intensity": 0.35
+  },
+  "internal": {
+   "fear_gt": 0.5,
+   "hunger_gt": 0.55
+  },
+  "reaction": {
+   "behavior": "escape",
+   "gain": 1.89,
+   "dir": "away"
+  },
+  "valence_prior": -0.63
+ },
+ {
+  "id": "roach.looming_shadow.mid.baseline",
+  "species": "roach",
+  "stimulus": {
+   "kinds": [
+    "shadow"
+   ],
+   "gesture": "approach_fast",
+   "min_intensity": 0.5
+  },
+  "internal": {
+   "fear_gt": 0.0,
+   "hunger_gt": 0.0
+  },
+  "reaction": {
+   "behavior": "escape",
+   "gain": 1.4,
+   "dir": "away"
+  },
+  "valence_prior": -1.0
+ },
+ {
+  "id": "roach.looming_shadow.mid.hungry",
+  "species": "roach",
+  "stimulus": {
+   "kinds": [
+    "shadow"
+   ],
+   "gesture": "approach_fast",
+   "min_intensity": 0.5
+  },
+  "internal": {
+   "fear_gt": 0.0,
+   "hunger_gt": 0.55
+  },
+  "reaction": {
+   "behavior": "escape",
+   "gain": 1.33,
+   "dir": "away"
+  },
+  "valence_prior": -1.0
+ },
+ {
+  "id": "roach.looming_shadow.mid.scared",
+  "species": "roach",
+  "stimulus": {
+   "kinds": [
+    "shadow"
+   ],
+   "gesture": "approach_fast",
+   "min_intensity": 0.5
+  },
+  "internal": {
+   "fear_gt": 0.5,
+   "hunger_gt": 0.0
+  },
+  "reaction": {
+   "behavior": "escape",
+   "gain": 1.75,
+   "dir": "away"
+  },
+  "valence_prior": -1.0
+ },
+ {
+  "id": "roach.looming_shadow.mid.stressed",
+  "species": "roach",
+  "stimulus": {
+   "kinds": [
+    "shadow"
+   ],
+   "gesture": "approach_fast",
+   "min_intensity": 0.5
+  },
+  "internal": {
+   "fear_gt": 0.5,
+   "hunger_gt": 0.55
+  },
+  "reaction": {
+   "behavior": "escape",
+   "gain": 1.89,
+   "dir": "away"
+  },
+  "valence_prior": -1.0
+ },
+ {
+  "id": "roach.looming_shadow.strong.baseline",
+  "species": "roach",
+  "stimulus": {
+   "kinds": [
+    "shadow"
+   ],
+   "gesture": "approach_fast",
+   "min_intensity": 0.65
+  },
+  "internal": {
+   "fear_gt": 0.0,
+   "hunger_gt": 0.0
+  },
+  "reaction": {
+   "behavior": "escape",
+   "gain": 1.4,
+   "dir": "away"
+  },
+  "valence_prior": -1.0
+ },
+ {
+  "id": "roach.looming_shadow.strong.hungry",
+  "species": "roach",
+  "stimulus": {
+   "kinds": [
+    "shadow"
+   ],
+   "gesture": "approach_fast",
+   "min_intensity": 0.65
+  },
+  "internal": {
+   "fear_gt": 0.0,
+   "hunger_gt": 0.55
+  },
+  "reaction": {
+   "behavior": "escape",
+   "gain": 1.33,
+   "dir": "away"
+  },
+  "valence_prior": -1.0
+ },
+ {
+  "id": "roach.looming_shadow.strong.scared",
+  "species": "roach",
+  "stimulus": {
+   "kinds": [
+    "shadow"
+   ],
+   "gesture": "approach_fast",
+   "min_intensity": 0.65
+  },
+  "internal": {
+   "fear_gt": 0.5,
+   "hunger_gt": 0.0
+  },
+  "reaction": {
+   "behavior": "escape",
+   "gain": 1.75,
+   "dir": "away"
+  },
+  "valence_prior": -1.0
+ },
+ {
+  "id": "roach.looming_shadow.strong.stressed",
+  "species": "roach",
+  "stimulus": {
+   "kinds": [
+    "shadow"
+   ],
+   "gesture": "approach_fast",
+   "min_intensity": 0.65
+  },
+  "internal": {
+   "fear_gt": 0.5,
+   "hunger_gt": 0.55
+  },
+  "reaction": {
+   "behavior": "escape",
+   "gain": 1.89,
+   "dir": "away"
+  },
+  "valence_prior": -1.0
+ },
+ {
+  "id": "roach.shadow_pass.soft.baseline",
+  "species": "roach",
+  "stimulus": {
+   "kinds": [
+    "shadow"
+   ],
+   "gesture": "approach_slow",
+   "min_intensity": 0.13
+  },
+  "internal": {
+   "fear_gt": 0.0,
+   "hunger_gt": 0.0
+  },
+  "reaction": {
+   "behavior": "explore",
+   "gain": 0.8,
+   "dir": "away"
+  },
+  "valence_prior": -0.175
+ },
+ {
+  "id": "roach.shadow_pass.soft.hungry",
+  "species": "roach",
+  "stimulus": {
+   "kinds": [
+    "shadow"
+   ],
+   "gesture": "approach_slow",
+   "min_intensity": 0.13
+  },
+  "internal": {
+   "fear_gt": 0.0,
+   "hunger_gt": 0.55
+  },
+  "reaction": {
+   "behavior": "explore",
+   "gain": 0.8,
+   "dir": "away"
+  },
+  "valence_prior": -0.175
+ },
+ {
+  "id": "roach.shadow_pass.soft.scared",
+  "species": "roach",
+  "stimulus": {
+   "kinds": [
+    "shadow"
+   ],
+   "gesture": "approach_slow",
+   "min_intensity": 0.13
+  },
+  "internal": {
+   "fear_gt": 0.5,
+   "hunger_gt": 0.0
+  },
+  "reaction": {
+   "behavior": "explore",
+   "gain": 0.8,
+   "dir": "away"
+  },
+  "valence_prior": -0.175
+ },
+ {
+  "id": "roach.shadow_pass.soft.stressed",
+  "species": "roach",
+  "stimulus": {
+   "kinds": [
+    "shadow"
+   ],
+   "gesture": "approach_slow",
+   "min_intensity": 0.13
+  },
+  "internal": {
+   "fear_gt": 0.5,
+   "hunger_gt": 0.55
+  },
+  "reaction": {
+   "behavior": "explore",
+   "gain": 0.8,
+   "dir": "away"
+  },
+  "valence_prior": -0.175
+ },
+ {
+  "id": "roach.shadow_pass.mid.baseline",
+  "species": "roach",
+  "stimulus": {
+   "kinds": [
+    "shadow"
+   ],
+   "gesture": "approach_slow",
+   "min_intensity": 0.18
+  },
+  "internal": {
+   "fear_gt": 0.0,
+   "hunger_gt": 0.0
+  },
+  "reaction": {
+   "behavior": "explore",
+   "gain": 0.8,
+   "dir": "away"
+  },
+  "valence_prior": -0.287
+ },
+ {
+  "id": "roach.shadow_pass.mid.hungry",
+  "species": "roach",
+  "stimulus": {
+   "kinds": [
+    "shadow"
+   ],
+   "gesture": "approach_slow",
+   "min_intensity": 0.18
+  },
+  "internal": {
+   "fear_gt": 0.0,
+   "hunger_gt": 0.55
+  },
+  "reaction": {
+   "behavior": "explore",
+   "gain": 0.8,
+   "dir": "away"
+  },
+  "valence_prior": -0.287
+ },
+ {
+  "id": "roach.shadow_pass.mid.scared",
+  "species": "roach",
+  "stimulus": {
+   "kinds": [
+    "shadow"
+   ],
+   "gesture": "approach_slow",
+   "min_intensity": 0.18
+  },
+  "internal": {
+   "fear_gt": 0.5,
+   "hunger_gt": 0.0
+  },
+  "reaction": {
+   "behavior": "explore",
+   "gain": 0.8,
+   "dir": "away"
+  },
+  "valence_prior": -0.287
+ },
+ {
+  "id": "roach.shadow_pass.mid.stressed",
+  "species": "roach",
+  "stimulus": {
+   "kinds": [
+    "shadow"
+   ],
+   "gesture": "approach_slow",
+   "min_intensity": 0.18
+  },
+  "internal": {
+   "fear_gt": 0.5,
+   "hunger_gt": 0.55
+  },
+  "reaction": {
+   "behavior": "explore",
+   "gain": 0.8,
+   "dir": "away"
+  },
+  "valence_prior": -0.287
+ },
+ {
+  "id": "roach.shadow_pass.strong.baseline",
+  "species": "roach",
+  "stimulus": {
+   "kinds": [
+    "shadow"
+   ],
+   "gesture": "approach_slow",
+   "min_intensity": 0.23
+  },
+  "internal": {
+   "fear_gt": 0.0,
+   "hunger_gt": 0.0
+  },
+  "reaction": {
+   "behavior": "explore",
+   "gain": 0.8,
+   "dir": "away"
+  },
+  "valence_prior": -0.4
+ },
+ {
+  "id": "roach.shadow_pass.strong.hungry",
+  "species": "roach",
+  "stimulus": {
+   "kinds": [
+    "shadow"
+   ],
+   "gesture": "approach_slow",
+   "min_intensity": 0.23
+  },
+  "internal": {
+   "fear_gt": 0.0,
+   "hunger_gt": 0.55
+  },
+  "reaction": {
+   "behavior": "explore",
+   "gain": 0.8,
+   "dir": "away"
+  },
+  "valence_prior": -0.4
+ },
+ {
+  "id": "roach.shadow_pass.strong.scared",
+  "species": "roach",
+  "stimulus": {
+   "kinds": [
+    "shadow"
+   ],
+   "gesture": "approach_slow",
+   "min_intensity": 0.23
+  },
+  "internal": {
+   "fear_gt": 0.5,
+   "hunger_gt": 0.0
+  },
+  "reaction": {
+   "behavior": "explore",
+   "gain": 0.8,
+   "dir": "away"
+  },
+  "valence_prior": -0.4
+ },
+ {
+  "id": "roach.shadow_pass.strong.stressed",
+  "species": "roach",
+  "stimulus": {
+   "kinds": [
+    "shadow"
+   ],
+   "gesture": "approach_slow",
+   "min_intensity": 0.23
+  },
+  "internal": {
+   "fear_gt": 0.5,
+   "hunger_gt": 0.55
+  },
+  "reaction": {
+   "behavior": "explore",
+   "gain": 0.8,
+   "dir": "away"
+  },
+  "valence_prior": -0.4
+ },
+ {
+  "id": "roach.vibration_tap.soft.baseline",
+  "species": "roach",
+  "stimulus": {
+   "kinds": [
+    "vibration"
+   ],
+   "gesture": null,
+   "min_intensity": 0.28
+  },
+  "internal": {
+   "fear_gt": 0.0,
+   "hunger_gt": 0.0
+  },
+  "reaction": {
+   "behavior": "escape",
+   "gain": 1.62,
+   "dir": "away"
+  },
+  "valence_prior": -0.56
+ },
+ {
+  "id": "roach.vibration_tap.soft.hungry",
+  "species": "roach",
+  "stimulus": {
+   "kinds": [
+    "vibration"
+   ],
+   "gesture": null,
+   "min_intensity": 0.28
+  },
+  "internal": {
+   "fear_gt": 0.0,
+   "hunger_gt": 0.55
+  },
+  "reaction": {
+   "behavior": "escape",
+   "gain": 1.54,
+   "dir": "away"
+  },
+  "valence_prior": -0.56
+ },
+ {
+  "id": "roach.vibration_tap.soft.scared",
+  "species": "roach",
+  "stimulus": {
+   "kinds": [
+    "vibration"
+   ],
+   "gesture": null,
+   "min_intensity": 0.28
+  },
+  "internal": {
+   "fear_gt": 0.5,
+   "hunger_gt": 0.0
+  },
+  "reaction": {
+   "behavior": "escape",
+   "gain": 2.0,
+   "dir": "away"
+  },
+  "valence_prior": -0.56
+ },
+ {
+  "id": "roach.vibration_tap.soft.stressed",
+  "species": "roach",
+  "stimulus": {
+   "kinds": [
+    "vibration"
+   ],
+   "gesture": null,
+   "min_intensity": 0.28
+  },
+  "internal": {
+   "fear_gt": 0.5,
+   "hunger_gt": 0.55
+  },
+  "reaction": {
+   "behavior": "escape",
+   "gain": 2.0,
+   "dir": "away"
+  },
+  "valence_prior": -0.56
+ },
+ {
+  "id": "roach.vibration_tap.mid.baseline",
+  "species": "roach",
+  "stimulus": {
+   "kinds": [
+    "vibration"
+   ],
+   "gesture": null,
+   "min_intensity": 0.4
+  },
+  "internal": {
+   "fear_gt": 0.0,
+   "hunger_gt": 0.0
+  },
+  "reaction": {
+   "behavior": "escape",
+   "gain": 1.62,
+   "dir": "away"
+  },
+  "valence_prior": -0.92
+ },
+ {
+  "id": "roach.vibration_tap.mid.hungry",
+  "species": "roach",
+  "stimulus": {
+   "kinds": [
+    "vibration"
+   ],
+   "gesture": null,
+   "min_intensity": 0.4
+  },
+  "internal": {
+   "fear_gt": 0.0,
+   "hunger_gt": 0.55
+  },
+  "reaction": {
+   "behavior": "escape",
+   "gain": 1.54,
+   "dir": "away"
+  },
+  "valence_prior": -0.92
+ },
+ {
+  "id": "roach.vibration_tap.mid.scared",
+  "species": "roach",
+  "stimulus": {
+   "kinds": [
+    "vibration"
+   ],
+   "gesture": null,
+   "min_intensity": 0.4
+  },
+  "internal": {
+   "fear_gt": 0.5,
+   "hunger_gt": 0.0
+  },
+  "reaction": {
+   "behavior": "escape",
+   "gain": 2.0,
+   "dir": "away"
+  },
+  "valence_prior": -0.92
+ },
+ {
+  "id": "roach.vibration_tap.mid.stressed",
+  "species": "roach",
+  "stimulus": {
+   "kinds": [
+    "vibration"
+   ],
+   "gesture": null,
+   "min_intensity": 0.4
+  },
+  "internal": {
+   "fear_gt": 0.5,
+   "hunger_gt": 0.55
+  },
+  "reaction": {
+   "behavior": "escape",
+   "gain": 2.0,
+   "dir": "away"
+  },
+  "valence_prior": -0.92
+ },
+ {
+  "id": "roach.vibration_tap.strong.baseline",
+  "species": "roach",
+  "stimulus": {
+   "kinds": [
+    "vibration"
+   ],
+   "gesture": null,
+   "min_intensity": 0.52
+  },
+  "internal": {
+   "fear_gt": 0.0,
+   "hunger_gt": 0.0
+  },
+  "reaction": {
+   "behavior": "escape",
+   "gain": 1.62,
+   "dir": "away"
+  },
+  "valence_prior": -1.0
+ },
+ {
+  "id": "roach.vibration_tap.strong.hungry",
+  "species": "roach",
+  "stimulus": {
+   "kinds": [
+    "vibration"
+   ],
+   "gesture": null,
+   "min_intensity": 0.52
+  },
+  "internal": {
+   "fear_gt": 0.0,
+   "hunger_gt": 0.55
+  },
+  "reaction": {
+   "behavior": "escape",
+   "gain": 1.54,
+   "dir": "away"
+  },
+  "valence_prior": -1.0
+ },
+ {
+  "id": "roach.vibration_tap.strong.scared",
+  "species": "roach",
+  "stimulus": {
+   "kinds": [
+    "vibration"
+   ],
+   "gesture": null,
+   "min_intensity": 0.52
+  },
+  "internal": {
+   "fear_gt": 0.5,
+   "hunger_gt": 0.0
+  },
+  "reaction": {
+   "behavior": "escape",
+   "gain": 2.0,
+   "dir": "away"
+  },
+  "valence_prior": -1.0
+ },
+ {
+  "id": "roach.vibration_tap.strong.stressed",
+  "species": "roach",
+  "stimulus": {
+   "kinds": [
+    "vibration"
+   ],
+   "gesture": null,
+   "min_intensity": 0.52
+  },
+  "internal": {
+   "fear_gt": 0.5,
+   "hunger_gt": 0.55
+  },
+  "reaction": {
+   "behavior": "escape",
+   "gain": 2.0,
+   "dir": "away"
+  },
+  "valence_prior": -1.0
+ },
+ {
+  "id": "roach.contact_grab.soft.baseline",
+  "species": "roach",
+  "stimulus": {
+   "kinds": [
+    "contact"
+   ],
+   "gesture": null,
+   "min_intensity": 0.24
+  },
+  "internal": {
+   "fear_gt": 0.0,
+   "hunger_gt": 0.0
+  },
+  "reaction": {
+   "behavior": "escape",
+   "gain": 1.4,
+   "dir": "away"
+  },
+  "valence_prior": -0.63
+ },
+ {
+  "id": "roach.contact_grab.soft.hungry",
+  "species": "roach",
+  "stimulus": {
+   "kinds": [
+    "contact"
+   ],
+   "gesture": null,
+   "min_intensity": 0.24
+  },
+  "internal": {
+   "fear_gt": 0.0,
+   "hunger_gt": 0.55
+  },
+  "reaction": {
+   "behavior": "escape",
+   "gain": 1.33,
+   "dir": "away"
+  },
+  "valence_prior": -0.63
+ },
+ {
+  "id": "roach.contact_grab.soft.scared",
+  "species": "roach",
+  "stimulus": {
+   "kinds": [
+    "contact"
+   ],
+   "gesture": null,
+   "min_intensity": 0.24
+  },
+  "internal": {
+   "fear_gt": 0.5,
+   "hunger_gt": 0.0
+  },
+  "reaction": {
+   "behavior": "escape",
+   "gain": 1.75,
+   "dir": "away"
+  },
+  "valence_prior": -0.63
+ },
+ {
+  "id": "roach.contact_grab.soft.stressed",
+  "species": "roach",
+  "stimulus": {
+   "kinds": [
+    "contact"
+   ],
+   "gesture": null,
+   "min_intensity": 0.24
+  },
+  "internal": {
+   "fear_gt": 0.5,
+   "hunger_gt": 0.55
+  },
+  "reaction": {
+   "behavior": "escape",
+   "gain": 1.89,
+   "dir": "away"
+  },
+  "valence_prior": -0.63
+ },
+ {
+  "id": "roach.contact_grab.mid.baseline",
+  "species": "roach",
+  "stimulus": {
+   "kinds": [
+    "contact"
+   ],
+   "gesture": null,
+   "min_intensity": 0.35
+  },
+  "internal": {
+   "fear_gt": 0.0,
+   "hunger_gt": 0.0
+  },
+  "reaction": {
+   "behavior": "escape",
+   "gain": 1.4,
+   "dir": "away"
+  },
+  "valence_prior": -1.0
+ },
+ {
+  "id": "roach.contact_grab.mid.hungry",
+  "species": "roach",
+  "stimulus": {
+   "kinds": [
+    "contact"
+   ],
+   "gesture": null,
+   "min_intensity": 0.35
+  },
+  "internal": {
+   "fear_gt": 0.0,
+   "hunger_gt": 0.55
+  },
+  "reaction": {
+   "behavior": "escape",
+   "gain": 1.33,
+   "dir": "away"
+  },
+  "valence_prior": -1.0
+ },
+ {
+  "id": "roach.contact_grab.mid.scared",
+  "species": "roach",
+  "stimulus": {
+   "kinds": [
+    "contact"
+   ],
+   "gesture": null,
+   "min_intensity": 0.35
+  },
+  "internal": {
+   "fear_gt": 0.5,
+   "hunger_gt": 0.0
+  },
+  "reaction": {
+   "behavior": "escape",
+   "gain": 1.75,
+   "dir": "away"
+  },
+  "valence_prior": -1.0
+ },
+ {
+  "id": "roach.contact_grab.mid.stressed",
+  "species": "roach",
+  "stimulus": {
+   "kinds": [
+    "contact"
+   ],
+   "gesture": null,
+   "min_intensity": 0.35
+  },
+  "internal": {
+   "fear_gt": 0.5,
+   "hunger_gt": 0.55
+  },
+  "reaction": {
+   "behavior": "escape",
+   "gain": 1.89,
+   "dir": "away"
+  },
+  "valence_prior": -1.0
+ },
+ {
+  "id": "roach.contact_grab.strong.baseline",
+  "species": "roach",
+  "stimulus": {
+   "kinds": [
+    "contact"
+   ],
+   "gesture": null,
+   "min_intensity": 0.45
+  },
+  "internal": {
+   "fear_gt": 0.0,
+   "hunger_gt": 0.0
+  },
+  "reaction": {
+   "behavior": "escape",
+   "gain": 1.4,
+   "dir": "away"
+  },
+  "valence_prior": -1.0
+ },
+ {
+  "id": "roach.contact_grab.strong.hungry",
+  "species": "roach",
+  "stimulus": {
+   "kinds": [
+    "contact"
+   ],
+   "gesture": null,
+   "min_intensity": 0.45
+  },
+  "internal": {
+   "fear_gt": 0.0,
+   "hunger_gt": 0.55
+  },
+  "reaction": {
+   "behavior": "escape",
+   "gain": 1.33,
+   "dir": "away"
+  },
+  "valence_prior": -1.0
+ },
+ {
+  "id": "roach.contact_grab.strong.scared",
+  "species": "roach",
+  "stimulus": {
+   "kinds": [
+    "contact"
+   ],
+   "gesture": null,
+   "min_intensity": 0.45
+  },
+  "internal": {
+   "fear_gt": 0.5,
+   "hunger_gt": 0.0
+  },
+  "reaction": {
+   "behavior": "escape",
+   "gain": 1.75,
+   "dir": "away"
+  },
+  "valence_prior": -1.0
+ },
+ {
+  "id": "roach.contact_grab.strong.stressed",
+  "species": "roach",
+  "stimulus": {
+   "kinds": [
+    "contact"
+   ],
+   "gesture": null,
+   "min_intensity": 0.45
+  },
+  "internal": {
+   "fear_gt": 0.5,
+   "hunger_gt": 0.55
+  },
+  "reaction": {
+   "behavior": "escape",
+   "gain": 1.89,
+   "dir": "away"
+  },
+  "valence_prior": -1.0
+ },
+ {
+  "id": "roach.food_odor.soft.baseline",
+  "species": "roach",
+  "stimulus": {
+   "kinds": [
+    "odor_food"
+   ],
+   "gesture": null,
+   "min_intensity": 0.07
+  },
+  "internal": {
+   "fear_gt": 0.0,
+   "hunger_gt": 0.0
+  },
+  "reaction": {
+   "behavior": "seek_food",
+   "gain": 1.15,
+   "dir": "toward"
+  },
+  "valence_prior": 0.385
+ },
+ {
+  "id": "roach.food_odor.soft.hungry",
+  "species": "roach",
+  "stimulus": {
+   "kinds": [
+    "odor_food"
+   ],
+   "gesture": null,
+   "min_intensity": 0.07
+  },
+  "internal": {
+   "fear_gt": 0.0,
+   "hunger_gt": 0.55
+  },
+  "reaction": {
+   "behavior": "seek_food",
+   "gain": 1.49,
+   "dir": "toward"
+  },
+  "valence_prior": 0.385
+ },
+ {
+  "id": "roach.food_odor.soft.scared",
+  "species": "roach",
+  "stimulus": {
+   "kinds": [
+    "odor_food"
+   ],
+   "gesture": null,
+   "min_intensity": 0.07
+  },
+  "internal": {
+   "fear_gt": 0.5,
+   "hunger_gt": 0.0
+  },
+  "reaction": {
+   "behavior": "seek_food",
+   "gain": 0.8,
+   "dir": "toward"
+  },
+  "valence_prior": 0.385
+ },
+ {
+  "id": "roach.food_odor.soft.stressed",
+  "species": "roach",
+  "stimulus": {
+   "kinds": [
+    "odor_food"
+   ],
+   "gesture": null,
+   "min_intensity": 0.07
+  },
+  "internal": {
+   "fear_gt": 0.5,
+   "hunger_gt": 0.55
+  },
+  "reaction": {
+   "behavior": "seek_food",
+   "gain": 0.69,
+   "dir": "toward"
+  },
+  "valence_prior": 0.385
+ },
+ {
+  "id": "roach.food_odor.mid.baseline",
+  "species": "roach",
+  "stimulus": {
+   "kinds": [
+    "odor_food"
+   ],
+   "gesture": null,
+   "min_intensity": 0.1
+  },
+  "internal": {
+   "fear_gt": 0.0,
+   "hunger_gt": 0.0
+  },
+  "reaction": {
+   "behavior": "seek_food",
+   "gain": 1.15,
+   "dir": "toward"
+  },
+  "valence_prior": 0.632
+ },
+ {
+  "id": "roach.food_odor.mid.hungry",
+  "species": "roach",
+  "stimulus": {
+   "kinds": [
+    "odor_food"
+   ],
+   "gesture": null,
+   "min_intensity": 0.1
+  },
+  "internal": {
+   "fear_gt": 0.0,
+   "hunger_gt": 0.55
+  },
+  "reaction": {
+   "behavior": "seek_food",
+   "gain": 1.49,
+   "dir": "toward"
+  },
+  "valence_prior": 0.632
+ },
+ {
+  "id": "roach.food_odor.mid.scared",
+  "species": "roach",
+  "stimulus": {
+   "kinds": [
+    "odor_food"
+   ],
+   "gesture": null,
+   "min_intensity": 0.1
+  },
+  "internal": {
+   "fear_gt": 0.5,
+   "hunger_gt": 0.0
+  },
+  "reaction": {
+   "behavior": "seek_food",
+   "gain": 0.8,
+   "dir": "toward"
+  },
+  "valence_prior": 0.632
+ },
+ {
+  "id": "roach.food_odor.mid.stressed",
+  "species": "roach",
+  "stimulus": {
+   "kinds": [
+    "odor_food"
+   ],
+   "gesture": null,
+   "min_intensity": 0.1
+  },
+  "internal": {
+   "fear_gt": 0.5,
+   "hunger_gt": 0.55
+  },
+  "reaction": {
+   "behavior": "seek_food",
+   "gain": 0.69,
+   "dir": "toward"
+  },
+  "valence_prior": 0.632
+ },
+ {
+  "id": "roach.food_odor.strong.baseline",
+  "species": "roach",
+  "stimulus": {
+   "kinds": [
+    "odor_food"
+   ],
+   "gesture": null,
+   "min_intensity": 0.13
+  },
+  "internal": {
+   "fear_gt": 0.0,
+   "hunger_gt": 0.0
+  },
+  "reaction": {
+   "behavior": "seek_food",
+   "gain": 1.15,
+   "dir": "toward"
+  },
+  "valence_prior": 0.88
+ },
+ {
+  "id": "roach.food_odor.strong.hungry",
+  "species": "roach",
+  "stimulus": {
+   "kinds": [
+    "odor_food"
+   ],
+   "gesture": null,
+   "min_intensity": 0.13
+  },
+  "internal": {
+   "fear_gt": 0.0,
+   "hunger_gt": 0.55
+  },
+  "reaction": {
+   "behavior": "seek_food",
+   "gain": 1.49,
+   "dir": "toward"
+  },
+  "valence_prior": 0.88
+ },
+ {
+  "id": "roach.food_odor.strong.scared",
+  "species": "roach",
+  "stimulus": {
+   "kinds": [
+    "odor_food"
+   ],
+   "gesture": null,
+   "min_intensity": 0.13
+  },
+  "internal": {
+   "fear_gt": 0.5,
+   "hunger_gt": 0.0
+  },
+  "reaction": {
+   "behavior": "seek_food",
+   "gain": 0.8,
+   "dir": "toward"
+  },
+  "valence_prior": 0.88
+ },
+ {
+  "id": "roach.food_odor.strong.stressed",
+  "species": "roach",
+  "stimulus": {
+   "kinds": [
+    "odor_food"
+   ],
+   "gesture": null,
+   "min_intensity": 0.13
+  },
+  "internal": {
+   "fear_gt": 0.5,
+   "hunger_gt": 0.55
+  },
+  "reaction": {
+   "behavior": "seek_food",
+   "gain": 0.69,
+   "dir": "toward"
+  },
+  "valence_prior": 0.88
+ },
+ {
+  "id": "roach.feed_context.soft.baseline",
+  "species": "roach",
+  "stimulus": {
+   "kinds": [
+    "odor_food"
+   ],
+   "gesture": "approach_slow",
+   "min_intensity": 0.07
+  },
+  "internal": {
+   "fear_gt": 0.0,
+   "hunger_gt": 0.0
+  },
+  "reaction": {
+   "behavior": "seek_food",
+   "gain": 1.03,
+   "dir": "toward"
+  },
+  "valence_prior": 0.245
+ },
+ {
+  "id": "roach.feed_context.soft.hungry",
+  "species": "roach",
+  "stimulus": {
+   "kinds": [
+    "odor_food"
+   ],
+   "gesture": "approach_slow",
+   "min_intensity": 0.07
+  },
+  "internal": {
+   "fear_gt": 0.0,
+   "hunger_gt": 0.55
+  },
+  "reaction": {
+   "behavior": "seek_food",
+   "gain": 1.35,
+   "dir": "toward"
+  },
+  "valence_prior": 0.245
+ },
+ {
+  "id": "roach.feed_context.soft.scared",
+  "species": "roach",
+  "stimulus": {
+   "kinds": [
+    "odor_food"
+   ],
+   "gesture": "approach_slow",
+   "min_intensity": 0.07
+  },
+  "internal": {
+   "fear_gt": 0.5,
+   "hunger_gt": 0.0
+  },
+  "reaction": {
+   "behavior": "seek_food",
+   "gain": 0.72,
+   "dir": "toward"
+  },
+  "valence_prior": 0.245
+ },
+ {
+  "id": "roach.feed_context.soft.stressed",
+  "species": "roach",
+  "stimulus": {
+   "kinds": [
+    "odor_food"
+   ],
+   "gesture": "approach_slow",
+   "min_intensity": 0.07
+  },
+  "internal": {
+   "fear_gt": 0.5,
+   "hunger_gt": 0.55
+  },
+  "reaction": {
+   "behavior": "seek_food",
+   "gain": 0.62,
+   "dir": "toward"
+  },
+  "valence_prior": 0.245
+ },
+ {
+  "id": "roach.feed_context.mid.baseline",
+  "species": "roach",
+  "stimulus": {
+   "kinds": [
+    "odor_food"
+   ],
+   "gesture": "approach_slow",
+   "min_intensity": 0.1
+  },
+  "internal": {
+   "fear_gt": 0.0,
+   "hunger_gt": 0.0
+  },
+  "reaction": {
+   "behavior": "seek_food",
+   "gain": 1.03,
+   "dir": "toward"
+  },
+  "valence_prior": 0.402
+ },
+ {
+  "id": "roach.feed_context.mid.hungry",
+  "species": "roach",
+  "stimulus": {
+   "kinds": [
+    "odor_food"
+   ],
+   "gesture": "approach_slow",
+   "min_intensity": 0.1
+  },
+  "internal": {
+   "fear_gt": 0.0,
+   "hunger_gt": 0.55
+  },
+  "reaction": {
+   "behavior": "seek_food",
+   "gain": 1.35,
+   "dir": "toward"
+  },
+  "valence_prior": 0.402
+ },
+ {
+  "id": "roach.feed_context.mid.scared",
+  "species": "roach",
+  "stimulus": {
+   "kinds": [
+    "odor_food"
+   ],
+   "gesture": "approach_slow",
+   "min_intensity": 0.1
+  },
+  "internal": {
+   "fear_gt": 0.5,
+   "hunger_gt": 0.0
+  },
+  "reaction": {
+   "behavior": "seek_food",
+   "gain": 0.72,
+   "dir": "toward"
+  },
+  "valence_prior": 0.402
+ },
+ {
+  "id": "roach.feed_context.mid.stressed",
+  "species": "roach",
+  "stimulus": {
+   "kinds": [
+    "odor_food"
+   ],
+   "gesture": "approach_slow",
+   "min_intensity": 0.1
+  },
+  "internal": {
+   "fear_gt": 0.5,
+   "hunger_gt": 0.55
+  },
+  "reaction": {
+   "behavior": "seek_food",
+   "gain": 0.62,
+   "dir": "toward"
+  },
+  "valence_prior": 0.402
+ },
+ {
+  "id": "roach.feed_context.strong.baseline",
+  "species": "roach",
+  "stimulus": {
+   "kinds": [
+    "odor_food"
+   ],
+   "gesture": "approach_slow",
+   "min_intensity": 0.13
+  },
+  "internal": {
+   "fear_gt": 0.0,
+   "hunger_gt": 0.0
+  },
+  "reaction": {
+   "behavior": "seek_food",
+   "gain": 1.03,
+   "dir": "toward"
+  },
+  "valence_prior": 0.56
+ },
+ {
+  "id": "roach.feed_context.strong.hungry",
+  "species": "roach",
+  "stimulus": {
+   "kinds": [
+    "odor_food"
+   ],
+   "gesture": "approach_slow",
+   "min_intensity": 0.13
+  },
+  "internal": {
+   "fear_gt": 0.0,
+   "hunger_gt": 0.55
+  },
+  "reaction": {
+   "behavior": "seek_food",
+   "gain": 1.35,
+   "dir": "toward"
+  },
+  "valence_prior": 0.56
+ },
+ {
+  "id": "roach.feed_context.strong.scared",
+  "species": "roach",
+  "stimulus": {
+   "kinds": [
+    "odor_food"
+   ],
+   "gesture": "approach_slow",
+   "min_intensity": 0.13
+  },
+  "internal": {
+   "fear_gt": 0.5,
+   "hunger_gt": 0.0
+  },
+  "reaction": {
+   "behavior": "seek_food",
+   "gain": 0.72,
+   "dir": "toward"
+  },
+  "valence_prior": 0.56
+ },
+ {
+  "id": "roach.feed_context.strong.stressed",
+  "species": "roach",
+  "stimulus": {
+   "kinds": [
+    "odor_food"
+   ],
+   "gesture": "approach_slow",
+   "min_intensity": 0.13
+  },
+  "internal": {
+   "fear_gt": 0.5,
+   "hunger_gt": 0.55
+  },
+  "reaction": {
+   "behavior": "seek_food",
+   "gain": 0.62,
+   "dir": "toward"
+  },
+  "valence_prior": 0.56
+ },
+ {
+  "id": "roach.mate_odor.soft.baseline",
+  "species": "roach",
+  "stimulus": {
+   "kinds": [
+    "odor_mate"
+   ],
+   "gesture": null,
+   "min_intensity": 0.08
+  },
+  "internal": {
+   "fear_gt": 0.0,
+   "hunger_gt": 0.0
+  },
+  "reaction": {
+   "behavior": "explore",
+   "gain": 0.8,
+   "dir": "toward"
+  },
+  "valence_prior": 0.175
+ },
+ {
+  "id": "roach.mate_odor.soft.hungry",
+  "species": "roach",
+  "stimulus": {
+   "kinds": [
+    "odor_mate"
+   ],
+   "gesture": null,
+   "min_intensity": 0.08
+  },
+  "internal": {
+   "fear_gt": 0.0,
+   "hunger_gt": 0.55
+  },
+  "reaction": {
+   "behavior": "explore",
+   "gain": 0.8,
+   "dir": "toward"
+  },
+  "valence_prior": 0.175
+ },
+ {
+  "id": "roach.mate_odor.soft.scared",
+  "species": "roach",
+  "stimulus": {
+   "kinds": [
+    "odor_mate"
+   ],
+   "gesture": null,
+   "min_intensity": 0.08
+  },
+  "internal": {
+   "fear_gt": 0.5,
+   "hunger_gt": 0.0
+  },
+  "reaction": {
+   "behavior": "explore",
+   "gain": 0.8,
+   "dir": "toward"
+  },
+  "valence_prior": 0.175
+ },
+ {
+  "id": "roach.mate_odor.soft.stressed",
+  "species": "roach",
+  "stimulus": {
+   "kinds": [
+    "odor_mate"
+   ],
+   "gesture": null,
+   "min_intensity": 0.08
+  },
+  "internal": {
+   "fear_gt": 0.5,
+   "hunger_gt": 0.55
+  },
+  "reaction": {
+   "behavior": "explore",
+   "gain": 0.8,
+   "dir": "toward"
+  },
+  "valence_prior": 0.175
+ },
+ {
+  "id": "roach.mate_odor.mid.baseline",
+  "species": "roach",
+  "stimulus": {
+   "kinds": [
+    "odor_mate"
+   ],
+   "gesture": null,
+   "min_intensity": 0.12
+  },
+  "internal": {
+   "fear_gt": 0.0,
+   "hunger_gt": 0.0
+  },
+  "reaction": {
+   "behavior": "explore",
+   "gain": 0.8,
+   "dir": "toward"
+  },
+  "valence_prior": 0.287
+ },
+ {
+  "id": "roach.mate_odor.mid.hungry",
+  "species": "roach",
+  "stimulus": {
+   "kinds": [
+    "odor_mate"
+   ],
+   "gesture": null,
+   "min_intensity": 0.12
+  },
+  "internal": {
+   "fear_gt": 0.0,
+   "hunger_gt": 0.55
+  },
+  "reaction": {
+   "behavior": "explore",
+   "gain": 0.8,
+   "dir": "toward"
+  },
+  "valence_prior": 0.287
+ },
+ {
+  "id": "roach.mate_odor.mid.scared",
+  "species": "roach",
+  "stimulus": {
+   "kinds": [
+    "odor_mate"
+   ],
+   "gesture": null,
+   "min_intensity": 0.12
+  },
+  "internal": {
+   "fear_gt": 0.5,
+   "hunger_gt": 0.0
+  },
+  "reaction": {
+   "behavior": "explore",
+   "gain": 0.8,
+   "dir": "toward"
+  },
+  "valence_prior": 0.287
+ },
+ {
+  "id": "roach.mate_odor.mid.stressed",
+  "species": "roach",
+  "stimulus": {
+   "kinds": [
+    "odor_mate"
+   ],
+   "gesture": null,
+   "min_intensity": 0.12
+  },
+  "internal": {
+   "fear_gt": 0.5,
+   "hunger_gt": 0.55
+  },
+  "reaction": {
+   "behavior": "explore",
+   "gain": 0.8,
+   "dir": "toward"
+  },
+  "valence_prior": 0.287
+ },
+ {
+  "id": "roach.mate_odor.strong.baseline",
+  "species": "roach",
+  "stimulus": {
+   "kinds": [
+    "odor_mate"
+   ],
+   "gesture": null,
+   "min_intensity": 0.16
+  },
+  "internal": {
+   "fear_gt": 0.0,
+   "hunger_gt": 0.0
+  },
+  "reaction": {
+   "behavior": "explore",
+   "gain": 0.8,
+   "dir": "toward"
+  },
+  "valence_prior": 0.4
+ },
+ {
+  "id": "roach.mate_odor.strong.hungry",
+  "species": "roach",
+  "stimulus": {
+   "kinds": [
+    "odor_mate"
+   ],
+   "gesture": null,
+   "min_intensity": 0.16
+  },
+  "internal": {
+   "fear_gt": 0.0,
+   "hunger_gt": 0.55
+  },
+  "reaction": {
+   "behavior": "explore",
+   "gain": 0.8,
+   "dir": "toward"
+  },
+  "valence_prior": 0.4
+ },
+ {
+  "id": "roach.mate_odor.strong.scared",
+  "species": "roach",
+  "stimulus": {
+   "kinds": [
+    "odor_mate"
+   ],
+   "gesture": null,
+   "min_intensity": 0.16
+  },
+  "internal": {
+   "fear_gt": 0.5,
+   "hunger_gt": 0.0
+  },
+  "reaction": {
+   "behavior": "explore",
+   "gain": 0.8,
+   "dir": "toward"
+  },
+  "valence_prior": 0.4
+ },
+ {
+  "id": "roach.mate_odor.strong.stressed",
+  "species": "roach",
+  "stimulus": {
+   "kinds": [
+    "odor_mate"
+   ],
+   "gesture": null,
+   "min_intensity": 0.16
+  },
+  "internal": {
+   "fear_gt": 0.5,
+   "hunger_gt": 0.55
+  },
+  "reaction": {
+   "behavior": "explore",
+   "gain": 0.8,
+   "dir": "toward"
+  },
+  "valence_prior": 0.4
+ },
+ {
+  "id": "roach.cold_zone.soft.baseline",
+  "species": "roach",
+  "stimulus": {
+   "kinds": [
+    "cold"
+   ],
+   "gesture": null,
+   "min_intensity": 0.08
+  },
+  "internal": {
+   "fear_gt": 0.0,
+   "hunger_gt": 0.0
+  },
+  "reaction": {
+   "behavior": "explore",
+   "gain": 0.9,
+   "dir": "away"
+  },
+  "valence_prior": -0.42
+ },
+ {
+  "id": "roach.cold_zone.soft.hungry",
+  "species": "roach",
+  "stimulus": {
+   "kinds": [
+    "cold"
+   ],
+   "gesture": null,
+   "min_intensity": 0.08
+  },
+  "internal": {
+   "fear_gt": 0.0,
+   "hunger_gt": 0.55
+  },
+  "reaction": {
+   "behavior": "explore",
+   "gain": 0.9,
+   "dir": "away"
+  },
+  "valence_prior": -0.42
+ },
+ {
+  "id": "roach.cold_zone.soft.scared",
+  "species": "roach",
+  "stimulus": {
+   "kinds": [
+    "cold"
+   ],
+   "gesture": null,
+   "min_intensity": 0.08
+  },
+  "internal": {
+   "fear_gt": 0.5,
+   "hunger_gt": 0.0
+  },
+  "reaction": {
+   "behavior": "explore",
+   "gain": 0.9,
+   "dir": "away"
+  },
+  "valence_prior": -0.42
+ },
+ {
+  "id": "roach.cold_zone.soft.stressed",
+  "species": "roach",
+  "stimulus": {
+   "kinds": [
+    "cold"
+   ],
+   "gesture": null,
+   "min_intensity": 0.08
+  },
+  "internal": {
+   "fear_gt": 0.5,
+   "hunger_gt": 0.55
+  },
+  "reaction": {
+   "behavior": "explore",
+   "gain": 0.9,
+   "dir": "away"
+  },
+  "valence_prior": -0.42
+ },
+ {
+  "id": "roach.cold_zone.mid.baseline",
+  "species": "roach",
+  "stimulus": {
+   "kinds": [
+    "cold"
+   ],
+   "gesture": null,
+   "min_intensity": 0.12
+  },
+  "internal": {
+   "fear_gt": 0.0,
+   "hunger_gt": 0.0
+  },
+  "reaction": {
+   "behavior": "explore",
+   "gain": 0.9,
+   "dir": "away"
+  },
+  "valence_prior": -0.69
+ },
+ {
+  "id": "roach.cold_zone.mid.hungry",
+  "species": "roach",
+  "stimulus": {
+   "kinds": [
+    "cold"
+   ],
+   "gesture": null,
+   "min_intensity": 0.12
+  },
+  "internal": {
+   "fear_gt": 0.0,
+   "hunger_gt": 0.55
+  },
+  "reaction": {
+   "behavior": "explore",
+   "gain": 0.9,
+   "dir": "away"
+  },
+  "valence_prior": -0.69
+ },
+ {
+  "id": "roach.cold_zone.mid.scared",
+  "species": "roach",
+  "stimulus": {
+   "kinds": [
+    "cold"
+   ],
+   "gesture": null,
+   "min_intensity": 0.12
+  },
+  "internal": {
+   "fear_gt": 0.5,
+   "hunger_gt": 0.0
+  },
+  "reaction": {
+   "behavior": "explore",
+   "gain": 0.9,
+   "dir": "away"
+  },
+  "valence_prior": -0.69
+ },
+ {
+  "id": "roach.cold_zone.mid.stressed",
+  "species": "roach",
+  "stimulus": {
+   "kinds": [
+    "cold"
+   ],
+   "gesture": null,
+   "min_intensity": 0.12
+  },
+  "internal": {
+   "fear_gt": 0.5,
+   "hunger_gt": 0.55
+  },
+  "reaction": {
+   "behavior": "explore",
+   "gain": 0.9,
+   "dir": "away"
+  },
+  "valence_prior": -0.69
+ },
+ {
+  "id": "roach.cold_zone.strong.baseline",
+  "species": "roach",
+  "stimulus": {
+   "kinds": [
+    "cold"
+   ],
+   "gesture": null,
+   "min_intensity": 0.16
+  },
+  "internal": {
+   "fear_gt": 0.0,
+   "hunger_gt": 0.0
+  },
+  "reaction": {
+   "behavior": "explore",
+   "gain": 0.9,
+   "dir": "away"
+  },
+  "valence_prior": -0.96
+ },
+ {
+  "id": "roach.cold_zone.strong.hungry",
+  "species": "roach",
+  "stimulus": {
+   "kinds": [
+    "cold"
+   ],
+   "gesture": null,
+   "min_intensity": 0.16
+  },
+  "internal": {
+   "fear_gt": 0.0,
+   "hunger_gt": 0.55
+  },
+  "reaction": {
+   "behavior": "explore",
+   "gain": 0.9,
+   "dir": "away"
+  },
+  "valence_prior": -0.96
+ },
+ {
+  "id": "roach.cold_zone.strong.scared",
+  "species": "roach",
+  "stimulus": {
+   "kinds": [
+    "cold"
+   ],
+   "gesture": null,
+   "min_intensity": 0.16
+  },
+  "internal": {
+   "fear_gt": 0.5,
+   "hunger_gt": 0.0
+  },
+  "reaction": {
+   "behavior": "explore",
+   "gain": 0.9,
+   "dir": "away"
+  },
+  "valence_prior": -0.96
+ },
+ {
+  "id": "roach.cold_zone.strong.stressed",
+  "species": "roach",
+  "stimulus": {
+   "kinds": [
+    "cold"
+   ],
+   "gesture": null,
+   "min_intensity": 0.16
+  },
+  "internal": {
+   "fear_gt": 0.5,
+   "hunger_gt": 0.55
+  },
+  "reaction": {
+   "behavior": "explore",
+   "gain": 0.9,
+   "dir": "away"
+  },
+  "valence_prior": -0.96
+ },
+ {
+  "id": "roach.light_glare.soft.baseline",
+  "species": "roach",
+  "stimulus": {
+   "kinds": [
+    "light"
+   ],
+   "gesture": null,
+   "min_intensity": 0.15
+  },
+  "internal": {
+   "fear_gt": 0.0,
+   "hunger_gt": 0.0
+  },
+  "reaction": {
+   "behavior": "explore",
+   "gain": 1.3,
+   "dir": "away"
+  },
+  "valence_prior": -0.35
+ },
+ {
+  "id": "roach.light_glare.soft.hungry",
+  "species": "roach",
+  "stimulus": {
+   "kinds": [
+    "light"
+   ],
+   "gesture": null,
+   "min_intensity": 0.15
+  },
+  "internal": {
+   "fear_gt": 0.0,
+   "hunger_gt": 0.55
+  },
+  "reaction": {
+   "behavior": "explore",
+   "gain": 1.3,
+   "dir": "away"
+  },
+  "valence_prior": -0.35
+ },
+ {
+  "id": "roach.light_glare.soft.scared",
+  "species": "roach",
+  "stimulus": {
+   "kinds": [
+    "light"
+   ],
+   "gesture": null,
+   "min_intensity": 0.15
+  },
+  "internal": {
+   "fear_gt": 0.5,
+   "hunger_gt": 0.0
+  },
+  "reaction": {
+   "behavior": "explore",
+   "gain": 1.3,
+   "dir": "away"
+  },
+  "valence_prior": -0.35
+ },
+ {
+  "id": "roach.light_glare.soft.stressed",
+  "species": "roach",
+  "stimulus": {
+   "kinds": [
+    "light"
+   ],
+   "gesture": null,
+   "min_intensity": 0.15
+  },
+  "internal": {
+   "fear_gt": 0.5,
+   "hunger_gt": 0.55
+  },
+  "reaction": {
+   "behavior": "explore",
+   "gain": 1.3,
+   "dir": "away"
+  },
+  "valence_prior": -0.35
+ },
+ {
+  "id": "roach.light_glare.mid.baseline",
+  "species": "roach",
+  "stimulus": {
+   "kinds": [
+    "light"
+   ],
+   "gesture": null,
+   "min_intensity": 0.22
+  },
+  "internal": {
+   "fear_gt": 0.0,
+   "hunger_gt": 0.0
+  },
+  "reaction": {
+   "behavior": "explore",
+   "gain": 1.3,
+   "dir": "away"
+  },
+  "valence_prior": -0.575
+ },
+ {
+  "id": "roach.light_glare.mid.hungry",
+  "species": "roach",
+  "stimulus": {
+   "kinds": [
+    "light"
+   ],
+   "gesture": null,
+   "min_intensity": 0.22
+  },
+  "internal": {
+   "fear_gt": 0.0,
+   "hunger_gt": 0.55
+  },
+  "reaction": {
+   "behavior": "explore",
+   "gain": 1.3,
+   "dir": "away"
+  },
+  "valence_prior": -0.575
+ },
+ {
+  "id": "roach.light_glare.mid.scared",
+  "species": "roach",
+  "stimulus": {
+   "kinds": [
+    "light"
+   ],
+   "gesture": null,
+   "min_intensity": 0.22
+  },
+  "internal": {
+   "fear_gt": 0.5,
+   "hunger_gt": 0.0
+  },
+  "reaction": {
+   "behavior": "explore",
+   "gain": 1.3,
+   "dir": "away"
+  },
+  "valence_prior": -0.575
+ },
+ {
+  "id": "roach.light_glare.mid.stressed",
+  "species": "roach",
+  "stimulus": {
+   "kinds": [
+    "light"
+   ],
+   "gesture": null,
+   "min_intensity": 0.22
+  },
+  "internal": {
+   "fear_gt": 0.5,
+   "hunger_gt": 0.55
+  },
+  "reaction": {
+   "behavior": "explore",
+   "gain": 1.3,
+   "dir": "away"
+  },
+  "valence_prior": -0.575
+ },
+ {
+  "id": "roach.light_glare.strong.baseline",
+  "species": "roach",
+  "stimulus": {
+   "kinds": [
+    "light"
+   ],
+   "gesture": null,
+   "min_intensity": 0.29
+  },
+  "internal": {
+   "fear_gt": 0.0,
+   "hunger_gt": 0.0
+  },
+  "reaction": {
+   "behavior": "explore",
+   "gain": 1.3,
+   "dir": "away"
+  },
+  "valence_prior": -0.8
+ },
+ {
+  "id": "roach.light_glare.strong.hungry",
+  "species": "roach",
+  "stimulus": {
+   "kinds": [
+    "light"
+   ],
+   "gesture": null,
+   "min_intensity": 0.29
+  },
+  "internal": {
+   "fear_gt": 0.0,
+   "hunger_gt": 0.55
+  },
+  "reaction": {
+   "behavior": "explore",
+   "gain": 1.3,
+   "dir": "away"
+  },
+  "valence_prior": -0.8
+ },
+ {
+  "id": "roach.light_glare.strong.scared",
+  "species": "roach",
+  "stimulus": {
+   "kinds": [
+    "light"
+   ],
+   "gesture": null,
+   "min_intensity": 0.29
+  },
+  "internal": {
+   "fear_gt": 0.5,
+   "hunger_gt": 0.0
+  },
+  "reaction": {
+   "behavior": "explore",
+   "gain": 1.3,
+   "dir": "away"
+  },
+  "valence_prior": -0.8
+ },
+ {
+  "id": "roach.light_glare.strong.stressed",
+  "species": "roach",
+  "stimulus": {
+   "kinds": [
+    "light"
+   ],
+   "gesture": null,
+   "min_intensity": 0.29
+  },
+  "internal": {
+   "fear_gt": 0.5,
+   "hunger_gt": 0.55
+  },
+  "reaction": {
+   "behavior": "explore",
+   "gain": 1.3,
+   "dir": "away"
+  },
+  "valence_prior": -0.8
+ },
+ {
+  "id": "roach.cursor_idle_near.soft.baseline",
+  "species": "roach",
+  "stimulus": {
+   "kinds": [
+    "contact",
+    "shadow"
+   ],
+   "gesture": "idle",
+   "min_intensity": 0.03
+  },
+  "internal": {
+   "fear_gt": 0.0,
+   "hunger_gt": 0.0
+  },
+  "reaction": {
+   "behavior": "groom",
+   "gain": 0.6,
+   "dir": "stay"
+  },
+  "valence_prior": 0.035
+ },
+ {
+  "id": "roach.cursor_idle_near.soft.hungry",
+  "species": "roach",
+  "stimulus": {
+   "kinds": [
+    "contact",
+    "shadow"
+   ],
+   "gesture": "idle",
+   "min_intensity": 0.03
+  },
+  "internal": {
+   "fear_gt": 0.0,
+   "hunger_gt": 0.55
+  },
+  "reaction": {
+   "behavior": "groom",
+   "gain": 0.6,
+   "dir": "stay"
+  },
+  "valence_prior": 0.035
+ },
+ {
+  "id": "roach.cursor_idle_near.soft.scared",
+  "species": "roach",
+  "stimulus": {
+   "kinds": [
+    "contact",
+    "shadow"
+   ],
+   "gesture": "idle",
+   "min_intensity": 0.03
+  },
+  "internal": {
+   "fear_gt": 0.5,
+   "hunger_gt": 0.0
+  },
+  "reaction": {
+   "behavior": "groom",
+   "gain": 0.6,
+   "dir": "stay"
+  },
+  "valence_prior": 0.035
+ },
+ {
+  "id": "roach.cursor_idle_near.soft.stressed",
+  "species": "roach",
+  "stimulus": {
+   "kinds": [
+    "contact",
+    "shadow"
+   ],
+   "gesture": "idle",
+   "min_intensity": 0.03
+  },
+  "internal": {
+   "fear_gt": 0.5,
+   "hunger_gt": 0.55
+  },
+  "reaction": {
+   "behavior": "groom",
+   "gain": 0.6,
+   "dir": "stay"
+  },
+  "valence_prior": 0.035
+ },
+ {
+  "id": "roach.cursor_idle_near.mid.baseline",
+  "species": "roach",
+  "stimulus": {
+   "kinds": [
+    "contact",
+    "shadow"
+   ],
+   "gesture": "idle",
+   "min_intensity": 0.05
+  },
+  "internal": {
+   "fear_gt": 0.0,
+   "hunger_gt": 0.0
+  },
+  "reaction": {
+   "behavior": "groom",
+   "gain": 0.6,
+   "dir": "stay"
+  },
+  "valence_prior": 0.057
+ },
+ {
+  "id": "roach.cursor_idle_near.mid.hungry",
+  "species": "roach",
+  "stimulus": {
+   "kinds": [
+    "contact",
+    "shadow"
+   ],
+   "gesture": "idle",
+   "min_intensity": 0.05
+  },
+  "internal": {
+   "fear_gt": 0.0,
+   "hunger_gt": 0.55
+  },
+  "reaction": {
+   "behavior": "groom",
+   "gain": 0.6,
+   "dir": "stay"
+  },
+  "valence_prior": 0.057
+ },
+ {
+  "id": "roach.cursor_idle_near.mid.scared",
+  "species": "roach",
+  "stimulus": {
+   "kinds": [
+    "contact",
+    "shadow"
+   ],
+   "gesture": "idle",
+   "min_intensity": 0.05
+  },
+  "internal": {
+   "fear_gt": 0.5,
+   "hunger_gt": 0.0
+  },
+  "reaction": {
+   "behavior": "groom",
+   "gain": 0.6,
+   "dir": "stay"
+  },
+  "valence_prior": 0.057
+ },
+ {
+  "id": "roach.cursor_idle_near.mid.stressed",
+  "species": "roach",
+  "stimulus": {
+   "kinds": [
+    "contact",
+    "shadow"
+   ],
+   "gesture": "idle",
+   "min_intensity": 0.05
+  },
+  "internal": {
+   "fear_gt": 0.5,
+   "hunger_gt": 0.55
+  },
+  "reaction": {
+   "behavior": "groom",
+   "gain": 0.6,
+   "dir": "stay"
+  },
+  "valence_prior": 0.057
+ },
+ {
+  "id": "roach.cursor_idle_near.strong.baseline",
+  "species": "roach",
+  "stimulus": {
+   "kinds": [
+    "contact",
+    "shadow"
+   ],
+   "gesture": "idle",
+   "min_intensity": 0.07
+  },
+  "internal": {
+   "fear_gt": 0.0,
+   "hunger_gt": 0.0
+  },
+  "reaction": {
+   "behavior": "groom",
+   "gain": 0.6,
+   "dir": "stay"
+  },
+  "valence_prior": 0.08
+ },
+ {
+  "id": "roach.cursor_idle_near.strong.hungry",
+  "species": "roach",
+  "stimulus": {
+   "kinds": [
+    "contact",
+    "shadow"
+   ],
+   "gesture": "idle",
+   "min_intensity": 0.07
+  },
+  "internal": {
+   "fear_gt": 0.0,
+   "hunger_gt": 0.55
+  },
+  "reaction": {
+   "behavior": "groom",
+   "gain": 0.6,
+   "dir": "stay"
+  },
+  "valence_prior": 0.08
+ },
+ {
+  "id": "roach.cursor_idle_near.strong.scared",
+  "species": "roach",
+  "stimulus": {
+   "kinds": [
+    "contact",
+    "shadow"
+   ],
+   "gesture": "idle",
+   "min_intensity": 0.07
+  },
+  "internal": {
+   "fear_gt": 0.5,
+   "hunger_gt": 0.0
+  },
+  "reaction": {
+   "behavior": "groom",
+   "gain": 0.6,
+   "dir": "stay"
+  },
+  "valence_prior": 0.08
+ },
+ {
+  "id": "roach.cursor_idle_near.strong.stressed",
+  "species": "roach",
+  "stimulus": {
+   "kinds": [
+    "contact",
+    "shadow"
+   ],
+   "gesture": "idle",
+   "min_intensity": 0.07
+  },
+  "internal": {
+   "fear_gt": 0.5,
+   "hunger_gt": 0.55
+  },
+  "reaction": {
+   "behavior": "groom",
+   "gain": 0.6,
+   "dir": "stay"
+  },
+  "valence_prior": 0.08
+ },
+ {
+  "id": "roach.cursor_orbit.soft.baseline",
+  "species": "roach",
+  "stimulus": {
+   "kinds": [
+    "wind",
+    "shadow"
+   ],
+   "gesture": "orbit",
+   "min_intensity": 0.07
+  },
+  "internal": {
+   "fear_gt": 0.0,
+   "hunger_gt": 0.0
+  },
+  "reaction": {
+   "behavior": "turn",
+   "gain": 0.7,
+   "dir": "away"
+  },
+  "valence_prior": -0.07
+ },
+ {
+  "id": "roach.cursor_orbit.soft.hungry",
+  "species": "roach",
+  "stimulus": {
+   "kinds": [
+    "wind",
+    "shadow"
+   ],
+   "gesture": "orbit",
+   "min_intensity": 0.07
+  },
+  "internal": {
+   "fear_gt": 0.0,
+   "hunger_gt": 0.55
+  },
+  "reaction": {
+   "behavior": "turn",
+   "gain": 0.66,
+   "dir": "away"
+  },
+  "valence_prior": -0.07
+ },
+ {
+  "id": "roach.cursor_orbit.soft.scared",
+  "species": "roach",
+  "stimulus": {
+   "kinds": [
+    "wind",
+    "shadow"
+   ],
+   "gesture": "orbit",
+   "min_intensity": 0.07
+  },
+  "internal": {
+   "fear_gt": 0.5,
+   "hunger_gt": 0.0
+  },
+  "reaction": {
+   "behavior": "turn",
+   "gain": 0.88,
+   "dir": "away"
+  },
+  "valence_prior": -0.07
+ },
+ {
+  "id": "roach.cursor_orbit.soft.stressed",
+  "species": "roach",
+  "stimulus": {
+   "kinds": [
+    "wind",
+    "shadow"
+   ],
+   "gesture": "orbit",
+   "min_intensity": 0.07
+  },
+  "internal": {
+   "fear_gt": 0.5,
+   "hunger_gt": 0.55
+  },
+  "reaction": {
+   "behavior": "turn",
+   "gain": 0.94,
+   "dir": "away"
+  },
+  "valence_prior": -0.07
+ },
+ {
+  "id": "roach.cursor_orbit.mid.baseline",
+  "species": "roach",
+  "stimulus": {
+   "kinds": [
+    "wind",
+    "shadow"
+   ],
+   "gesture": "orbit",
+   "min_intensity": 0.1
+  },
+  "internal": {
+   "fear_gt": 0.0,
+   "hunger_gt": 0.0
+  },
+  "reaction": {
+   "behavior": "turn",
+   "gain": 0.7,
+   "dir": "away"
+  },
+  "valence_prior": -0.115
+ },
+ {
+  "id": "roach.cursor_orbit.mid.hungry",
+  "species": "roach",
+  "stimulus": {
+   "kinds": [
+    "wind",
+    "shadow"
+   ],
+   "gesture": "orbit",
+   "min_intensity": 0.1
+  },
+  "internal": {
+   "fear_gt": 0.0,
+   "hunger_gt": 0.55
+  },
+  "reaction": {
+   "behavior": "turn",
+   "gain": 0.66,
+   "dir": "away"
+  },
+  "valence_prior": -0.115
+ },
+ {
+  "id": "roach.cursor_orbit.mid.scared",
+  "species": "roach",
+  "stimulus": {
+   "kinds": [
+    "wind",
+    "shadow"
+   ],
+   "gesture": "orbit",
+   "min_intensity": 0.1
+  },
+  "internal": {
+   "fear_gt": 0.5,
+   "hunger_gt": 0.0
+  },
+  "reaction": {
+   "behavior": "turn",
+   "gain": 0.88,
+   "dir": "away"
+  },
+  "valence_prior": -0.115
+ },
+ {
+  "id": "roach.cursor_orbit.mid.stressed",
+  "species": "roach",
+  "stimulus": {
+   "kinds": [
+    "wind",
+    "shadow"
+   ],
+   "gesture": "orbit",
+   "min_intensity": 0.1
+  },
+  "internal": {
+   "fear_gt": 0.5,
+   "hunger_gt": 0.55
+  },
+  "reaction": {
+   "behavior": "turn",
+   "gain": 0.94,
+   "dir": "away"
+  },
+  "valence_prior": -0.115
+ },
+ {
+  "id": "roach.cursor_orbit.strong.baseline",
+  "species": "roach",
+  "stimulus": {
+   "kinds": [
+    "wind",
+    "shadow"
+   ],
+   "gesture": "orbit",
+   "min_intensity": 0.13
+  },
+  "internal": {
+   "fear_gt": 0.0,
+   "hunger_gt": 0.0
+  },
+  "reaction": {
+   "behavior": "turn",
+   "gain": 0.7,
+   "dir": "away"
+  },
+  "valence_prior": -0.16
+ },
+ {
+  "id": "roach.cursor_orbit.strong.hungry",
+  "species": "roach",
+  "stimulus": {
+   "kinds": [
+    "wind",
+    "shadow"
+   ],
+   "gesture": "orbit",
+   "min_intensity": 0.13
+  },
+  "internal": {
+   "fear_gt": 0.0,
+   "hunger_gt": 0.55
+  },
+  "reaction": {
+   "behavior": "turn",
+   "gain": 0.66,
+   "dir": "away"
+  },
+  "valence_prior": -0.16
+ },
+ {
+  "id": "roach.cursor_orbit.strong.scared",
+  "species": "roach",
+  "stimulus": {
+   "kinds": [
+    "wind",
+    "shadow"
+   ],
+   "gesture": "orbit",
+   "min_intensity": 0.13
+  },
+  "internal": {
+   "fear_gt": 0.5,
+   "hunger_gt": 0.0
+  },
+  "reaction": {
+   "behavior": "turn",
+   "gain": 0.88,
+   "dir": "away"
+  },
+  "valence_prior": -0.16
+ },
+ {
+  "id": "roach.cursor_orbit.strong.stressed",
+  "species": "roach",
+  "stimulus": {
+   "kinds": [
+    "wind",
+    "shadow"
+   ],
+   "gesture": "orbit",
+   "min_intensity": 0.13
+  },
+  "internal": {
+   "fear_gt": 0.5,
+   "hunger_gt": 0.55
+  },
+  "reaction": {
+   "behavior": "turn",
+   "gain": 0.94,
+   "dir": "away"
+  },
+  "valence_prior": -0.16
+ },
+ {
+  "id": "roach.cursor_jab.soft.baseline",
+  "species": "roach",
+  "stimulus": {
+   "kinds": [
+    "vibration",
+    "wind"
+   ],
+   "gesture": "jab",
+   "min_intensity": 0.32
+  },
+  "internal": {
+   "fear_gt": 0.0,
+   "hunger_gt": 0.0
+  },
+  "reaction": {
+   "behavior": "escape",
+   "gain": 1.56,
+   "dir": "away"
+  },
+  "valence_prior": -0.49
+ },
+ {
+  "id": "roach.cursor_jab.soft.hungry",
+  "species": "roach",
+  "stimulus": {
+   "kinds": [
+    "vibration",
+    "wind"
+   ],
+   "gesture": "jab",
+   "min_intensity": 0.32
+  },
+  "internal": {
+   "fear_gt": 0.0,
+   "hunger_gt": 0.55
+  },
+  "reaction": {
+   "behavior": "escape",
+   "gain": 1.48,
+   "dir": "away"
+  },
+  "valence_prior": -0.49
+ },
+ {
+  "id": "roach.cursor_jab.soft.scared",
+  "species": "roach",
+  "stimulus": {
+   "kinds": [
+    "vibration",
+    "wind"
+   ],
+   "gesture": "jab",
+   "min_intensity": 0.32
+  },
+  "internal": {
+   "fear_gt": 0.5,
+   "hunger_gt": 0.0
+  },
+  "reaction": {
+   "behavior": "escape",
+   "gain": 1.95,
+   "dir": "away"
+  },
+  "valence_prior": -0.49
+ },
+ {
+  "id": "roach.cursor_jab.soft.stressed",
+  "species": "roach",
+  "stimulus": {
+   "kinds": [
+    "vibration",
+    "wind"
+   ],
+   "gesture": "jab",
+   "min_intensity": 0.32
+  },
+  "internal": {
+   "fear_gt": 0.5,
+   "hunger_gt": 0.55
+  },
+  "reaction": {
+   "behavior": "escape",
+   "gain": 2.0,
+   "dir": "away"
+  },
+  "valence_prior": -0.49
+ },
+ {
+  "id": "roach.cursor_jab.mid.baseline",
+  "species": "roach",
+  "stimulus": {
+   "kinds": [
+    "vibration",
+    "wind"
+   ],
+   "gesture": "jab",
+   "min_intensity": 0.45
+  },
+  "internal": {
+   "fear_gt": 0.0,
+   "hunger_gt": 0.0
+  },
+  "reaction": {
+   "behavior": "escape",
+   "gain": 1.56,
+   "dir": "away"
+  },
+  "valence_prior": -0.805
+ },
+ {
+  "id": "roach.cursor_jab.mid.hungry",
+  "species": "roach",
+  "stimulus": {
+   "kinds": [
+    "vibration",
+    "wind"
+   ],
+   "gesture": "jab",
+   "min_intensity": 0.45
+  },
+  "internal": {
+   "fear_gt": 0.0,
+   "hunger_gt": 0.55
+  },
+  "reaction": {
+   "behavior": "escape",
+   "gain": 1.48,
+   "dir": "away"
+  },
+  "valence_prior": -0.805
+ },
+ {
+  "id": "roach.cursor_jab.mid.scared",
+  "species": "roach",
+  "stimulus": {
+   "kinds": [
+    "vibration",
+    "wind"
+   ],
+   "gesture": "jab",
+   "min_intensity": 0.45
+  },
+  "internal": {
+   "fear_gt": 0.5,
+   "hunger_gt": 0.0
+  },
+  "reaction": {
+   "behavior": "escape",
+   "gain": 1.95,
+   "dir": "away"
+  },
+  "valence_prior": -0.805
+ },
+ {
+  "id": "roach.cursor_jab.mid.stressed",
+  "species": "roach",
+  "stimulus": {
+   "kinds": [
+    "vibration",
+    "wind"
+   ],
+   "gesture": "jab",
+   "min_intensity": 0.45
+  },
+  "internal": {
+   "fear_gt": 0.5,
+   "hunger_gt": 0.55
+  },
+  "reaction": {
+   "behavior": "escape",
+   "gain": 2.0,
+   "dir": "away"
+  },
+  "valence_prior": -0.805
+ },
+ {
+  "id": "roach.cursor_jab.strong.baseline",
+  "species": "roach",
+  "stimulus": {
+   "kinds": [
+    "vibration",
+    "wind"
+   ],
+   "gesture": "jab",
+   "min_intensity": 0.59
+  },
+  "internal": {
+   "fear_gt": 0.0,
+   "hunger_gt": 0.0
+  },
+  "reaction": {
+   "behavior": "escape",
+   "gain": 1.56,
+   "dir": "away"
+  },
+  "valence_prior": -1.0
+ },
+ {
+  "id": "roach.cursor_jab.strong.hungry",
+  "species": "roach",
+  "stimulus": {
+   "kinds": [
+    "vibration",
+    "wind"
+   ],
+   "gesture": "jab",
+   "min_intensity": 0.59
+  },
+  "internal": {
+   "fear_gt": 0.0,
+   "hunger_gt": 0.55
+  },
+  "reaction": {
+   "behavior": "escape",
+   "gain": 1.48,
+   "dir": "away"
+  },
+  "valence_prior": -1.0
+ },
+ {
+  "id": "roach.cursor_jab.strong.scared",
+  "species": "roach",
+  "stimulus": {
+   "kinds": [
+    "vibration",
+    "wind"
+   ],
+   "gesture": "jab",
+   "min_intensity": 0.59
+  },
+  "internal": {
+   "fear_gt": 0.5,
+   "hunger_gt": 0.0
+  },
+  "reaction": {
+   "behavior": "escape",
+   "gain": 1.95,
+   "dir": "away"
+  },
+  "valence_prior": -1.0
+ },
+ {
+  "id": "roach.cursor_jab.strong.stressed",
+  "species": "roach",
+  "stimulus": {
+   "kinds": [
+    "vibration",
+    "wind"
+   ],
+   "gesture": "jab",
+   "min_intensity": 0.59
+  },
+  "internal": {
+   "fear_gt": 0.5,
+   "hunger_gt": 0.55
+  },
+  "reaction": {
+   "behavior": "escape",
+   "gain": 2.0,
+   "dir": "away"
+  },
+  "valence_prior": -1.0
+ },
+ {
+  "id": "roach.retreat_release.soft.baseline",
+  "species": "roach",
+  "stimulus": {
+   "kinds": [
+    "wind"
+   ],
+   "gesture": "retreat",
+   "min_intensity": 0.07
+  },
+  "internal": {
+   "fear_gt": 0.0,
+   "hunger_gt": 0.0
+  },
+  "reaction": {
+   "behavior": "explore",
+   "gain": 0.8,
+   "dir": "toward"
+  },
+  "valence_prior": 0.14
+ },
+ {
+  "id": "roach.retreat_release.soft.hungry",
+  "species": "roach",
+  "stimulus": {
+   "kinds": [
+    "wind"
+   ],
+   "gesture": "retreat",
+   "min_intensity": 0.07
+  },
+  "internal": {
+   "fear_gt": 0.0,
+   "hunger_gt": 0.55
+  },
+  "reaction": {
+   "behavior": "explore",
+   "gain": 0.8,
+   "dir": "toward"
+  },
+  "valence_prior": 0.14
+ },
+ {
+  "id": "roach.retreat_release.soft.scared",
+  "species": "roach",
+  "stimulus": {
+   "kinds": [
+    "wind"
+   ],
+   "gesture": "retreat",
+   "min_intensity": 0.07
+  },
+  "internal": {
+   "fear_gt": 0.5,
+   "hunger_gt": 0.0
+  },
+  "reaction": {
+   "behavior": "explore",
+   "gain": 0.8,
+   "dir": "toward"
+  },
+  "valence_prior": 0.14
+ },
+ {
+  "id": "roach.retreat_release.soft.stressed",
+  "species": "roach",
+  "stimulus": {
+   "kinds": [
+    "wind"
+   ],
+   "gesture": "retreat",
+   "min_intensity": 0.07
+  },
+  "internal": {
+   "fear_gt": 0.5,
+   "hunger_gt": 0.55
+  },
+  "reaction": {
+   "behavior": "explore",
+   "gain": 0.8,
+   "dir": "toward"
+  },
+  "valence_prior": 0.14
+ },
+ {
+  "id": "roach.retreat_release.mid.baseline",
+  "species": "roach",
+  "stimulus": {
+   "kinds": [
+    "wind"
+   ],
+   "gesture": "retreat",
+   "min_intensity": 0.1
+  },
+  "internal": {
+   "fear_gt": 0.0,
+   "hunger_gt": 0.0
+  },
+  "reaction": {
+   "behavior": "explore",
+   "gain": 0.8,
+   "dir": "toward"
+  },
+  "valence_prior": 0.23
+ },
+ {
+  "id": "roach.retreat_release.mid.hungry",
+  "species": "roach",
+  "stimulus": {
+   "kinds": [
+    "wind"
+   ],
+   "gesture": "retreat",
+   "min_intensity": 0.1
+  },
+  "internal": {
+   "fear_gt": 0.0,
+   "hunger_gt": 0.55
+  },
+  "reaction": {
+   "behavior": "explore",
+   "gain": 0.8,
+   "dir": "toward"
+  },
+  "valence_prior": 0.23
+ },
+ {
+  "id": "roach.retreat_release.mid.scared",
+  "species": "roach",
+  "stimulus": {
+   "kinds": [
+    "wind"
+   ],
+   "gesture": "retreat",
+   "min_intensity": 0.1
+  },
+  "internal": {
+   "fear_gt": 0.5,
+   "hunger_gt": 0.0
+  },
+  "reaction": {
+   "behavior": "explore",
+   "gain": 0.8,
+   "dir": "toward"
+  },
+  "valence_prior": 0.23
+ },
+ {
+  "id": "roach.retreat_release.mid.stressed",
+  "species": "roach",
+  "stimulus": {
+   "kinds": [
+    "wind"
+   ],
+   "gesture": "retreat",
+   "min_intensity": 0.1
+  },
+  "internal": {
+   "fear_gt": 0.5,
+   "hunger_gt": 0.55
+  },
+  "reaction": {
+   "behavior": "explore",
+   "gain": 0.8,
+   "dir": "toward"
+  },
+  "valence_prior": 0.23
+ },
+ {
+  "id": "roach.retreat_release.strong.baseline",
+  "species": "roach",
+  "stimulus": {
+   "kinds": [
+    "wind"
+   ],
+   "gesture": "retreat",
+   "min_intensity": 0.13
+  },
+  "internal": {
+   "fear_gt": 0.0,
+   "hunger_gt": 0.0
+  },
+  "reaction": {
+   "behavior": "explore",
+   "gain": 0.8,
+   "dir": "toward"
+  },
+  "valence_prior": 0.32
+ },
+ {
+  "id": "roach.retreat_release.strong.hungry",
+  "species": "roach",
+  "stimulus": {
+   "kinds": [
+    "wind"
+   ],
+   "gesture": "retreat",
+   "min_intensity": 0.13
+  },
+  "internal": {
+   "fear_gt": 0.0,
+   "hunger_gt": 0.55
+  },
+  "reaction": {
+   "behavior": "explore",
+   "gain": 0.8,
+   "dir": "toward"
+  },
+  "valence_prior": 0.32
+ },
+ {
+  "id": "roach.retreat_release.strong.scared",
+  "species": "roach",
+  "stimulus": {
+   "kinds": [
+    "wind"
+   ],
+   "gesture": "retreat",
+   "min_intensity": 0.13
+  },
+  "internal": {
+   "fear_gt": 0.5,
+   "hunger_gt": 0.0
+  },
+  "reaction": {
+   "behavior": "explore",
+   "gain": 0.8,
+   "dir": "toward"
+  },
+  "valence_prior": 0.32
+ },
+ {
+  "id": "roach.retreat_release.strong.stressed",
+  "species": "roach",
+  "stimulus": {
+   "kinds": [
+    "wind"
+   ],
+   "gesture": "retreat",
+   "min_intensity": 0.13
+  },
+  "internal": {
+   "fear_gt": 0.5,
+   "hunger_gt": 0.55
+  },
+  "reaction": {
+   "behavior": "explore",
+   "gain": 0.8,
+   "dir": "toward"
+  },
+  "valence_prior": 0.32
+ },
+ {
+  "id": "roach.story_hint.soft.baseline",
+  "species": "roach",
+  "stimulus": {
+   "kinds": [
+    "story"
+   ],
+   "gesture": null,
+   "min_intensity": 0.0
+  },
+  "internal": {
+   "fear_gt": 0.0,
+   "hunger_gt": 0.0
+  },
+  "reaction": {
+   "behavior": "explore",
+   "gain": 0.5,
+   "dir": "toward"
+  },
+  "valence_prior": 0.0
+ },
+ {
+  "id": "roach.story_hint.soft.hungry",
+  "species": "roach",
+  "stimulus": {
+   "kinds": [
+    "story"
+   ],
+   "gesture": null,
+   "min_intensity": 0.0
+  },
+  "internal": {
+   "fear_gt": 0.0,
+   "hunger_gt": 0.55
+  },
+  "reaction": {
+   "behavior": "explore",
+   "gain": 0.5,
+   "dir": "toward"
+  },
+  "valence_prior": 0.0
+ },
+ {
+  "id": "roach.story_hint.soft.scared",
+  "species": "roach",
+  "stimulus": {
+   "kinds": [
+    "story"
+   ],
+   "gesture": null,
+   "min_intensity": 0.0
+  },
+  "internal": {
+   "fear_gt": 0.5,
+   "hunger_gt": 0.0
+  },
+  "reaction": {
+   "behavior": "explore",
+   "gain": 0.5,
+   "dir": "toward"
+  },
+  "valence_prior": 0.0
+ },
+ {
+  "id": "roach.story_hint.soft.stressed",
+  "species": "roach",
+  "stimulus": {
+   "kinds": [
+    "story"
+   ],
+   "gesture": null,
+   "min_intensity": 0.0
+  },
+  "internal": {
+   "fear_gt": 0.5,
+   "hunger_gt": 0.55
+  },
+  "reaction": {
+   "behavior": "explore",
+   "gain": 0.5,
+   "dir": "toward"
+  },
+  "valence_prior": 0.0
+ },
+ {
+  "id": "roach.story_hint.mid.baseline",
+  "species": "roach",
+  "stimulus": {
+   "kinds": [
+    "story"
+   ],
+   "gesture": null,
+   "min_intensity": 0.0
+  },
+  "internal": {
+   "fear_gt": 0.0,
+   "hunger_gt": 0.0
+  },
+  "reaction": {
+   "behavior": "explore",
+   "gain": 0.5,
+   "dir": "toward"
+  },
+  "valence_prior": 0.0
+ },
+ {
+  "id": "roach.story_hint.mid.hungry",
+  "species": "roach",
+  "stimulus": {
+   "kinds": [
+    "story"
+   ],
+   "gesture": null,
+   "min_intensity": 0.0
+  },
+  "internal": {
+   "fear_gt": 0.0,
+   "hunger_gt": 0.55
+  },
+  "reaction": {
+   "behavior": "explore",
+   "gain": 0.5,
+   "dir": "toward"
+  },
+  "valence_prior": 0.0
+ },
+ {
+  "id": "roach.story_hint.mid.scared",
+  "species": "roach",
+  "stimulus": {
+   "kinds": [
+    "story"
+   ],
+   "gesture": null,
+   "min_intensity": 0.0
+  },
+  "internal": {
+   "fear_gt": 0.5,
+   "hunger_gt": 0.0
+  },
+  "reaction": {
+   "behavior": "explore",
+   "gain": 0.5,
+   "dir": "toward"
+  },
+  "valence_prior": 0.0
+ },
+ {
+  "id": "roach.story_hint.mid.stressed",
+  "species": "roach",
+  "stimulus": {
+   "kinds": [
+    "story"
+   ],
+   "gesture": null,
+   "min_intensity": 0.0
+  },
+  "internal": {
+   "fear_gt": 0.5,
+   "hunger_gt": 0.55
+  },
+  "reaction": {
+   "behavior": "explore",
+   "gain": 0.5,
+   "dir": "toward"
+  },
+  "valence_prior": 0.0
+ },
+ {
+  "id": "roach.story_hint.strong.baseline",
+  "species": "roach",
+  "stimulus": {
+   "kinds": [
+    "story"
+   ],
+   "gesture": null,
+   "min_intensity": 0.0
+  },
+  "internal": {
+   "fear_gt": 0.0,
+   "hunger_gt": 0.0
+  },
+  "reaction": {
+   "behavior": "explore",
+   "gain": 0.5,
+   "dir": "toward"
+  },
+  "valence_prior": 0.0
+ },
+ {
+  "id": "roach.story_hint.strong.hungry",
+  "species": "roach",
+  "stimulus": {
+   "kinds": [
+    "story"
+   ],
+   "gesture": null,
+   "min_intensity": 0.0
+  },
+  "internal": {
+   "fear_gt": 0.0,
+   "hunger_gt": 0.55
+  },
+  "reaction": {
+   "behavior": "explore",
+   "gain": 0.5,
+   "dir": "toward"
+  },
+  "valence_prior": 0.0
+ },
+ {
+  "id": "roach.story_hint.strong.scared",
+  "species": "roach",
+  "stimulus": {
+   "kinds": [
+    "story"
+   ],
+   "gesture": null,
+   "min_intensity": 0.0
+  },
+  "internal": {
+   "fear_gt": 0.5,
+   "hunger_gt": 0.0
+  },
+  "reaction": {
+   "behavior": "explore",
+   "gain": 0.5,
+   "dir": "toward"
+  },
+  "valence_prior": 0.0
+ },
+ {
+  "id": "roach.story_hint.strong.stressed",
+  "species": "roach",
+  "stimulus": {
+   "kinds": [
+    "story"
+   ],
+   "gesture": null,
+   "min_intensity": 0.0
+  },
+  "internal": {
+   "fear_gt": 0.5,
+   "hunger_gt": 0.55
+  },
+  "reaction": {
+   "behavior": "explore",
+   "gain": 0.5,
+   "dir": "toward"
+  },
+  "valence_prior": 0.0
+ }
+]
