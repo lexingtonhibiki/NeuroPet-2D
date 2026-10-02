@@ -37,7 +37,7 @@
 - [x] 本次未运行任何测试、审查代理、probe、smoke 或内存采样（用户明确禁止）；双语改动没有产生新的测量数据。
 
 - [x] v0.2.0 连贯运动与桌面体验（分支 codex/motion-comfort，基线 8cc870b）：新增 `neuropet/core/desktop.py` 作为可用桌面唯一事实源（Win32 `MonitorFromPoint` + `GetMonitorInfo` 的 `rcWork`，非 Windows 回退整屏，2s 节流刷新），身体软墙/拖拽仲裁/面板落食/随机航点全部改走它；新增 `neuropet/core/autostart.py`（stdlib `winreg` 写 HKCU Run）与 `neuropet/render/trail.py`（Canvas 矢量拖尾）。
-- [x] 黑框闪烁：`fit_viewport` 重写为「内容包围盒 5Hz 节流 + 运动中只扩不缩 + 静止收边」；滚动原点改用 `left / (scrollregion 宽 − 画布宽)` 反解（旧码少乘「画布宽/屏宽」因子，窗口位置与可见左缘恒不同步）；几何与滚动包在 `_RedrawGuard`（Win32 `WM_SETREDRAW` + `RedrawWindow`，finally 恢复）里一次做完，中间态不上屏。
+- [x] 针对黑框闪烁的改动（**未复现、未做真机验证**）：`fit_viewport` 重写为「内容包围盒 5Hz 节流 + 运动中只扩不缩 + 静止收边」；几何与滚动包在 `_RedrawGuard`（Win32 `WM_SETREDRAW` + `RedrawWindow`，finally 恢复）里一次做完，目标是让「新几何 + 旧原点」的中间帧不上屏（假设：色键窗在原生 resize/move 与重绘间隙被涂上窗口类背景纯黑，键色是 #010101）。**滚动分数换算本轮未改**：已对照 Tk `generic/tkCanvas.c` 的 `TK_SCROLL_MOVETO`（`newX = scrollX1 - inset + fraction*(scrollX2 - scrollX1)`）确认分母是整个 scrollregion 宽，`left / self.w` 原本就是正确值——此前把它改成减视口宽是错的，已恢复。
 - [x] 边缘瞬移：删掉 body 的整屏 80px 软墙与 world 的整屏 60px 钳位，统一为「可用桌面 ∩ margin_for(window_half)」（下限 80 保原活动范围）；撞墙改为逐轴连续截断 + 贴边滑行；区外不再单帧夹回，而是压速朝区内最近点转向；`_steer_toward` 增加朝边界的提前减速；取食半径随体型走，避免边缘食物够不到。
 - [x] 全局爬行速度 0.5×~8×（默认 2×）：`body.set_speed_multiplier` 按 `_p_base` 一次算出 cruise/sprint/fly_speed/accel/escape_sprint_cap 与飞行逃逸上限，不累积乘法、不重建 body（保留 `_speed`、步态相位、钉足）；`ABS_SPEED_MAX=5200` 兜底 dt 抖动；不缩放全局 dt。配置新增 `crawl_speed` / `trail_enabled`。
 - [x] 鼠标闭合风压：`perception/mouse.py` 新增 `closing_pressure` / `shear_pressure` / `wind_pressure` 三个纯函数（正投影平方归一 × 距离衰减开根），静止/远离为 0、擦身保留弱剪切；`body._apply_escape` 用同一函数驱动逃速（1× 时最高 ×1.6，风压 0 时逐位等于改动前）。头部无循环导入（函数内 import）。
@@ -62,7 +62,7 @@
 - [x] v0.1.1 便携构建一次完成：`D:\DevTools\IDEs\Python\Python313\python.exe tools\build_release.py`（PyInstaller onedir + collect_licenses）成功，`dist/NeuroPet-2D/` 含 EXE、_internal、licenses、README.txt、LICENSE.txt，无 data/logs。ZIP `dist/NeuroPet-2D-v0.1.1-windows-x64.zip`，21,053,399 字节，1,023 条目，SHA256 16D59461FFF93D109EDE21370DBB7179D7A96E8427757BA5CC0D152D61665EB0。构建后只核对了静态产物（Analysis-00.toc 含 neuropet.core.i18n、包内 README.txt 双语内容、ZIP 白名单条目），未启动 EXE、未跑 probe/smoke。公开发布与 push 由 Codex 协调。
 
 - v0.2.0 计划（docs/motion-comfort-plan.md）由用户授权直接执行：实现、双语文档、本地提交与一次便携构建由当前会话完成；不派审查代理、不跑测试、不 push、不发布 Release、不改本机自启动设置。
-- 实现期发现的真实缺陷（非候选）：`xview_moveto` 的分数换算少乘「画布宽/屏宽」因子；闭合速度正投影方向写反（`c - p` 应为 `p - c`）；`escape_sprint_cap` 对不飞物种不在参数里，8× 时 `min(sprint,cap)` 会把倍率吃掉；`StateArbiter` 恒用默认留白钳位会与身体留白互相拉扯。三处都已按代码事实修正并留注释。
+- 实现期发现的真实缺陷（非候选，且均由代码/上游源码直接确认）：闭合速度正投影方向写反（`c - p` 应为 `p - c`，会让远离时的风压反而变大）；`escape_sprint_cap` 对不飞物种不在参数里，8× 时 `min(sprint,cap)` 会把倍率吃掉；`StateArbiter` 恒用默认留白钳位会与身体留白互相拉扯；设置窗口的 `tkinter.Variable` 是局部 Python 对象，被回收后 `__del__` unset Tcl 变量，Tk 变量 trace 把 combobox 重置为默认（空）。四处均已按代码事实修正并留注释。**未列入**：滚动分数换算原先被误判为根因 —— 用户指出后已按 Tk 源码复核并恢复，黑框闪烁的真实成因本轮仍未定位。
 - 留白口径最终定为 `max(80, window_half × 0.7)`：下限保 v0.1.x 的活动范围，体型放大时按比例放开；取食半径随之按体型放宽，避免边缘食物不可达。
 
 - [x] v0.2.0 便携构建一次完成：`D:/DevTools/IDEs/Python/Python313/python.exe tools/build_release.py`（PyInstaller onedir + collect_licenses）。首次尝试因上一轮遗留的 `dist/NeuroPet-2D/NeuroPet-2D.exe`（PID 21796，19:51 启动）锁住 `_internal` 而失败，结束该遗留进程后一次成功；`dist/NeuroPet-2D/` 只含 EXE、_internal、licenses、README.txt、LICENSE.txt，无 data/logs。

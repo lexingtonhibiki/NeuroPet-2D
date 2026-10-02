@@ -18,18 +18,29 @@ MAGIC = "#010101"  # 色键透明色:该颜色像素透明且点击穿透
 _KEY_RGB = (1, 1, 1)  # 同上,数值形式(RGB 预合成底色,见 update_pet)
 
 # ================= v0.2.0:视口节拍(黑框闪烁的修复面) =================
-# 黑框/视觉跳变的三个成因,逐条对应下面的实现:
-#  ① 滚动原点算错:`xview_moveto(frac)` 的 frac 是**分数**,Tk 内部换算成
-#     `frac × (scrollregion 宽 − 画布宽)`;旧码传 `left / self.w`,少了
-#     `(画布宽 / self.w)` 这个因子 ⇒ 窗口移到 left 而可见左缘停在
-#     `left × (1 − vw/w)`,两者恒不同步 ⇒ 每改一次几何就跳一截。
-#  ② 中间态被呈现:旧码 geometry → update_idletasks() → 滚动。Tk 在
-#     update_idletasks 里已经跑过一次重绘,此刻窗口位置已是新的而画布原点
-#     还是旧的 ⇒ 未绘到的区域按窗口类背景刷成纯黑(≠ #010101 键色)⇒ 闪黑框。
-#     现改为:先禁用重绘,geometry 与滚动一次做完,finally 恢复后再呈现一帧。
-#  ③ 几何抖动:旧码每 ~2s 就可能改一次几何(缩边与扩边混在一起),等于把
-#     ① ② 每两秒放大一次。现改为**只扩不缩**(运动中)+ 静止一段时间才收边,
-#     扩边时新视口 ⊇ 旧视口 ∪ 内容 ⇒ 屏幕上的像素集合只增不减,运动连续。
+# 诚实口径:**本轮没有复现过黑框**,也没有做过任何屏幕录制或取帧比对。下面
+# 写的是"改动内容"与"它针对的假设",不是已确认的根因;是否真的消除了闪烁,
+# 需要真实桌面运行才能判定,本轮按用户要求未启动桌宠。
+#
+# 实际改了三处,全部围绕同一个假设:**色键窗在原生 resize/move 与画布重绘的
+# 间隙里被涂上窗口类背景(纯黑),而键色是 #010101,所以"还没画到"的区域会闪
+# 成可见黑块。** 若这个假设成立,能减少这类间隙的办法是:少改几何、改的时候
+# 不上屏、改的时候不裁掉已经可见的像素。
+#  ① 过渡原子化:旧码 geometry → update_idletasks() → 滚动。update_idletasks()
+#     会跑完挂起的 idle 重绘,此刻窗口位置已是新的而画布原点还是旧的,这个
+#     中间帧会被呈现。现改为在 Win32 ``WM_SETREDRAW`` 抑制下 geometry 与滚动
+#     一次做完,finally 恢复后只呈现一帧。
+#  ② 只扩不缩:扩边时新视口 ⊇ 旧视口 ∪ 内容 ⇒ 屏幕上已可见的像素只增不减,
+#     不会因改几何而"消失一截再回来"。收边只在内容静止一段时间后发生,且那时
+#     内容必然在视口内,同样连续。
+#  ③ 节流:内容包围盒按 FIT_BOUNDS_INTERVAL_S 重算(5Hz),不是每帧。
+#
+# 滚动分数的换算**本轮未改**,并已对照 Tk 源码核对过:
+# ``generic/tkCanvas.c`` 的 ``CANV_XVIEW``/``CANV_YVIEW`` 在 TK_SCROLL_MOVETO
+# 分支是 ``newX = scrollX1 - inset + (int)(fraction * (scrollX2 - scrollX1) + .5)``,
+# 分母是**整个 scrollregion 宽**(inset = 2×borderWidth,本画布 bd=0 即 0)。
+# scrollregion 恒为 (0, 0, self.w, self.h),故 ``fraction = left / self.w``
+# 才让可见左缘正好落在 left —— 与改动前一致,不要"优化"成减视口宽的分母。
 FIT_BOUNDS_INTERVAL_S = 0.2   # 内容包围盒重算节流(5Hz;原来每帧都算 bbox)
 FIT_EDGE = 12                  # 扩边判据的回差(px)
 FIT_MARGIN_GROW = 96           # 运动中窗口在内容外的余量(沿用旧值)
@@ -154,9 +165,11 @@ def display_signature(pose: dict, traits: dict, x: float, y: float,
 class _RedrawGuard:
     """Win32 ``WM_SETREDRAW`` 抑制:批量改几何/滚动期间**不呈现中间态**。
 
-    色键窗在原生 resize/move 擦除期间按窗口类背景涂黑,而色键是 #010101,
-    所以"尚未绘制"的黑与键色不同 = 可见黑框;唯一不改配色也不退回全屏
-    画布的办法就是让这段过渡根本不上屏。
+    针对的假设:色键窗在原生 resize/move 擦除期间按窗口类背景涂黑,而键色是
+    #010101,于是"尚未绘制"的黑与键色不同 ⇒ 可能闪出可见黑块。抑制重绘让这
+    段过渡根本不上屏。**这是修复目标,本轮未复现也未验证该闪烁。**
+
+    不改配色、不退回全屏画布,也不做每帧 hide/show 遮掩。
 
     失败安全:任一步异常都已在 ``__exit__`` 的 finally 语义下恢复(wParam=1
     + 一次 RedrawWindow),异常照旧向上抛由调用点兜住;非 Windows 或
@@ -413,9 +426,18 @@ class OverlayStage:
     def _apply_viewport(self, new: tuple[int, int, int, int]) -> None:
         """一次原子过渡:改几何 + 设画布原点,期间不上屏,finally 恢复重绘。
 
-        顺序不可换:必须先让 Tk 落实新的分配(画布宽),``xview_moveto`` 才能
-        按 ``left / (scrollregion 宽 − 画布宽)`` 反解出"可见左缘恰为 left"。
-        整个过程包在 ``_RedrawGuard`` 里 ⇒ 中间态不上屏,只呈现恢复后的一帧。
+        顺序不可换:先 ``geometry`` 再 ``update_idletasks()`` 让 Tk 落实新的
+        分配,最后设原点 —— 原点必须在几何之后,否则会按旧画布宽定位。
+
+        滚动分数:**``left / self.w``**(未改动)。Tk ``generic/tkCanvas.c`` 的
+        ``CANV_XVIEW``/``CANV_YVIEW`` 在 TK_SCROLL_MOVETO 分支为
+        ``newX = scrollX1 - inset + (int)(fraction * (scrollX2 - scrollX1) + .5)``,
+        分母是整个 scrollregion 宽、不是"scrollregion 宽 − 视口宽";本画布
+        ``bd=0`` 故 inset=0,scrollregion 恒为 (0,0,self.w,self.h),于是
+        ``fraction = left / self.w`` 让可见左缘正好落在 left。
+
+        整个过程包在 ``_RedrawGuard`` 里 ⇒ 几何与滚动之间的中间帧不上屏,
+        只呈现恢复后的一帧(这是本轮的**修复目标**,未经真机验证)。
         """
         if new == self._viewport:
             return
@@ -426,11 +448,8 @@ class OverlayStage:
         with _RedrawGuard(self.win, self.canvas):
             self.win.geometry(f"{width}x{height}+{left}+{top}")
             self.win.update_idletasks()          # 落实分配(不上屏)
-            # frac = left / (scrollregion 宽 − 画布宽):Tk 的 xview_moveto
-            # 把 frac 乘成绝对像素。视口占满整屏时分母为 1、Tk 侧夹到 0,
-            # 与 left 必为 0 一致。
-            self.canvas.xview_moveto(min(1.0, left / max(1, self.w - width)))
-            self.canvas.yview_moveto(min(1.0, top / max(1, self.h - height)))
+            self.canvas.xview_moveto(min(1.0, left / max(1, self.w)))
+            self.canvas.yview_moveto(min(1.0, top / max(1, self.h)))
 
     def _compute_overlap_groups(self) -> list[tuple[str, ...]]:
         ids = list(self._pet_raw)
