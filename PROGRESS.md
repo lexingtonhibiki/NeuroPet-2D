@@ -66,8 +66,12 @@
 - 留白口径最终定为 `max(80, window_half × 0.7)`：下限保 v0.1.x 的活动范围，体型放大时按比例放开；取食半径随之按体型放宽，避免边缘食物不可达。
 
 - [x] v0.2.0 便携构建一次完成：`D:/DevTools/IDEs/Python/Python313/python.exe tools/build_release.py`（PyInstaller onedir + collect_licenses）。首次尝试因上一轮遗留的 `dist/NeuroPet-2D/NeuroPet-2D.exe`（PID 21796，19:51 启动）锁住 `_internal` 而失败，结束该遗留进程后一次成功；`dist/NeuroPet-2D/` 只含 EXE、_internal、licenses、README.txt、LICENSE.txt，无 data/logs。
-- [x] ZIP `dist/NeuroPet-2D-v0.2.0-windows-x64.zip`，21,061,829 字节，1,023 条目（与 v0.1.1 同数），SHA256 42E4B2B2A26BFBE73BD63841B9DCF9C1D12139699D74BCF5E5CFEDCEEB5DCEC9。白名单只含 EXE/_internal/许可/说明文件；`_internal/data/gait/*.json` 是**构建输入的步态参数表**（v0.1.0/v0.1.1 同样内含），不含 config.json / pets.json / session.json / profiles/ / logs/。打包脚本 `tools/make_portable_zip.py` 按顶层白名单枚举并固定排序。
+- [x] ZIP `dist/NeuroPet-2D-v0.2.0-windows-x64.zip`，21,062,758 字节，1,023 条目（与 v0.1.1 同数），SHA256 2766AEE4559864A56CFBF2C6C0BEE6DCFE738C73BB74AE8A2C9A43657AAF0019。白名单只含 EXE/_internal/许可/说明文件；`_internal/data/gait/*.json` 是**构建输入的步态参数表**（v0.1.0/v0.1.1 同样内含），不含 config.json / pets.json / session.json / profiles/ / logs/。打包脚本 `tools/make_portable_zip.py` 按顶层白名单枚举并固定排序。
+- [x] 提交 `328e8c5` 修正滚动分数换算（见下）后**重新构建**并更新同一份 v0.2.0 ZIP：21,062,758 字节，1,023 条目，SHA256 2766AEE4559864A56CFBF2C6C0BEE6DCFE738C73BB74AE8A2C9A43657AAF0019。前一次构建的产物 21,061,829 / 42E4B2B2A26BFBE73BD63841B9DCF9C1D12139699D74BCF5E5CFEDCEEB5DCEC9 作废。
 - [x] 构建后只核对静态产物：Analysis-00.toc 含 `neuropet.core.desktop` / `neuropet.core.autostart` / `neuropet.render.trail` / `neuropet.core.i18n`，包内 README.txt 含新增的中英文速度/自启动说明，ZIP 顶层清单无 data/logs。**未启动 EXE、未跑 probe/smoke、未做视觉或交互验证。**
+
+- 滚动分数换算的更正：v0.2.0 首个提交把 `xview_moveto` 的分母改成 `scrollregion 宽 − 视口宽`，并写成已确认的黑框根因；用户指出后对照 Tk `generic/tkCanvas.c`（`TK_SCROLL_MOVETO`：分母是整个 scrollregion 宽，inset=2×bd=0）复核，确认原值 `left / self.w` 才是正确的，已恢复，并把相关文档改为"未复现、未验证"的诚实口径。黑框闪烁的真实成因本轮仍未定位。
+- 追加要求（docs/settings-live-save-addendum.md）的全部设置修复（实时保存、当前宠物下拉、Tk 变量强引用、关闭即关窗口、下拉点击穿透、双语错误文案）在 `328e8c5` 中原样保留，未被本次更正触及。
 
 ## 执行决定
 - 用户“直接做”覆盖技能的重复设计/计划确认；本会话直接执行。
