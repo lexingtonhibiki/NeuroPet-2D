@@ -7,6 +7,8 @@ import sys
 from dataclasses import asdict, dataclass, field
 from pathlib import Path
 
+from .i18n import resolve as resolve_language
+
 # r23 绿色版(exe):数据目录放 **exe 旁**而非解压临时目录(_MEIPASS 退出即焚,
 # 宠物记忆/名册/配置无法持久)。开发运行仍以仓库根为锚。
 if getattr(sys, "frozen", False):
@@ -35,6 +37,9 @@ class AppConfig:
     log_events: bool = False
     feeding_timeout_s: int = 15      # 投喂模式限时(秒);<=0 表示不自动退出
     bubbles_enabled: bool = True     # 提示气泡(C2;面板勾选,默认开)
+    # 界面语言(v0.1.1):zh-CN / en。空串 = 跟随系统语言(首次运行时判定并保存);
+    # 旧配置没有本字段 → load_config 填系统语言,不改用户的文件。
+    language: str = ""
     # 各物种数量偏好由面板管理,不在此硬编码
 
 
@@ -53,9 +58,15 @@ def load_config() -> AppConfig:
             values["max_pets"] = max(10, int(values["max_pets"]))
         except (TypeError, ValueError, OverflowError):
             values["max_pets"] = 10
+        # 旧配置无 language / 写了不认识的值 → 跟随系统语言(中文系统中文,
+        # 否则英文;检测失败回退中文)。宠物存档与其它字段一律不动。
+        values["language"] = resolve_language(values.get("language"))
         return AppConfig(**values)
     except Exception:
-        return AppConfig()
+        # 首次运行/文件损坏:同样给出确定语言码,不留空串。
+        cfg = AppConfig()
+        cfg.language = resolve_language("")
+        return cfg
 
 
 def save_config(cfg: AppConfig) -> None:

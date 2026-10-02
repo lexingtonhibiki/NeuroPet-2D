@@ -22,6 +22,7 @@ from .config import (DATA_DIR, PLUGINS_DIR, PETS_PATH, AppConfig, load_config,
                      load_roster, profile_dir, save_config, save_roster)
 from .contracts import (Behavior, BehaviorCommand, MovementMode,
                         PetState, StimulusKind)
+from .i18n import set_lang, t
 from .interfaces import IBody, IBrain, SpeciesPlugin
 from .plugin import PluginRegistry
 from .windowing import OverlayStage, display_signature, set_dpi_aware, working_set_mb
@@ -386,6 +387,7 @@ class PetHandle:
 class App:
     def __init__(self) -> None:
         self.cfg = load_config()
+        set_lang(self.cfg.language)   # 配置优先;缺失/不认识时 load_config 已填系统语言
         self.root = tk.Tk()
         # r24:默认 report_callback_exception 用 print 打印(tkinter/__init__.py
         # :1788),pythonw/--noconsole 下 stdout 是坏句柄 → 该 print 抛 OSError
@@ -503,7 +505,7 @@ class App:
         ``NEUROPET_MASTERY=off``(停止自适应,脑保持当前等级)。
         """
         if len(self.pets) >= self.cfg.max_pets:
-            raise RuntimeError(f"桌面已有 {self.cfg.max_pets} 只宠物。先隐藏或移除一只，再添加。")
+            raise RuntimeError(t("error.desk_full", total=self.cfg.max_pets))
         sp = self.species(species_id)
         if pet_id is None:
             pet_id = f"{species_id}-{uuid.uuid4().hex[:6]}"
@@ -1663,6 +1665,21 @@ class App:
             # 超时自动关闭时靠这里把面板勾选复位
             self._panel.set_feeding(self.feeding)
         return self.feeding
+
+    # ---------------- 界面语言(v0.1.1) ----------------
+    def set_language(self, code: str) -> str:
+        """切换界面语言并立即生效:存配置 → 面板就地刷新 → 托盘同步。
+
+        不重建窗口、不重启托盘线程,不动任何宠物状态(选中项、编号、暂停与
+        隐藏态、打开的可选窗口及其关联宠物都原样保留)。返回生效的语言码。"""
+        lang = set_lang(code)
+        self.cfg.language = lang
+        save_config(self.cfg)
+        if self._panel:
+            self._panel.apply_language()
+        if self._tray:
+            self._tray.refresh_language()
+        return lang
 
     # ---------------- 面板穿透缓存(钩子线程只读) ----------------
     def _refresh_panel_rect(self) -> None:

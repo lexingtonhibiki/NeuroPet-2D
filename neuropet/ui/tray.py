@@ -22,6 +22,8 @@ from __future__ import annotations
 
 import threading
 
+from ..core.i18n import t
+
 # 托盘线程 → 主线程 的跨线程主题(主循环 bus.drain() 重放到主线程执行)
 TOPIC_TOGGLE_PANEL = "tray/toggle_panel"
 TOPIC_TOGGLE_FEEDING = "tray/toggle_feeding"
@@ -125,7 +127,7 @@ class TrayIcon:
         icon = pystray.Icon(
             "NeuroPet",
             icon=make_tray_image(32),
-            title="NeuroPet 桌宠(左键:显示/隐藏面板,右键:菜单)",
+            title=t("tray.title"),
             menu=menu)
         self._icon = icon
         self._register_bus()
@@ -167,14 +169,16 @@ class TrayIcon:
     def _build_menu(self, pystray):
         """构建右键菜单。「显示控制面板」标记 default=True → pystray 左键单击触发它。
         「投喂模式」勾选态为动态 callable:每次菜单项激活后 pystray 自动
-        update_menu() 重建,勾选框随即反映最新 feeding 状态。"""
+        update_menu() 重建,勾选框随即反映最新 feeding 状态。
+        文案是 callable(而非常量):语言切换后 `refresh_language()` 重建
+        win32 菜单句柄时重新取值,托盘线程不重建、不重启。"""
         return pystray.Menu(
-            pystray.MenuItem("显示控制面板", self._on_toggle_panel, default=True),
-            pystray.MenuItem("投喂模式", self._on_toggle_feeding,
+            pystray.MenuItem(lambda item: t("tray.panel"), self._on_toggle_panel, default=True),
+            pystray.MenuItem(lambda item: t("tray.feeding"), self._on_toggle_feeding,
                              checked=lambda item: bool(
                                  getattr(self.app, "feeding", False))),
             pystray.Menu.SEPARATOR,
-            pystray.MenuItem("退出", self._on_quit),
+            pystray.MenuItem(lambda item: t("tray.quit"), self._on_quit),
         )
 
     # ---- 托盘线程回调:只 publish,绝不触碰 tkinter/App 可变状态以外的东东 ----
@@ -218,6 +222,17 @@ class TrayIcon:
         self.app.shutdown()
 
     def _on_feeding_changed(self, topic: str, data: dict) -> None:
+        self._refresh_menu()
+
+    def refresh_language(self) -> None:
+        """语言切换后同步托盘悬停标题与菜单文案(不重建图标、不重启线程)。"""
+        icon = self._icon
+        if icon is None:
+            return
+        try:
+            icon.title = t("tray.title")     # pystray 公共 setter,win32 走 NIF_TIP
+        except Exception:
+            pass
         self._refresh_menu()
 
     def _refresh_menu(self) -> None:
