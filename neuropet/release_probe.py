@@ -133,6 +133,10 @@ def main():
             from neuropet.ui.panel import ControlPanel
         app._panel = ControlPanel(app)
         app._panel.set_on_drop_request(app._on_panel_drop)
+        from neuropet.ui.tray import TrayIcon
+        tray = TrayIcon(app)
+        if tray.start():
+            app._tray = tray
         phases["panel"] = memory()
         if args.panel == "off":
             app._panel.hide()
@@ -140,18 +144,12 @@ def main():
         frames, costs, uploads, samples = [], [], [], []
         started = time.perf_counter()
         cpu_started = time.process_time()
-        last = started
-        next_due = started
-        sim = 0.0
-        def frame():
-            nonlocal last, next_due, sim
+        production_step = app._step_frame
+        def frame(dt):
             now = time.perf_counter()
-            dt = min(0.05, max(0.0001, now-last))
-            last = now
-            sim += dt
             before = app._upload_count
             t0 = time.perf_counter()
-            app._step_frame(dt)
+            production_step(dt)
             cost = (time.perf_counter()-t0)*1000
             if now-started >= 3:
                 frames.append(now)
@@ -162,6 +160,7 @@ def main():
             if now-started >= args.seconds:
                 report = {"pets": len(app.pets), "panel": args.panel,
                           "scale": args.scale, "workload": "forced walking, alternating species, cursor excluded",
+                          "tray": app._tray is not None, "timer": "production App._tick",
                           "cpu_one_core_percent": round(100*(time.process_time()-cpu_started)/(now-started), 2),
                           "seconds": round(now-started, 3), "screen": app.world.screen,
                           "memory_end": memory(), "memory_samples": samples,
@@ -177,11 +176,9 @@ def main():
                 print(json.dumps({k:v for k,v in report.items() if k != "memory_samples"}, indent=2), flush=True)
                 app.shutdown()
                 return
-            next_due += 1/60
-            if next_due < now-.25:
-                next_due = now
-            app.root.after(max(1, int((next_due-time.perf_counter())*1000)), frame)
-        app.root.after(1, frame)
+        app._step_frame = frame
+        app._next_t = app._last_tick = started
+        app.root.after(1, app._tick)
         app.root.mainloop()
 
 

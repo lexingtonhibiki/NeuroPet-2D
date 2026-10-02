@@ -1,0 +1,260 @@
+{
+  "pets": 10,
+  "panel": "on",
+  "seconds": 30.008,
+  "screen": [
+    1920,
+    1080
+  ],
+  "memory_end": {
+    "working_set_mib": 82.953125,
+    "private_mib": 56.08984375,
+    "peak_working_set_mib": 89.4609375
+  },
+  "memory_samples": [
+    {
+      "elapsed_s": 0.007,
+      "working_set_mib": 49.625,
+      "private_mib": 31.625,
+      "peak_working_set_mib": 56.28125
+    },
+    {
+      "elapsed_s": 1.011,
+      "working_set_mib": 71.62890625,
+      "private_mib": 47.67578125,
+      "peak_working_set_mib": 76.85546875
+    },
+    {
+      "elapsed_s": 2.015,
+      "working_set_mib": 73.45703125,
+      "private_mib": 48.4140625,
+      "peak_working_set_mib": 77.640625
+    },
+    {
+      "elapsed_s": 3.024,
+      "working_set_mib": 77.70703125,
+      "private_mib": 52.23828125,
+      "peak_working_set_mib": 81.5625
+    },
+    {
+      "elapsed_s": 4.045,
+      "working_set_mib": 85.04296875,
+      "private_mib": 52.41796875,
+      "peak_working_set_mib": 85.04296875
+    },
+    {
+      "elapsed_s": 5.049,
+      "working_set_mib": 76.96875,
+      "private_mib": 50.515625,
+      "peak_working_set_mib": 85.04296875
+    },
+    {
+      "elapsed_s": 6.06,
+      "working_set_mib": 79.4765625,
+      "private_mib": 53.8671875,
+      "peak_working_set_mib": 86.5390625
+    },
+    {
+      "elapsed_s": 7.081,
+      "working_set_mib": 80.15234375,
+      "private_mib": 54.08984375,
+      "peak_working_set_mib": 86.5390625
+    },
+    {
+      "elapsed_s": 8.092,
+      "working_set_mib": 80.4140625,
+      "private_mib": 55.5,
+      "peak_working_set_mib": 86.5390625
+    },
+    {
+      "elapsed_s": 9.096,
+      "working_set_mib": 80.16796875,
+      "private_mib": 56.0078125,
+      "peak_working_set_mib": 86.5390625
+    },
+    {
+      "elapsed_s": 10.104,
+      "working_set_mib": 79.02734375,
+      "private_mib": 54.16015625,
+      "peak_working_set_mib": 86.5390625
+    },
+    {
+      "elapsed_s": 11.125,
+      "working_set_mib": 79.49609375,
+      "private_mib": 54.14453125,
+      "peak_working_set_mib": 86.5390625
+    },
+    {
+      "elapsed_s": 12.139,
+      "working_set_mib": 76.91015625,
+      "private_mib": 51.0546875,
+      "peak_working_set_mib": 88.078125
+    },
+    {
+      "elapsed_s": 13.156,
+      "working_set_mib": 81.0625,
+      "private_mib": 55.28515625,
+      "peak_working_set_mib": 88.078125
+    },
+    {
+      "elapsed_s": 14.163,
+      "working_set_mib": 80.1796875,
+      "private_mib": 54.96484375,
+      "peak_working_set_mib": 88.078125
+    },
+    {
+      "elapsed_s": 15.166,
+      "working_set_mib": 73.08984375,
+      "private_mib": 54.67578125,
+      "peak_working_set_mib": 88.078125
+    },
+    {
+      "elapsed_s": 16.174,
+      "working_set_mib": 80.08984375,
+      "private_mib": 54.0,
+      "peak_working_set_mib": 88.890625
+    },
+    {
+      "elapsed_s": 17.183,
+      "working_set_mib": 80.26171875,
+      "private_mib": 54.62890625,
+      "peak_working_set_mib": 88.890625
+    },
+    {
+      "elapsed_s": 18.202,
+      "working_set_mib": 80.5078125,
+      "private_mib": 54.3203125,
+      "peak_working_set_mib": 88.890625
+    },
+    {
+      "elapsed_s": 19.222,
+      "working_set_mib": 82.68359375,
+      "private_mib": 55.9375,
+      "peak_working_set_mib": 88.890625
+    },
+    {
+      "elapsed_s": 20.241,
+      "working_set_mib": 77.15625,
+      "private_mib": 50.515625,
+      "peak_working_set_mib": 88.890625
+    },
+    {
+      "elapsed_s": 21.259,
+      "working_set_mib": 81.5703125,
+      "private_mib": 55.40234375,
+      "peak_working_set_mib": 88.890625
+    },
+    {
+      "elapsed_s": 22.264,
+      "working_set_mib": 81.1171875,
+      "private_mib": 55.03125,
+      "peak_working_set_mib": 88.890625
+    },
+    {
+      "elapsed_s": 23.277,
+      "working_set_mib": 79.1015625,
+      "private_mib": 53.6171875,
+      "peak_working_set_mib": 88.890625
+    },
+    {
+      "elapsed_s": 24.289,
+      "working_set_mib": 80.87109375,
+      "private_mib": 55.58203125,
+      "peak_working_set_mib": 88.890625
+    },
+    {
+      "elapsed_s": 25.311,
+      "working_set_mib": 86.16015625,
+      "private_mib": 56.0859375,
+      "peak_working_set_mib": 88.890625
+    },
+    {
+      "elapsed_s": 26.326,
+      "working_set_mib": 80.8359375,
+      "private_mib": 56.02734375,
+      "peak_working_set_mib": 88.890625
+    },
+    {
+      "elapsed_s": 27.326,
+      "working_set_mib": 80.58984375,
+      "private_mib": 54.78515625,
+      "peak_working_set_mib": 88.890625
+    },
+    {
+      "elapsed_s": 28.328,
+      "working_set_mib": 82.08984375,
+      "private_mib": 56.0859375,
+      "peak_working_set_mib": 88.890625
+    },
+    {
+      "elapsed_s": 29.369,
+      "working_set_mib": 73.8671875,
+      "private_mib": 54.890625,
+      "peak_working_set_mib": 89.4609375
+    }
+  ],
+  "memory_phases": {
+    "modules": {
+      "working_set_mib": 26.40625,
+      "private_mib": 15.4375,
+      "peak_working_set_mib": 29.77734375
+    },
+    "stage": {
+      "working_set_mib": 38.21875,
+      "private_mib": 23.2421875,
+      "peak_working_set_mib": 41.9296875
+    },
+    "pets": {
+      "working_set_mib": 40.81640625,
+      "private_mib": 25.94140625,
+      "peak_working_set_mib": 41.9296875
+    },
+    "panel": {
+      "working_set_mib": 42.7578125,
+      "private_mib": 27.80078125,
+      "peak_working_set_mib": 42.7578125
+    }
+  },
+  "frame_cost_ms": {
+    "p50": 19.224,
+    "p95": 25.197,
+    "p99": 31.889
+  },
+  "loop_fps": 42.33,
+  "sprite_updates_per_pet_s": 12.95,
+  "cache": {
+    "masters": {
+      "entries": 2,
+      "unique_mib": 1.04
+    },
+    "rot": {
+      "entries": 242,
+      "unique_mib": 10.749
+    },
+    "l2": {
+      "entries": 0,
+      "unique_mib": 0.0
+    },
+    "shadow_patches": {
+      "entries": 24,
+      "unique_mib": 1.317
+    },
+    "shadow_sprites": {
+      "entries": 14,
+      "unique_mib": 0.661
+    },
+    "shadow_masks": {
+      "entries": 20,
+      "unique_mib": 2.048
+    },
+    "snap": {
+      "entries": 3,
+      "unique_mib": 1.065
+    },
+    "whole_frames": {
+      "entries": 8,
+      "unique_mib": 1.377
+    },
+    "total_unique_mib": 18.257
+  }
+}

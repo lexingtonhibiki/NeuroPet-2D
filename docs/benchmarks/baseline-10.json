@@ -1,0 +1,174 @@
+{
+  "pets": 10,
+  "panel": "on",
+  "seconds": 20.02,
+  "screen": [
+    1920,
+    1080
+  ],
+  "memory_end": {
+    "working_set_mib": 145.6875,
+    "private_mib": 132.98828125,
+    "peak_working_set_mib": 280.79296875
+  },
+  "memory_samples": [
+    {
+      "elapsed_s": 0.006,
+      "working_set_mib": 57.01171875,
+      "private_mib": 39.484375,
+      "peak_working_set_mib": 57.09375
+    },
+    {
+      "elapsed_s": 1.022,
+      "working_set_mib": 96.27734375,
+      "private_mib": 77.46875,
+      "peak_working_set_mib": 98.515625
+    },
+    {
+      "elapsed_s": 2.038,
+      "working_set_mib": 118.85546875,
+      "private_mib": 93.83203125,
+      "peak_working_set_mib": 123.54296875
+    },
+    {
+      "elapsed_s": 3.067,
+      "working_set_mib": 108.37890625,
+      "private_mib": 84.9921875,
+      "peak_working_set_mib": 145.515625
+    },
+    {
+      "elapsed_s": 4.086,
+      "working_set_mib": 126.3671875,
+      "private_mib": 101.96484375,
+      "peak_working_set_mib": 145.515625
+    },
+    {
+      "elapsed_s": 5.089,
+      "working_set_mib": 156.875,
+      "private_mib": 132.2265625,
+      "peak_working_set_mib": 158.19921875
+    },
+    {
+      "elapsed_s": 6.092,
+      "working_set_mib": 201.57421875,
+      "private_mib": 175.3125,
+      "peak_working_set_mib": 202.95703125
+    },
+    {
+      "elapsed_s": 7.095,
+      "working_set_mib": 191.640625,
+      "private_mib": 166.16796875,
+      "peak_working_set_mib": 202.95703125
+    },
+    {
+      "elapsed_s": 8.114,
+      "working_set_mib": 206.921875,
+      "private_mib": 181.44921875,
+      "peak_working_set_mib": 211.91015625
+    },
+    {
+      "elapsed_s": 9.129,
+      "working_set_mib": 231.1171875,
+      "private_mib": 206.95703125,
+      "peak_working_set_mib": 232.02734375
+    },
+    {
+      "elapsed_s": 10.133,
+      "working_set_mib": 263.8203125,
+      "private_mib": 239.5,
+      "peak_working_set_mib": 263.8203125
+    },
+    {
+      "elapsed_s": 11.136,
+      "working_set_mib": 277.02734375,
+      "private_mib": 253.125,
+      "peak_working_set_mib": 277.02734375
+    },
+    {
+      "elapsed_s": 12.138,
+      "working_set_mib": 136.97265625,
+      "private_mib": 111.55859375,
+      "peak_working_set_mib": 280.79296875
+    },
+    {
+      "elapsed_s": 13.172,
+      "working_set_mib": 158.01953125,
+      "private_mib": 133.59765625,
+      "peak_working_set_mib": 280.79296875
+    },
+    {
+      "elapsed_s": 14.181,
+      "working_set_mib": 185.265625,
+      "private_mib": 160.32421875,
+      "peak_working_set_mib": 280.79296875
+    },
+    {
+      "elapsed_s": 15.2,
+      "working_set_mib": 214.58984375,
+      "private_mib": 189.38671875,
+      "peak_working_set_mib": 280.79296875
+    },
+    {
+      "elapsed_s": 16.226,
+      "working_set_mib": 246.50390625,
+      "private_mib": 221.1484375,
+      "peak_working_set_mib": 280.79296875
+    },
+    {
+      "elapsed_s": 17.234,
+      "working_set_mib": 245.3828125,
+      "private_mib": 220.62890625,
+      "peak_working_set_mib": 280.79296875
+    },
+    {
+      "elapsed_s": 18.25,
+      "working_set_mib": 266.2890625,
+      "private_mib": 250.5703125,
+      "peak_working_set_mib": 280.79296875
+    },
+    {
+      "elapsed_s": 19.295,
+      "working_set_mib": 114.03515625,
+      "private_mib": 94.61328125,
+      "peak_working_set_mib": 280.79296875
+    }
+  ],
+  "frame_cost_ms": {
+    "p50": 17.538,
+    "p95": 30.457,
+    "p99": 44.066
+  },
+  "loop_fps": 40.32,
+  "sprite_updates_per_pet_s": 8.07,
+  "cache": {
+    "rot": {
+      "entries": 119,
+      "unique_mib": 5.432
+    },
+    "l2": {
+      "entries": 0,
+      "unique_mib": 0.0
+    },
+    "shadow_patches": {
+      "entries": 24,
+      "unique_mib": 1.103
+    },
+    "shadow_sprites": {
+      "entries": 14,
+      "unique_mib": 0.661
+    },
+    "shadow_masks": {
+      "entries": 91,
+      "unique_mib": 14.217
+    },
+    "snap": {
+      "entries": 124,
+      "unique_mib": 38.758
+    },
+    "whole_frames": {
+      "entries": 12,
+      "unique_mib": 1.875
+    },
+    "total_unique_mib": 62.046
+  }
+}

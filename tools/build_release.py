@@ -16,6 +16,8 @@ def main():
         "--exclude-module", "numpy", "--exclude-module", "matplotlib",
         "--exclude-module", "pytest", "--exclude-module", "OpenGL",
         "--exclude-module", "moderngl", *sys.argv[1:], "NeuroPet.py"], cwd=ROOT, check=True)
+    from tools.collect_licenses import main as collect_licenses
+    collect_licenses()
 
 if __name__ == "__main__":
     sys.path.insert(0, str(ROOT))

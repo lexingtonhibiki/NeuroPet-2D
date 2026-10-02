@@ -1296,7 +1296,9 @@ class App:
         self.stage.move_pets({h.pet_id: h.state.pos for h in pets})
         quota = RENDER_QUOTA if len(pets) <= 3 else 4
         order = quota_rotation(len(pets), self._render_cursor, quota)
-        self._render_cursor += quota
+        # If every candidate is skipped, still rotate the starting point. A
+        # consumed slot below overrides this with the last serviced position.
+        self._render_cursor += 1
         quota_left = quota
         for i in order:
             h = pets[i]
@@ -1359,6 +1361,7 @@ class App:
             # 不重置自己的延迟钟 ⇒ 下一 tick 立即重试,不必再等一整个 interval。
             # ⚠ 槽位口径 = 过了 interval 门且未被跳帧的宠数;dedup 命中仍吃槽(未变)。
             quota_left -= 1
+            self._render_cursor = i + 1
             h.last_render = now
             h.skip_streak = 0
             # PF 快赢①:上传去重 —— 显示(签名+坐标)与上次实际上传一致时,
