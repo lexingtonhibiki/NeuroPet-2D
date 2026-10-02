@@ -30,6 +30,10 @@ Memory and performance reporting is unchanged: **60 MiB is the two-pet optimizat
 
 v0.1.0 ZIP SHA256（供核对升级包 / to identify the previous package）：`BD279BCA0B114802484CD645F99BFA0077E0DBF68D5E0B266BDC728AAFC4B540`
 
+本次 v0.1.1 便携包 / This v0.1.1 portable package：`dist/NeuroPet-2D-v0.1.1-windows-x64.zip`，21,053,399 字节，1,023 个条目（只含 `NeuroPet-2D.exe`、`_internal/`、`licenses/`、`README.txt`、`LICENSE.txt`）。
+
+SHA256：`16D59461FFF93D109EDE21370DBB7179D7A96E8427757BA5CC0D152D61665EB0`
+
 便携包附项目与依赖许可证、pystray 的 Python 源码轮子。原研究目录未修改，发行包不包含私人存档、日志或 `data/`。
 
 The portable package includes the project and dependency licenses plus pystray's pure-Python source wheel. The original research directory is untouched, and the release package contains no private saves, logs or `data/` folder.

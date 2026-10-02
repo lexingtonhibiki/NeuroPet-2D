@@ -40,7 +40,7 @@
 - [x] 10 宠、面板、字节缓存、便携启动、依赖与许可、说明和已完成的视觉/资源证据。
 - [x] 已公开发布 https://github.com/lexingtonhibiki/NeuroPet-2D ，默认分支 main；v0.1.0 Release 附 Windows x64 便携 ZIP。按用户指令不追加验证。
 - [x] 最终打包完成，ZIP 21,065,352 字节，SHA256 BD279BCA0B114802484CD645F99BFA0077E0DBF68D5E0B266BDC728AAFC4B540。ZIP 使用 EXE/_internal/许可/说明文件白名单，不收集运行产生的数据或日志。
-- [x] v0.1.1 便携构建一次完成（见下方交付记录），ZIP 命名 NeuroPet-2D-v0.1.1-windows-x64.zip，只含 EXE、_internal、licenses、README.txt、LICENSE.txt；未包含 data、logs 或用户存档。公开发布与 push 由 Codex 协调。
+- [x] v0.1.1 便携构建一次完成：`D:\DevTools\IDEs\Python\Python313\python.exe tools\build_release.py`（PyInstaller onedir + collect_licenses）成功，`dist/NeuroPet-2D/` 含 EXE、_internal、licenses、README.txt、LICENSE.txt，无 data/logs。ZIP `dist/NeuroPet-2D-v0.1.1-windows-x64.zip`，21,053,399 字节，1,023 条目，SHA256 16D59461FFF93D109EDE21370DBB7179D7A96E8427757BA5CC0D152D61665EB0。构建后只核对了静态产物（Analysis-00.toc 含 neuropet.core.i18n、包内 README.txt 双语内容、ZIP 白名单条目），未启动 EXE、未跑 probe/smoke。公开发布与 push 由 Codex 协调。
 
 ## 执行决定
 - 用户“直接做”覆盖技能的重复设计/计划确认；本会话直接执行。
