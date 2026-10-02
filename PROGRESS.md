@@ -31,7 +31,7 @@
 
 ## 剩余工作
 - [x] 10 宠、面板、字节缓存、便携启动、依赖与许可、说明和已完成的视觉/资源证据。
-- [ ] 提交发行收尾，公开仓库与 Release；按用户指令不追加验证。
+- [x] 已公开发布 https://github.com/lexingtonhibiki/NeuroPet-2D ，默认分支 main；v0.1.0 Release 附 Windows x64 便携 ZIP。按用户指令不追加验证。
 - [x] 最终打包完成，ZIP 21,065,352 字节，SHA256 BD279BCA0B114802484CD645F99BFA0077E0DBF68D5E0B266BDC728AAFC4B540。ZIP 使用 EXE/_internal/许可/说明文件白名单，不收集运行产生的数据或日志。
 
 ## 执行决定
