@@ -99,8 +99,10 @@ class TrailLayer:
             if total + seg > span:
                 if seg > 1e-6:
                     k = (span - total) / seg
-                    ax = pts[i][0] + (pts[i + 1][0] - pts[i][0]) * k
-                    ay = pts[i][1] + (pts[i + 1][1] - pts[i][1]) * k
+                    # Walk backward from the newer endpoint by the remaining
+                    # length. Starting at the older end would extend the tail.
+                    ax = pts[i + 1][0] + (pts[i][0] - pts[i + 1][0]) * k
+                    ay = pts[i + 1][1] + (pts[i][1] - pts[i + 1][1]) * k
                     chain.append((ax, ay, pts[i][2]))
                 break
             total += seg

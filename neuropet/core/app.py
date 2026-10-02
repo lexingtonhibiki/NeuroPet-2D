@@ -858,11 +858,14 @@ class App:
         "配置里写了 true"当成"系统已注册"。
         """
         try:
-            return bool(write_autostart(bool(on)))
+            write_autostart(bool(on))
+            # The registry helper returns operation success, including successful
+            # deletion. UI callers need the resulting enabled state instead.
+            return self.autostart_enabled()
         except Exception as exc:
             from neuropet.diag import log
             log(f"[autostart] 切换失败({on}): {exc!r}")
-            return False
+            return self.autostart_enabled()
 
     def pet_scale(self, pet_id: str) -> float:
         h = self.pets.get(pet_id)

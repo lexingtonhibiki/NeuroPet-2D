@@ -222,6 +222,7 @@ class OverlayStage:
         self.win.configure(bg=MAGIC)
         self.canvas = tk.Canvas(self.win, width=1, height=1, bg=MAGIC,
                                 scrollregion=(0, 0, screen_w, screen_h),
+                                confine=False,
                                 xscrollincrement=1, yscrollincrement=1,
                                 highlightthickness=0, bd=0)
         self.canvas.pack(fill="both", expand=True)
@@ -378,7 +379,8 @@ class OverlayStage:
     def fit_viewport(self, force: bool = False) -> None:
         """屏幕坐标作画 + 窗口只包住可见内容(v0.2.0:只扩不缩 + 原子过渡)。
 
-        节流:内容包围盒按 ``FIT_BOUNDS_INTERVAL_S`` 重算(5Hz),不是每帧。
+        节流:完整内容包围盒按 ``FIT_BOUNDS_INTERVAL_S`` 重算(5Hz)。缓存的
+        宠物矩形越出视口时立即扩边,避免高速宠物等待下一次轮询才重新出现。
         扩边:任何内容越出视口 ``FIT_EDGE`` 立即扩,且新视口取
         **旧视口 ∪ 内容(+余量)** —— 屏幕上的像素集合只增不减,所以扩边本身
         连续,不会被"新露出来的空白"闪一下。
@@ -386,7 +388,14 @@ class OverlayStage:
         ``FIT_SHRINK_QUIET_S`` 后才收(收边时内容必然在视口内,同样连续)。
         """
         now = time.perf_counter()
-        if not force and now - self._fit_checked < FIT_BOUNDS_INTERVAL_S:
+        left, top, right, bottom = self._viewport
+        escaped = any(
+            (x - image.width // 2 < left and left > 0)
+            or (y - image.height // 2 < top and top > 0)
+            or (x + (image.width + 1) // 2 > right and right < self.w)
+            or (y + (image.height + 1) // 2 > bottom and bottom < self.h)
+            for image, x, y in self._pet_raw.values())
+        if not force and not escaped and now - self._fit_checked < FIT_BOUNDS_INTERVAL_S:
             return
         self._fit_checked = now
         content = self._content_bounds()
@@ -394,8 +403,8 @@ class OverlayStage:
             self._fit_content = content
             self._fit_quiet_since = now
         left, top, right, bottom = self._viewport
-        grew = (content[0] < left - FIT_EDGE or content[1] < top - FIT_EDGE
-                or content[2] > right + FIT_EDGE or content[3] > bottom + FIT_EDGE)
+        grew = escaped or (content[0] < left - FIT_EDGE or content[1] < top - FIT_EDGE
+                           or content[2] > right + FIT_EDGE or content[3] > bottom + FIT_EDGE)
         if force or grew:
             margin = FIT_MARGIN_GROW
             new = (max(0, min(left, content[0] - margin)),
@@ -426,8 +435,8 @@ class OverlayStage:
     def _apply_viewport(self, new: tuple[int, int, int, int]) -> None:
         """一次原子过渡:改几何 + 设画布原点,期间不上屏,finally 恢复重绘。
 
-        顺序不可换:先 ``geometry`` 再 ``update_idletasks()`` 让 Tk 落实新的
-        分配,最后设原点 —— 原点必须在几何之后,否则会按旧画布宽定位。
+        先落实窗口分配再设原点。Canvas 禁用 confine,因此即使 Windows 的
+        Configure 事件稍后才更新画布尺寸,也不会按旧宽度把世界原点夹回 0。
 
         滚动分数:**``left / self.w``**(未改动)。Tk ``generic/tkCanvas.c`` 的
         ``CANV_XVIEW``/``CANV_YVIEW`` 在 TK_SCROLL_MOVETO 分支为

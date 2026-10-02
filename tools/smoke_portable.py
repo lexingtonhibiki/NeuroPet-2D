@@ -26,6 +26,7 @@ def main():
             subprocess.run([str(PACKAGE / "NeuroPet-2D.exe"), "--smoke", str(result)],
                            cwd=temp, env=env, timeout=30, check=True)
             report = json.loads(result.read_text("utf-8"))
+            print(f"portable startup {attempt + 1}: {json.dumps(report, sort_keys=True)}")
             assert report["pets"] == 2 and report["capacity"] == 10, report
             assert report["panel"] and report["tray"] and report["uploads"] > 0, report
             roster = json.loads((data / "pets.json").read_text("utf-8"))

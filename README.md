@@ -4,7 +4,7 @@
 
 **中文 | [English](README.en.md)**
 
-**[下载 Windows 便携版](https://github.com/lexingtonhibiki/NeuroPet-2D/releases/latest)** · [资源实测](docs/performance.md) · [发布说明](docs/release-notes-v0.2.0.md)
+**[下载 Windows 便携版](https://github.com/lexingtonhibiki/NeuroPet-2D/releases/latest)** · [资源实测](docs/performance.md) · [发布说明](docs/release-notes-v0.2.1.md)
 
 ![控制面板](assets/demos/panel.png)
 

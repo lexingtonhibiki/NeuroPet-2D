@@ -28,6 +28,9 @@ def main() -> None:
             output.write_text(json.dumps({"pets": len(app.pets),
                 "capacity": app.cfg.max_pets, "tray": app._tray is not None,
                 "panel": app._panel.win.winfo_viewable(),
+                "panel_state": app._panel.win.state(),
+                "panel_config_visible": app.cfg.panel_visible,
+                "startup_tray_only": app._startup_tray_only,
                 "uploads": app._upload_count}, indent=2), encoding="utf-8")
             app.shutdown()
         app.root.after(5000, finish_smoke)

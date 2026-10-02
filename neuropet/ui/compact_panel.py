@@ -565,7 +565,6 @@ class ControlPanel:
         self.app._refresh_panel_rect()
 
     def _build_settings_rows(self, win, frame):
-        loading = getattr(self, "_settings_loading", False)
         V = self._settings_vars
         sizes = (0.5, 0.75, 1.0, 1.5, 2.0)
 
@@ -578,7 +577,7 @@ class ControlPanel:
         language_box.pack(fill="x", pady=(7, 15))
 
         def choose_language(event=None):
-            if loading:
+            if self._settings_loading:
                 return
             index = language_box.current()
             if not 0 <= index < len(LANGUAGES):
@@ -605,7 +604,7 @@ class ControlPanel:
         self._settings_recall_btn = recall_btn
 
         def choose_pet(event=None):
-            if loading:
+            if self._settings_loading:
                 return
             picked = self._settings_pid_from_label(pet.get())
             if not picked:
@@ -633,7 +632,7 @@ class ControlPanel:
         self._settings_size_row = (size_label, size_box)
 
         def choose_size(event=None):
-            if loading:
+            if self._settings_loading:
                 return
             target = self._settings_target_pid()
             if target not in self.app.pets:
@@ -654,7 +653,7 @@ class ControlPanel:
         speed_box.pack(fill="x", pady=(7, 4))
 
         def choose_speed(event=None):
-            if loading:
+            if self._settings_loading:
                 return
             try:
                 value = float(speed.get().rstrip("×"))
@@ -662,6 +661,7 @@ class ControlPanel:
                 return
             actual = self._guard(win, lambda: self.app.set_crawl_speed(value))
             speed.set(f"{actual if actual is not None else self.app.crawl_speed():g}×")
+            speed_now.configure(text=t("settings.speed_now", mult=self.app.crawl_speed()))
         speed_box.bind("<<ComboboxSelected>>", choose_speed)
         speed_now = ttk.Label(frame, text=t("settings.speed_now", mult=self.app.crawl_speed()),
                               style="Pet2D.Muted.TLabel")
@@ -674,7 +674,7 @@ class ControlPanel:
         V["startup"] = startup
 
         def toggle_startup():
-            if loading:
+            if self._settings_loading:
                 return
             self.app.cfg.panel_visible = bool(startup.get())
             if not self._guard(win, lambda: save_config(self.app.cfg)):
@@ -685,7 +685,7 @@ class ControlPanel:
         V["trails"] = trails
 
         def toggle_trails():
-            if loading:
+            if self._settings_loading:
                 return
             trails.set(bool(self._guard(win, lambda: self.app.set_trails(trails.get()))))
         ttk.Checkbutton(frame, text=t("settings.trails"), variable=trails,
@@ -694,7 +694,7 @@ class ControlPanel:
         V["autostart"] = autostart
 
         def toggle_autostart():
-            if loading:
+            if self._settings_loading:
                 return
             want = bool(autostart.get())
             ok = bool(self._guard(win, lambda: self.app.set_autostart(want)))
@@ -713,7 +713,7 @@ class ControlPanel:
                   style="Pet2D.Muted.TLabel", wraplength=300).pack(anchor="w")
 
         def toggle_click_feed():
-            if loading:
+            if self._settings_loading:
                 return
             self.app.toggle_feeding(self.feeding_var.get())
         ttk.Checkbutton(frame, text=t("settings.click_feed"), variable=self.feeding_var,

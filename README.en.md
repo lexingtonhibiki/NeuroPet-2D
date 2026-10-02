@@ -4,7 +4,7 @@ Lifelike Windows cockroach / fruit fly desktop pets. Six-legged gait, antenna pr
 
 **[English] | [中文](README.md)**
 
-**[Download the Windows portable build](https://github.com/lexingtonhibiki/NeuroPet-2D/releases/latest)** · [Measured resources](docs/performance.md) · [Release notes](docs/release-notes-v0.2.0.md)
+**[Download the Windows portable build](https://github.com/lexingtonhibiki/NeuroPet-2D/releases/latest)** · [Measured resources](docs/performance.md) · [Release notes](docs/release-notes-v0.2.1.md)
 
 ![Control panel](assets/demos/panel.png)
 
