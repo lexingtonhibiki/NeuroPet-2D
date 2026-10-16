@@ -61,8 +61,8 @@ _BUBBLE_TICK_S = 0.1        # C2 气泡层每帧 update 的节流周期(10Hz)
 
 # ================= §6:隐藏宠物并保留记忆 + 召回 =================
 # 隐藏会话文件:记录当前隐藏宠的 pet_id/物种清单(save_all / hide / recall
-# 时重写)。重启后 run() → _restore_hidden 按原 pet_id 重建并立即隐藏,
-# 记忆/体型档经 profile 载入恢复 —— 隐藏态跨重启还原。
+# 时重写)。重启后 run() → _restore_hidden 按原 pet_id 直接构建到隐藏集,
+# 不占可见名额、不创建舞台项;记忆/体型档经 profile 载入恢复。
 _SESSION_FILE = DATA_DIR / "session.json"
 
 # ================= r16 Task E:启动名册读配置(data/pets.json) =================
@@ -439,6 +439,9 @@ class App:
         # 即同时停 sim(_step)与渲染(_render)——两者都遍历 self.pets;
         # state/body/brain/体型档原地保留,召回时逐位恢复,不占可见名额。
         self._hidden: dict[str, PetHandle] = {}
+        # Failed startup restores stay in the session for a later retry. They
+        # must not disappear when an unrelated pet is hidden or the app exits.
+        self._pending_hidden_records: list[dict] = []
         # r11/r12:FeaturePlugin 内核(ADR-0031/0034)——drag 功能插件化;
         # 位置写权威经 StateArbiter 每帧合成(drag 90 > locomotion 40)。
         from .kernel import FeatureKernel
@@ -536,11 +539,26 @@ class App:
         """
         if len(self.pets) >= self.cfg.max_pets:
             raise RuntimeError(t("error.desk_full", total=self.cfg.max_pets))
-        sp = self.species(species_id)
         if pet_id is None:
             pet_id = f"{species_id}-{uuid.uuid4().hex[:6]}"
         elif pet_id in self.pets or pet_id in self._hidden:
             pet_id = f"{pet_id}-{uuid.uuid4().hex[:4]}"   # 防 id 冲突(防御性)
+        handle = self._create_pet_handle(species_id, pet_id, pos, intelligence, brain_id)
+        self.pets[pet_id] = handle
+        self.world.upsert_pet(handle.state)
+        self.stage.ensure_pet_item(pet_id)
+        self._load_profile(handle)
+        self.bus.publish("system/pet_added", {"pet_id": pet_id, "species": species_id})
+        if self._panel:
+            self._panel.refresh_pets()
+        self._write_roster()            # r16 Task E:可见名册回写 pets.json
+        return pet_id
+
+    def _create_pet_handle(self, species_id: str, pet_id: str, pos=None,
+                           intelligence: int | None = None,
+                           brain_id: str | None = None) -> PetHandle:
+        """Build a handle without making it visible or rewriting its archive."""
+        sp = self.species(species_id)
         if pos is None:
             # Place a newcomer in the least occupied slot instead of stacking every
             # insect in the centre. This also avoids a large merged upload at startup.
@@ -565,18 +583,10 @@ class App:
             brain = self.registry.create(brain_id, app=self, state=state)
         brain.set_intelligence(intelligence or self.cfg.intelligence)
         handle = PetHandle(state, body, brain, scale=scale)
-        self.pets[pet_id] = handle
-        self.world.upsert_pet(state)
         # 身体建好后按**它自己的**留白再钳一次位置(上面的钳位用的是无身体
         # 尺寸的默认留白):体型大的蟑螂不会一出生就半个身子压在任务栏上。
         state.pos = self.world.clamp_to_screen(state.pos, self._margin_for(handle))
-        self.stage.ensure_pet_item(pet_id)
-        self._load_profile(handle)
-        self.bus.publish("system/pet_added", {"pet_id": pet_id, "species": species_id})
-        if self._panel:
-            self._panel.refresh_pets()
-        self._write_roster()            # r16 Task E:可见名册回写 pets.json
-        return pet_id
+        return handle
 
     def remove_pet(self, pet_id: str) -> None:
         h = self.pets.pop(pet_id, None)
@@ -696,6 +706,7 @@ class App:
         try:
             records = [{"pet_id": pid, "species_id": h.state.species_id}
                        for pid, h in self._hidden.items()]
+            records.extend(getattr(self, "_pending_hidden_records", ()))
             _SESSION_FILE.write_text(
                 json.dumps({"hidden": records}, ensure_ascii=False, indent=1),
                 "utf-8")
@@ -714,22 +725,45 @@ class App:
         return []
 
     def _restore_hidden(self) -> None:
-        """启动还原隐藏会话(§6:启动载入后隐藏态还原)。
+        """Load hidden archives without borrowing a visible slot or touching the stage.
 
-        按会话记录的原 pet_id 重建宠物并立即隐藏:记忆/体型档经 add_pet 的
-        profile 载入恢复;位置为屏幕默认(与可见宠一致,位置本就不跨重启
-        持久化)。单条失败(物种缺失等)跳过;结束后按实际隐藏集重写会话。
+        Failed or incomplete records remain pending for a later restart. Exact
+        duplicate references are coalesced; conflicting IDs never get a new UUID.
+        Existing profile files are not rewritten; the session is written once
+        after restoration.
         """
         recs = self._read_hidden_session()
         if not recs:
             return
+        self._pending_hidden_records = list(recs)
+        missing = object()
         for rec in recs:
             pid, sp = rec.get("pet_id"), rec.get("species_id")
+            if (not isinstance(pid, str) or not pid
+                    or not isinstance(sp, str) or not sp):
+                continue
+            existing = self._hidden.get(pid)
+            if existing is not None and existing.state.species_id == sp:
+                self._pending_hidden_records.remove(rec)
+                continue  # The same archive was already restored; do not clone it.
+            if pid in self.pets or existing is not None:
+                continue  # Keep conflicting records unresolved, preserving their IDs.
+            old_fx = self._fx.get(pid, missing)
+            old_speed = self._speed_mult.get(pid, missing)
             try:
-                new_id = self.add_pet(sp, pet_id=pid)
-                self.hide_pet(new_id)
+                handle = self._create_pet_handle(sp, pid)
+                self._load_profile(handle)
             except Exception as exc:
+                # Loading effects can populate these maps before a later failure.
+                for mapping, old in ((self._fx, old_fx), (self._speed_mult, old_speed)):
+                    if old is missing:
+                        mapping.pop(pid, None)
+                    else:
+                        mapping[pid] = old
                 print(f"[app] 隐藏宠还原失败 {pid}: {exc}")
+                continue
+            self._hidden[pid] = handle
+            self._pending_hidden_records.remove(rec)
         self._write_hidden_session()
 
     # ---------------- v0.2.0:统一边界口径(任务栏已扣除的可用桌面) ----------------
