@@ -19,6 +19,7 @@ import numpy as np
 from neuropet.core.app import frame_tier_next
 from neuropet.core.contracts import Behavior, BehaviorCommand, PetState
 from neuropet.core.mathutil import wrap_angle
+from neuropet.core.desktop import margin_for
 from neuropet.core.world import WorldModel
 from neuropet.body.base import GenericInsectBody
 from neuropet.body.gait import LAND_GRACE_TAU, _Foot
@@ -63,9 +64,11 @@ def test_tier_turn_aware() -> None:
 def test_wall_pivot_continuous() -> None:
     w = WorldModel(*SCREEN)
     st = PetState(pet_id="wp", species_id="wp", pos=(1650.0, 540.0))
-    st.heading = 0.0                            # 正东直行,右墙 x=1920-80
+    st.heading = 0.0                            # 正东直行
     body = GenericInsectBody(st, dict(ROACH))
     view = w.snapshot("wp", 0.0)
+    x0, y0, x1, y1 = view.usable(margin_for(ROACH["window_half"]))
+    assert x0 < st.pos[0] < x1 and y0 < st.pos[1] < y1
     cmd = BehaviorCommand(Behavior.EXPLORE, target=(3000.0, 540.0),
                           intensity=1.0)
     bound_deg = math.degrees(body.PIVOT_RATE + ROACH["turn_rate"]) * DT * 1.15
@@ -79,11 +82,14 @@ def test_wall_pivot_continuous() -> None:
         max_dh = max(max_dh, dh)
         assert dh <= bound_deg + 0.5, \
             f"单帧朝向跳 {dh:.1f}° > 界 {bound_deg:.1f}°(枢转应连续)"
-        if st.pos[0] >= 1919.5 - 80.0:          # 贴墙线
+        assert x0 - 1.0 <= st.pos[0] <= x1 + 1.0 and \
+            y0 - 1.0 <= st.pos[1] <= y1 + 1.0, "运动全程应在可用边界内"
+        if st.pos[0] >= x1 - 0.5:              # 当前共享留白口径的贴墙线
             crossed = True
         if crossed and abs(wrap_angle(st.heading - 0.0)) > math.pi * 0.6:
             turned = True                       # 已明显折返(>108°)
-    margin_ok = (80.0 - 1.0 <= st.pos[0] <= SCREEN[0] - 80.0 + 1.0)
+    margin_ok = (x0 - 1.0 <= st.pos[0] <= x1 + 1.0
+                 and y0 - 1.0 <= st.pos[1] <= y1 + 1.0)
     record("② 撞墙枢转连续", crossed and turned and margin_ok,
            f"触墙={crossed} 折返={turned} 最大单帧Δ={max_dh:.1f}°"
            f"(PIVOT_RATE={math.degrees(body.PIVOT_RATE):.0f}°/s 折算界 "
