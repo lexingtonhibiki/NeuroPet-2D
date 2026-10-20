@@ -4,6 +4,7 @@ from __future__ import annotations
 import json
 import os
 import sys
+import tempfile
 from dataclasses import asdict, dataclass, field
 from pathlib import Path
 
@@ -98,7 +99,22 @@ def load_config() -> AppConfig:
 
 def save_config(cfg: AppConfig) -> None:
     DATA_DIR.mkdir(parents=True, exist_ok=True)
-    CONFIG_PATH.write_text(json.dumps({"app": asdict(cfg)}, ensure_ascii=False, indent=2), "utf-8")
+    # Serialize before touching the save. A failed write must leave the last
+    # valid settings available on restart, rather than a truncated JSON file.
+    payload = json.dumps({"app": asdict(cfg)}, ensure_ascii=False, indent=2)
+    temporary = None
+    try:
+        with tempfile.NamedTemporaryFile(mode="w", encoding="utf-8",
+                                         dir=CONFIG_PATH.parent,
+                                         prefix=".config-", suffix=".tmp",
+                                         delete=False) as stream:
+            temporary = Path(stream.name)
+            stream.write(payload)
+        # Close first: Windows cannot replace a file while it is still open.
+        os.replace(temporary, CONFIG_PATH)
+    finally:
+        if temporary is not None:
+            temporary.unlink(missing_ok=True)
 
 
 def profile_dir(pet_id: str) -> Path:
