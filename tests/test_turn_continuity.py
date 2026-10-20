@@ -11,6 +11,7 @@ from __future__ import annotations
 import math
 import sys
 from pathlib import Path
+from unittest.mock import patch
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 
@@ -19,6 +20,7 @@ import numpy as np
 from neuropet.core.app import frame_tier_next
 from neuropet.core.contracts import Behavior, BehaviorCommand, PetState
 from neuropet.core.mathutil import wrap_angle
+from neuropet.core.desktop import margin_for
 from neuropet.core.world import WorldModel
 from neuropet.body.base import GenericInsectBody
 from neuropet.body.gait import LAND_GRACE_TAU, _Foot
@@ -61,11 +63,16 @@ def test_tier_turn_aware() -> None:
 
 # ② 撞墙枢转:朝墙直行,全程单帧朝向变化有界(无 ~175° 瞬反),且确会折返
 def test_wall_pivot_continuous() -> None:
-    w = WorldModel(*SCREEN)
+    # 合成场景不能读取 Windows 主机实际工作区(可能比 SCREEN 小)。
+    with patch("neuropet.core.desktop.monitor_work_area",
+               return_value=(0, 0, *SCREEN)):
+        w = WorldModel(*SCREEN)
     st = PetState(pet_id="wp", species_id="wp", pos=(1650.0, 540.0))
-    st.heading = 0.0                            # 正东直行,右墙 x=1920-80
+    st.heading = 0.0                            # 正东直行
     body = GenericInsectBody(st, dict(ROACH))
     view = w.snapshot("wp", 0.0)
+    x0, y0, x1, y1 = view.usable(margin_for(ROACH["window_half"]))
+    assert x0 < st.pos[0] < x1 and y0 < st.pos[1] < y1
     cmd = BehaviorCommand(Behavior.EXPLORE, target=(3000.0, 540.0),
                           intensity=1.0)
     bound_deg = math.degrees(body.PIVOT_RATE + ROACH["turn_rate"]) * DT * 1.15
@@ -79,15 +86,27 @@ def test_wall_pivot_continuous() -> None:
         max_dh = max(max_dh, dh)
         assert dh <= bound_deg + 0.5, \
             f"单帧朝向跳 {dh:.1f}° > 界 {bound_deg:.1f}°(枢转应连续)"
-        if st.pos[0] >= 1919.5 - 80.0:          # 贴墙线
+        assert x0 - 1.0 <= st.pos[0] <= x1 + 1.0 and \
+            y0 - 1.0 <= st.pos[1] <= y1 + 1.0, "运动全程应在可用边界内"
+        if st.pos[0] >= x1 - 0.5:              # 当前共享留白口径的贴墙线
             crossed = True
         if crossed and abs(wrap_angle(st.heading - 0.0)) > math.pi * 0.6:
             turned = True                       # 已明显折返(>108°)
-    margin_ok = (80.0 - 1.0 <= st.pos[0] <= SCREEN[0] - 80.0 + 1.0)
+    margin_ok = (x0 - 1.0 <= st.pos[0] <= x1 + 1.0
+                 and y0 - 1.0 <= st.pos[1] <= y1 + 1.0)
     record("② 撞墙枢转连续", crossed and turned and margin_ok,
            f"触墙={crossed} 折返={turned} 最大单帧Δ={max_dh:.1f}°"
            f"(PIVOT_RATE={math.degrees(body.PIVOT_RATE):.0f}°/s 折算界 "
            f"{bound_deg:.1f}°) 位置界内={margin_ok}")
+
+
+def test_wall_pivot_ignores_host_geometry() -> None:
+    # 主机工作区故意小于合成起点;场景仍须触墙、连续转向并保持界内。
+    with patch("neuropet.core.desktop.monitor_work_area",
+               return_value=(0, 0, 1024, 728)) as host_area:
+        test_wall_pivot_continuous()
+        assert RESULTS[-1][1], "合成撞墙场景不应依赖主机工作区"
+        host_area.assert_not_called()
 
 
 # ③ 僵住快收:行走中突停,在途摆动腿连续收敛(无瞬降),且不产生新迈步
@@ -150,6 +169,7 @@ def test_rot_slack_fallback() -> None:
 def main() -> None:
     test_tier_turn_aware()
     test_wall_pivot_continuous()
+    test_wall_pivot_ignores_host_geometry()
     test_freeze_grace_landing()
     test_rot_slack_fallback()
     failed = [r for r in RESULTS if not r[1]]

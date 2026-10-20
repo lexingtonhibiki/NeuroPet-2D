@@ -115,7 +115,7 @@ def test_species_differentiated_stimuli() -> None:
     st = PetState(pet_id="p", species_id="s", pos=(960.0, 540.0))
     world.upsert_pet(st)
     cur = world.cursor
-    cur.x, cur.y = 1110.0, 540.0             # 距宠物 150px(<300 风半径)
+    cur.x, cur.y = 810.0, 540.0              # 左侧 150px,向东逼近宠物(<300 风半径)
     cur.vx, cur.vy, cur.speed = 2000.0, 0.0, 2000.0
     cur.gesture = "rush"
     view = world.snapshot("p", 0.0)
@@ -137,6 +137,14 @@ def test_species_differentiated_stimuli() -> None:
     wind_fly = next(s for s in sf if s.kind is StimulusKind.WIND)
     assert wind_fly.meta.get("coincide") is True, wind_fly.meta
     assert not any(s.meta.get("coincide") for s in sr), "蟑螂不应有 coincide 标记"
+
+    # 同速、同距但背离宠物:不能仅凭 rush/speed 产生风压。
+    cur.x, cur.y = 1110.0, 540.0
+    view = world.snapshot("p", 0.0)
+    for profile in (fly_prof, roach_prof):
+        receding = compute_stimuli(st, view, profile)
+        assert not any(s.kind is StimulusKind.WIND for s in receding), \
+            "远离宠物的光标不应产生 WIND 刺激"
 
     # ---- 3) 贴身低速:蟑螂 CONTACT/VIBRATION 之和 > 果蝇 ----
     print("[test] 物种差异:贴身低速时蟑螂接触/震动 > 果蝇")

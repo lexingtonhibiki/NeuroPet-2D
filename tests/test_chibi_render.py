@@ -46,6 +46,7 @@ import json
 import math
 import subprocess
 import sys
+import tempfile
 import time
 from pathlib import Path
 
@@ -97,13 +98,15 @@ def load_head(name: str, tmp_name: str, ref: str = REF_COMMIT):
         src = subprocess.run(
             ["git", "-C", str(ROOT), "show", f"{ref}:neuropet/render/{name}.py"],
             capture_output=True, text=True, check=True).stdout
-    tmp = ROOT / "scratch" / tmp_name
-    tmp.write_text(src, encoding="utf-8")
-    mod_name = f"neuropet.render.{tmp_name[:-3]}"
-    spec = importlib.util.spec_from_file_location(mod_name, tmp)
-    mod = importlib.util.module_from_spec(spec)
-    sys.modules[mod_name] = mod
-    spec.loader.exec_module(mod)
+    # 独立临时目录:干净检出无需 scratch,并行运行也不会覆盖参照模块。
+    with tempfile.TemporaryDirectory(prefix="neuropet-chibi-ref-") as tmp_dir:
+        tmp = Path(tmp_dir) / tmp_name
+        tmp.write_text(src, encoding="utf-8")
+        mod_name = f"neuropet.render.{tmp_name[:-3]}"
+        spec = importlib.util.spec_from_file_location(mod_name, tmp)
+        mod = importlib.util.module_from_spec(spec)
+        sys.modules[mod_name] = mod
+        spec.loader.exec_module(mod)
     return mod
 
 
