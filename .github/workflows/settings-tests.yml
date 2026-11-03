@@ -28,4 +28,6 @@ jobs:
       # Stdlib-only, temporary saves, no desktop/GUI or dependency installs.
       # This focused check is not the full product suite or the release build.
       - name: Test settings save failure recovery
-        run: python -S tests/test_config_save_atomic.py
+        run: |
+          python -S tests/test_config_save_atomic.py
+          python -S tests/test_crawl_speed_save.py
