@@ -17,6 +17,7 @@ import time
 import tkinter as tk
 import uuid
 from collections import deque
+from dataclasses import replace
 
 from .bus import EventBus
 from .config import (DATA_DIR, PLUGINS_DIR, PETS_PATH, AppConfig, load_config,
@@ -852,9 +853,11 @@ class App:
         速度、钉足世界坐标与步态相位全部连续,滑杆升降只是有限加减速。
         """
         value = snap_crawl_speed(mult)
+        # Persist a candidate before changing the live settings. On failure the
+        # settings UI reads crawl_speed() to restore its previous selection.
+        save_config(replace(self.cfg, crawl_speed=value))
         self._crawl_speed = value
         self.cfg.crawl_speed = value
-        save_config(self.cfg)
         self._sync_speed_multipliers()
         self.bus.publish("user/crawl_speed", {"mult": value})
         return value
